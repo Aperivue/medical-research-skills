@@ -27,7 +27,7 @@ Convert a personal Claude Code skill into a clean, distributable, open-source-re
 Collect from the user:
 
 1. **Source skill path**: directory containing the personal skill (e.g., `~/.claude/skills/my-skill/`)
-2. **Target package path**: directory of the distributable package (e.g., `~/Projects/medical-research-skills/`)
+2. **Target package path**: directory of the distributable package (e.g., `~/workspace/6_Aperivue/medical-research-skills/`)
 3. **Target license**: license of the package (default: MIT)
 
 ### Actions
