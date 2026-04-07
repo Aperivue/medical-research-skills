@@ -117,6 +117,10 @@ Find references that strengthen the presentation:
 3. **Review articles** — Authoritative summaries that frame the topic
 4. **Contradicting evidence** — Important for balanced Q&A preparation
 
+**Efficiency rule:** Limit supporting references to 5-8 total. Only search categories
+that the approved outline (Phase 0) actually requires. Skip categories not needed for
+the presentation type (e.g., skip clinical trials for a methods-focused paper).
+
 ### Selection Criteria
 
 Do NOT summarize every paper found. Extract only:
@@ -208,47 +212,10 @@ Only include if user requested in Phase 0. Examples:
 
 ### Note Injection Script
 
-Generate a Python script using `python-pptx` that:
-
-```python
-#!/usr/bin/env python3
-"""Inject speaker notes into presentation slides."""
-
-import argparse
-from pptx import Presentation
-
-notes = {
-    1: """[Speaker note for slide 1]""",
-    2: """[Speaker note for slide 2]""",
-    # ...
-}
-
-def main():
-    parser = argparse.ArgumentParser(description='Inject speaker notes into PPTX')
-    parser.add_argument('input', help='Input PPTX file')
-    parser.add_argument('-o', '--output', help='Output PPTX file (default: input with _notes suffix)')
-    parser.add_argument('--append', action='store_true', help='Append to existing notes instead of replacing')
-    args = parser.parse_args()
-
-    output = args.output or args.input.replace('.pptx', '_notes.pptx')
-    prs = Presentation(args.input)
-
-    for i, slide in enumerate(prs.slides, 1):
-        if i in notes and notes[i]:
-            if not slide.has_notes_slide:
-                slide.notes_slide
-            tf = slide.notes_slide.notes_text_frame
-            if args.append and tf.text.strip():
-                tf.text = tf.text + '\n\n---\n\n' + notes[i]
-            else:
-                tf.text = notes[i]
-
-    prs.save(output)
-    print(f'Done: {output} ({len(prs.slides)} slides)')
-
-if __name__ == '__main__':
-    main()
-```
+Generate a tailored `inject_notes.py` following the pattern in
+`${CLAUDE_SKILL_DIR}/references/inject_speaker_notes.py`. The generated script should
+contain only the `notes` dictionary customized for this presentation and the main
+injection loop from the template.
 
 ### Critical Rule
 

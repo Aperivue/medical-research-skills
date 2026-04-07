@@ -110,6 +110,15 @@ For each item, record:
 - **Location**: Section name and paragraph or approximate position (e.g., "Methods, paragraph 3")
 - **Notes**: What was found (if PRESENT/PARTIAL) or what should be added (if MISSING)
 
+### Step 4b: Section Boundary Check
+
+In addition to checklist items, verify that:
+- **Results section** contains only factual findings: no interpretation, no "why" explanations,
+  no prior literature comparisons, no evaluative adjectives without numbers.
+- **Discussion section** does not introduce new data not presented in Results.
+- Flag any boundary violation as a separate finding in Part C Action Items with the label
+  `[BOUNDARY]`.
+
 ### Step 5: Generate Report
 
 Produce a structured compliance report in two parts.

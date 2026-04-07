@@ -71,6 +71,10 @@ Define:
 - why existing AI or standard care is insufficient
 - who benefits if the project succeeds
 
+**Gate:** Present the problem framing (clinical pain point, gap, proposed solution) to the
+user. Confirm before building proposal sections — a misframed problem produces an
+unfundable proposal.
+
 ### Phase 3: Build the proposal spine
 
 Always articulate:

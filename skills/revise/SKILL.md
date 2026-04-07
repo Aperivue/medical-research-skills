@@ -59,6 +59,10 @@ R2-1  [MAJ]  Requires additional figure showing calibration curve
 R2-2  [MIN]  Add reference to [Author Year]
 ```
 
+**Gate:** Present the classified comment list to the user. Confirm classifications
+(especially REBUTTAL vs MAJOR) before generating responses. A misclassified REBUTTAL
+generates a response that argues with a valid reviewer point.
+
 ---
 
 ## Step 2: Triage -- Flag External Actions Needed
@@ -136,9 +140,13 @@ We thank the reviewer for this important suggestion. [State the concern.]
 
 To address this, we [describe new analysis/experiment/rewrite].
 [Key result: metric = value (95% CI, lower-upper; P = exact value)]
+(All new results MUST include 95% CI and exact p-value.)
 
 This finding [supports / strengthens / does not change] our original
 conclusion because [brief interpretation].
+
+Note: New text added to the Results section must contain only factual
+findings. Interpretation belongs in the response letter text or Discussion.
 
 We have added:
 - New [Table X / Figure X / Supplementary Table X] showing [content]

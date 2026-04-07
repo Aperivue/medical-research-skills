@@ -14,8 +14,8 @@ tables and figures following journal standards for medical imaging research.
 
 ## Reference Files
 
-- **Templates**: `~/.claude/skills/analyze-stats/references/templates/` -- reusable analysis scripts
-- **Figure style**: `~/.claude/skills/analyze-stats/references/style/figure_style.mplstyle`
+- **Templates**: `${CLAUDE_SKILL_DIR}/references/templates/` -- reusable analysis scripts
+- **Figure style**: `${CLAUDE_SKILL_DIR}/references/style/figure_style.mplstyle`
 - **Project data**: See CLAUDE.md for data locations under `2_Data/`
 
 Read relevant templates before generating analysis code.
@@ -84,8 +84,9 @@ np.random.seed(42)
 2. **Figure style**: Always load the matplotlib style file:
    ```python
    import matplotlib.pyplot as plt
-   plt.style.use(os.path.expanduser(
-       '~/.claude/skills/analyze-stats/references/style/figure_style.mplstyle'))
+   style_path = os.path.join(os.environ.get('CLAUDE_SKILL_DIR', '.'), 'references/style/figure_style.mplstyle')
+   if os.path.exists(style_path):
+       plt.style.use(style_path)
    ```
 3. **Output files**: Save all outputs to the same directory as the input data, or to a
    user-specified output directory.
@@ -138,6 +139,15 @@ These rules apply to ALL analyses without exception:
 7. **Missing data**: Report how many cases were excluded and why.
 8. **Decimal places**: p-values to 3 decimals, proportions to 1 decimal, means/SDs to
    appropriate precision for the measurement.
+
+## Error Handling
+
+- If a script fails to execute, report the error in one line, diagnose the likely cause
+  (missing package, data format mismatch, wrong column name), and present a fix.
+- Do NOT retry the same script more than once without modifying it or asking the user.
+- If an R package is unavailable, suggest `install.packages()` and wait for user confirmation.
+- For prediction models: always include calibration assessment (Brier score, calibration plot,
+  or calibration slope/intercept) alongside discrimination metrics. AUC alone is insufficient.
 
 ## Output Conventions
 

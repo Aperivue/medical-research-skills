@@ -58,7 +58,7 @@ Run the manuscript through each category below. For each item, assess:
 | Check | What to look for |
 |-------|-----------------|
 | Confidence intervals | All primary metrics have 95% CIs? |
-| Calibration | Prediction models: calibration plot + Brier score or slope/intercept? AUC alone is insufficient |
+| Calibration **[CRITICAL]** | Prediction models: calibration plot + Brier score or slope/intercept MUST be present. AUC alone is insufficient — mark as Critical if absent |
 | Clinical comparator | Is there a clinical-only baseline to show incremental value? |
 | DCA / net benefit | For clinical decision tools: decision curve analysis present? |
 | Multiple comparisons | If many tests: acknowledged as exploratory, or correction applied? |
@@ -96,15 +96,9 @@ Run the manuscript through each category below. For each item, assess:
 
 #### G. Reporting Guideline Compliance
 
-Match the manuscript type to the appropriate checklist and verify key items:
-
-| Manuscript type | Checklist | Critical items to verify |
-|----------------|-----------|------------------------|
-| Diagnostic accuracy | STARD / STARD-AI | Flow diagram, reference standard, spectrum |
-| Prediction model | TRIPOD+AI | Model development vs validation, calibration, leakage |
-| AI / Radiomics | CLAIM 2024 / CLEAR | Feature selection transparency, external validation |
-| RCT | CONSORT / CONSORT-AI | Randomization, blinding, ITT |
-| Systematic review | PRISMA 2020 | Search strategy, screening, risk of bias |
+For detailed item-by-item compliance, recommend `/check-reporting`. If it has already been
+run on this manuscript, reference its results. If not, flag as:
+"Reporting guideline compliance not yet checked — run `/check-reporting` before submission."
 
 ### Phase 3: Report
 

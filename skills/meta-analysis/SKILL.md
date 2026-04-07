@@ -288,6 +288,13 @@ Key points:
 - Including/excluding borderline studies (sensitivity to inclusion criteria)
 - Alternative model specifications
 
+#### Error Handling:
+- If R script fails, capture the error message, diagnose the likely cause (missing package,
+  data format mismatch, convergence failure), and present a fix. Do not silently re-run.
+- When reporting R output, separate statistical results (pooled estimates, heterogeneity
+  metrics, I-squared) from interpretation. Present numbers first in a "Statistical Results"
+  block, then interpretation guidance in a separate "Interpretation Notes" block.
+
 ### Phase 7: GRADE / Certainty of Evidence
 
 **Goal**: Assess certainty of the body of evidence.
@@ -331,7 +338,7 @@ Output: Summary of Findings table.
 | Ignoring threshold effect | False heterogeneity | Check Spearman correlation, SROC plot |
 | Standard funnel plot for DTA | Inappropriate | Use Deeks' funnel plot |
 | I-squared only for heterogeneity | Doesn't capture threshold effect | Use prediction region on SROC |
-| Missing GRADE | Common omission in DTA MA | Apply GRADE-DTA, or state as limitation |
+| Missing GRADE | Common omission in DTA MA | Apply GRADE-DTA. If <4 studies, assess each domain narratively and state the limitation explicitly |
 | Partial verification bias | Inflates sensitivity | Assess in QUADAS-2 Flow & Timing domain |
 | Unevaluable results excluded | Biases accuracy estimates | Report intent-to-diagnose analysis |
 

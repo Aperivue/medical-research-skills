@@ -104,6 +104,10 @@ Assign one current stage:
 - `submission prep`
 - `archived/unclear`
 
+**Gate:** Present the classification (project type, stage, target output) to the user.
+Confirm before creating any files — misclassification leads to wrong scaffold and
+wrong skill routing.
+
 ### Phase 3: Surface missing inputs
 
 Check for common gaps:

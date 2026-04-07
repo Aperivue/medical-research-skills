@@ -89,6 +89,10 @@ Extract from protocol, draft, slides, tables, or notes:
 - outcome definition
 - timing of variable availability
 
+**Gate:** Present the reconstructed study summary (question, analysis unit, intended use)
+to the user. Confirm before proceeding — if the reconstruction is wrong, the entire
+validity review will be misdirected.
+
 ### Phase 2: Check structural validity
 
 #### A. Analysis unit
