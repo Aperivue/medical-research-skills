@@ -3,9 +3,32 @@
 ## Overview
 
 - **Reporting guideline:** CARE 2016 (mandatory)
-- **Typical word count:** 1500–3000 words
+- **Typical word count:** 1000–1500 words (short-form) or 2000–3000 words (extended with literature review)
+- **Default mode:** Short-form (1000-1500 words). Use `--extended` for longer format.
 - **Structure:** Title → Abstract → Introduction → Case Presentation → Discussion → Conclusions → Patient Perspective (optional) → Informed Consent
 - **Key requirement:** Patient consent/anonymization documented
+
+---
+
+## CARE 2016 Checklist Quick Reference
+
+| # | Item | Section | Description |
+|---|------|---------|-------------|
+| 1 | Title | Title | Diagnosis or main symptom AND "case report" |
+| 2 | Key words | Abstract | 2-5 keywords covering the case |
+| 3 | Abstract | Abstract | Structured: Introduction, Case Presentation, Conclusion |
+| 4 | Introduction | Introduction | Background with references, why this case is reportable |
+| 5 | Patient information | Case Presentation | Demographics, main symptoms, medical history |
+| 6 | Clinical findings | Case Presentation | Physical examination, key clinical findings |
+| 7 | Timeline | Case Presentation | Important dates and events in table or figure |
+| 8 | Diagnostic assessment | Case Presentation | Methods, pathological findings, challenges, reasoning |
+| 9 | Therapeutic intervention | Case Presentation | Types, administration, duration, changes |
+| 10 | Follow-up and outcomes | Case Presentation | Clinician-assessed and patient-assessed outcomes, adherence, adverse events |
+| 11 | Discussion | Discussion | Strengths, limitations, relevant literature, rationale for conclusions |
+| 12 | Patient perspective | Optional | Patient's own views when available |
+| 13 | Informed consent | End | Documentation that consent was obtained |
+
+> Full CARE checklist: https://www.care-statement.org/checklist
 
 ---
 
@@ -172,6 +195,34 @@ At the end of the case report, include one of these statements:
 | Figure 2 | Timeline figure or pathology if relevant |
 | Table 1 | Clinical and laboratory data at presentation |
 | Table 2 | Comparison with published similar cases (if ≥5 exist) |
+
+---
+
+## Similar Case Literature Search
+
+When writing the Discussion, systematically search for previously reported similar cases:
+
+**Search strategy:**
+1. Primary: PubMed — `"[condition]"[Title] AND "case report"[Publication Type]`
+2. If <5 results, broaden: `"[condition]"[Title/Abstract] AND (case report[ti] OR case series[ti])`
+3. Optional: Google Scholar for non-indexed case reports
+
+**Data extraction from each similar case:**
+- Author and year
+- Patient age and sex
+- Key presenting features
+- Diagnostic method
+- Treatment approach
+- Outcome at follow-up
+
+**Comparison table (include if >=5 similar cases found):**
+
+| Author (Year) | Age/Sex | Key Presentation | Diagnosis Method | Treatment | Outcome |
+|---------------|---------|-----------------|-----------------|-----------|---------|
+| Current case | ... | ... | ... | ... | ... |
+| [Prior case 1] | ... | ... | ... | ... | ... |
+
+If <5 similar cases exist, state explicitly: "To our knowledge, only [N] similar cases have been reported in the English literature [citations]."
 
 ---
 

@@ -47,6 +47,30 @@ Gather essential information from the user before any writing begins.
    - Observational study: STROBE
    - Educational study: no standard checklist (use SQUIRE if applicable)
 4. Create or confirm the project scaffold directory.
+
+#### Case Report Mode
+
+When paper type is "case report":
+1. Load `${CLAUDE_SKILL_DIR}/references/paper_types/case_report.md` (CARE structure).
+2. Override word limits: total 1000-1500 words (excl. abstract, references, legends).
+3. Override abstract limit: 150 words, structured (Introduction, Case Presentation, Conclusion).
+4. Override reference limit: 15 references maximum.
+5. Apply CARE 2016 reporting guideline (mandatory).
+6. Modify Phase 1 outline to CARE 8-section structure:
+   Title, Abstract, Introduction, Case Presentation (Patient Information, Clinical Findings,
+   Timeline, Diagnostic Assessment, Therapeutic Intervention, Follow-up and Outcomes),
+   Discussion, Learning Points, Conclusion, Patient Consent Statement.
+7. In Phase 2, default figures:
+   - Figure 1: Key imaging findings (annotated, typically 3-6 panels)
+   - Figure 2: Clinical timeline (if complex course)
+   - Table 1: Laboratory and clinical data at presentation
+8. In Phase 5 (Discussion), call `/search-lit` with query: `"[condition]" AND "case report"[Publication Type]`.
+   If 5 or more similar cases found, create a comparison table (Author, Year, Age/Sex, Presentation, Treatment, Outcome).
+   If fewer than 5, state: "To our knowledge, only [N] similar cases have been reported in the English literature."
+9. Skip Phase 5a Discussion Planning Gate — case reports are shorter; proceed directly to drafting.
+10. For extended case reports with literature review, user can specify `--extended` to raise
+    the word limit to 2000-3000 words and add a structured review section.
+
 5. Summarize the setup to the user and confirm before proceeding.
 
 **Output:** Setup summary with journal constraints, paper type, reporting guideline, and directory path.
@@ -279,6 +303,38 @@ Final quality pass before submission.
 
 ---
 
+### Phase 8+ (Optional): Cover Letter Generation
+
+Triggered when the user requests "generate cover letter" or after `/find-journal` recommendation.
+
+This is an optional post-pipeline step. Do NOT generate automatically — only when explicitly requested.
+
+**Required user inputs (MUST ask, never fabricate):**
+1. Editor name (if known; otherwise use "Dear Editor")
+2. Suggested reviewers (2-3 names with affiliations and email addresses)
+3. Excluded reviewers (if any, with brief reason)
+4. Any specific points to emphasize for the target journal
+
+**Cover letter structure:**
+
+1. **Salutation**: "Dear [Editor name / Editor],"
+2. **Submission statement**: "We submit our manuscript entitled '[Title]' for consideration as [article type] in [Journal Name]."
+3. **Novelty statement** (2-3 sentences): What is new and why it matters. Extract from abstract key findings.
+4. **Scope fit** (1-2 sentences): Why this journal is appropriate. Reference journal scope from profile if loaded.
+5. **Brief methods** (1 sentence): Study design and key numbers.
+6. **Ethical compliance**: IRB approval number, author agreement, COI statement, no dual submission.
+7. **AI disclosure** (if applicable): Specific AI tools used and human oversight statement.
+8. **Suggested reviewers**: Name, affiliation, email, expertise area (2-3 minimum).
+9. **Excluded reviewers** (if any): Name and reason.
+10. **Closing**: Corresponding author name and credentials.
+
+**Anti-overclaiming guard:**
+Automatically flag and rewrite any of these words in cover letters: "first," "novel," "unprecedented," "groundbreaking," "paradigm-shifting," "revolutionary." Replace with specific factual statements about what the study contributes.
+
+**Word limit:** 300-500 words. Cover letters exceeding 500 words should be trimmed.
+
+---
+
 ## Critic Scoring Rubric
 
 Each section goes through a critic-fixer loop. The critic scores 6 dimensions (0-20 each, total 0-120 scaled to 0-100).
@@ -411,6 +467,7 @@ This skill orchestrates other skills at specific phases:
 | 7 | `/check-reporting` | Reporting guideline compliance |
 | 7 | `/search-lit` | Citation verification |
 | 7 | `/self-review` | Final pre-submission check |
+| 8+ | `/find-journal` | Journal scope for cover letter (optional) |
 
 If a called skill is not available, perform that step inline using the relevant section of this skill document as guidance.
 
