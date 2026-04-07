@@ -1,0 +1,260 @@
+---
+name: revise
+description: Parse peer reviewer comments and generate a structured Response to Reviewers document with tracked manuscript changes. Classifies comments as MAJOR/MINOR/REBUTTAL, coordinates new analyses with /analyze-stats and /make-figures, and produces cover letter for editor.
+triggers: revise paper, respond to reviewers, revision letter, reviewer comments, major revision, minor revision, resubmit, R1 revision, revision round, response letter, point-by-point response
+tools: Read, Write, Edit, Bash, Grep, Glob
+model: inherit
+---
+
+# Revision Skill -- Response to Peer Reviewers
+
+## Purpose
+
+Parse reviewer decision letters, classify each comment by type, generate a formal Response to Reviewers document, track required manuscript changes, and coordinate with /analyze-stats or /make-figures when new analyses or visuals are needed.
+
+---
+
+## Activation
+
+When the user provides reviewer comments (pasted text, PDF, or file path), or requests revision of a manuscript, this skill activates. Before proceeding, confirm:
+
+1. The reviewer decision letter (pasted text or file path)
+2. The current manuscript file (`paper/main.tex` or `paper/main.qmd`)
+3. The revision round number (default: R1)
+4. The journal name (affects cover letter format)
+
+---
+
+## Step 1: Parse and Number All Comments
+
+Read the full decision letter. Extract every discrete comment from every reviewer and the editor.
+
+### Numbering Convention
+
+```
+E-1, E-2, ...       <- Editor comments
+R1-1, R1-2, ...     <- Reviewer 1 comments
+R2-1, R2-2, ...     <- Reviewer 2 comments
+R3-1, R3-2, ...     <- Reviewer 3 (if present)
+```
+
+If a reviewer groups multiple requests in one paragraph, split them into sub-items: `R1-3a, R1-3b, R1-3c`
+
+### Classification
+
+| Type | Symbol | Definition |
+|------|--------|------------|
+| **MAJOR** | `[MAJ]` | Requires new experiment, re-analysis, new figure/table, or substantial structural rewrite |
+| **MINOR** | `[MIN]` | Requires text revision, clarification, formatting change, or additional citation |
+| **REBUTTAL** | `[REB]` | Reviewer is factually incorrect, misunderstood the study, or requests something scientifically unjustified |
+
+Output a classified comment list before generating responses:
+
+```
+E-1   [MIN]  Request to shorten abstract
+R1-1  [MAJ]  Requires subgroup analysis by scanner type
+R1-2  [MIN]  Clarify exclusion criteria rationale
+R1-3  [REB]  Claims our sample size is underpowered (we disagree)
+R2-1  [MAJ]  Requires additional figure showing calibration curve
+R2-2  [MIN]  Add reference to [Author Year]
+```
+
+---
+
+## Step 2: Triage -- Flag External Actions Needed
+
+Before writing responses, identify which comments require external action:
+
+**Comments requiring /analyze-stats:** Flag any MAJOR comment that requires new statistical analysis, re-run of existing analysis, additional metric (calibration, NRI, ICC), or sample size recalculation.
+
+**Comments requiring /make-figures:** Flag any MAJOR comment that requires a new figure or revised figure (calibration plot, subgroup forest plot, Bland-Altman, new panel).
+
+Output: "The following comments require statistical analysis before responses can be finalized: R1-1, R2-3. Run /analyze-stats with these tasks, then return to /revise."
+
+---
+
+## Step 3: Generate Response to Reviewers Document
+
+**Output location:** `revision/R[N]/response_to_reviewers_R[N].md`
+
+### Document Header
+
+```
+Response to Reviewers
+
+Manuscript ID: [JOURNAL-XXXXX]
+Manuscript Title: [Full title]
+Authors: [Last name of first author] et al.
+Revision Round: [R1 / R2 / R3]
+Date: [YYYY-MM-DD]
+
+We thank the Editor and reviewers for their careful reading of our manuscript
+and their constructive comments. We have revised the manuscript accordingly
+and provide a point-by-point response below. All changes are shown in the
+revised manuscript with tracked changes (or highlighted in yellow).
+```
+
+### Per-Comment Response Block
+
+```
+---
+
+**Comment R[X]-[Y]** [MAJ/MIN/REB]
+
+*Reviewer's comment:*
+> [Exact text of the comment, quoted verbatim]
+
+**Response:**
+
+[Response text -- format by type below]
+
+**Manuscript change:**
+- Section: [Methods / Results / Discussion / etc.]
+- Page [X], Line [Y] (in the revised manuscript)
+- [Quote the new or changed sentence if short]
+```
+
+---
+
+## Step 4: Response Formats by Comment Type
+
+### MINOR Comment
+
+Keep concise (3-8 sentences). Acknowledge, explain the change.
+
+```
+We thank the reviewer for this observation. We have [describe change] in
+the [section] section. The revised text now reads: "[new sentence]."
+```
+
+### MAJOR Comment
+
+Structured response with four parts: acknowledgment -> new analysis -> key result -> location of changes.
+
+```
+We thank the reviewer for this important suggestion. [State the concern.]
+
+To address this, we [describe new analysis/experiment/rewrite].
+[Key result: metric = value (95% CI, lower-upper; P = exact value)]
+
+This finding [supports / strengthens / does not change] our original
+conclusion because [brief interpretation].
+
+We have added:
+- New [Table X / Figure X / Supplementary Table X] showing [content]
+- Methods revised: Page X, Lines Y-Z
+- Results revised: Page X, Lines Y-Z
+```
+
+### REBUTTAL Comment
+
+Polite but firm. Do not capitulate without scientific justification.
+
+```
+We thank the reviewer for raising this point. We respectfully suggest
+that [restate reviewer's claim], while we [state your position].
+
+[Explanation with supporting evidence. Cite literature if available:
+"This is consistent with [Author et al., Year; PMID XXXXXX], who
+demonstrated that..."]
+
+[If applicable: "We have added the following clarifying sentence to
+[section] (Page X, Line Y): '[new sentence].'"]
+
+We believe this issue does not warrant [the specific change requested]
+because [reason]. We hope the reviewer finds this explanation satisfactory.
+```
+
+---
+
+## Step 5: Cover Letter to Editor
+
+**Output location:** `revision/R[N]/cover_letter_R[N].md`
+
+```
+[Date]
+
+Dear Dr. [Editor Name / "Editor-in-Chief"],
+
+Thank you for the opportunity to revise our manuscript, "[Full title]"
+(Manuscript ID: XXXX), submitted to [Journal Name]. We have carefully
+reviewed the comments from the Editor and reviewers and have revised
+the manuscript accordingly.
+
+In brief, the principal changes in this revision are: [1) ..., 2) ...,
+3) ...]. A point-by-point response to each comment is provided in the
+accompanying Response to Reviewers document. Revised sections are
+highlighted in yellow in the manuscript.
+
+We believe the revised manuscript addresses all concerns raised in the
+review and is now suitable for publication in [Journal Name].
+
+Sincerely,
+
+[First Author Name], MD/PhD
+[Institution]
+[Email]
+On behalf of all authors
+```
+
+---
+
+## Step 6: Change Log
+
+**Output location:** `revision/R[N]/change_log_R[N].md`
+
+| Comment | Type | Change Made | Section | Page | Lines |
+|---------|------|-------------|---------|------|-------|
+| R1-1 | MAJ | Added subgroup analysis by scanner type | Results 4.3, Table 3 | 12 | 234-251 |
+| R1-2 | MIN | Clarified exclusion criteria for motion artifact | Methods 2.2 | 6 | 112-115 |
+
+---
+
+## Step 7: Final Verification
+
+After all responses are drafted, check:
+
+- [ ] Every reviewer comment has a response (none skipped)
+- [ ] Every MAJOR comment has a corresponding manuscript change with location
+- [ ] Every REBUTTAL is backed by cited evidence or clear scientific reasoning
+- [ ] All new statistics include 95% CI and exact p-values
+- [ ] Page/line number references match the revised manuscript (not the original)
+- [ ] Cover letter is addressed to the correct editor
+- [ ] Response letter is 5000-8000 words
+- [ ] Tracked changes are enabled in the revised manuscript
+- [ ] All new figures/tables are referenced in the response letter
+
+---
+
+## Revision Round File Structure
+
+| Round | Folder | Files |
+|-------|--------|-------|
+| R1 | `revision/R1/` | `response_to_reviewers_R1.md`, `cover_letter_R1.md`, `change_log_R1.md` |
+| R2 | `revision/R2/` | `response_to_reviewers_R2.md`, `cover_letter_R2.md`, `change_log_R2.md` |
+
+Revised manuscript: `paper/main_revised_R[N].tex` (or `.qmd`)
+
+For R2+, acknowledge whether R1 concerns were fully resolved. If a reviewer raises a new concern at R2, note: "This comment was not raised in the first review round; we address it as follows."
+
+---
+
+## Word Count Guidance
+
+- Response letter total: 5000-8000 words (including quoted reviewer comments)
+- Cover letter: 200-400 words
+- MINOR response: 50-150 words
+- MAJOR response: 150-400 words
+- REBUTTAL response: 200-500 words
+
+---
+
+## Common Mistakes to Avoid
+
+1. Do not agree with every MAJOR comment without providing the actual new data or analysis.
+2. Do not write vague responses ("We have revised the text accordingly") without specifying what changed and where.
+3. Do not skip any comment, even if trivial or addressed elsewhere.
+4. Do not reference page/line numbers from the original manuscript; use the revised version.
+5. Do not begin a rebuttal aggressively; always open with acknowledgment.
+6. Do not promise changes that were not actually made.
+7. Do not forget to renumber figures and tables if new items were inserted.

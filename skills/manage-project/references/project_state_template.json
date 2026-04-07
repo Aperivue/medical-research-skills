@@ -1,0 +1,37 @@
+{
+  "name": "{name}",
+  "type": "{type}",
+  "journal": "{journal}",
+  "created": "YYYY-MM-DD",
+  "target_submission": null,
+  "current_phase": 0,
+  "phases": {
+    "0_init": "complete",
+    "1_outline": "pending",
+    "2_tables_figures": "pending",
+    "3_methods": "pending",
+    "4_results": "pending",
+    "5_discussion": "pending",
+    "6_intro_abstract": "pending",
+    "7_polish": "pending"
+  },
+  "word_counts": {
+    "abstract": 0,
+    "introduction": 0,
+    "methods": 0,
+    "results": 0,
+    "discussion": 0,
+    "total": 0
+  },
+  "checklist_status": "pending",
+  "citation_status": "unverified",
+  "revision_round": null,
+  "memory_files": {
+    "PROJECT.md": true,
+    "STATUS.md": true,
+    "CLAIMS.md": true,
+    "DATA_DICTIONARY.md": true,
+    "ANALYSIS_PLAN.md": true,
+    "REVIEW_LOG.md": true
+  }
+}

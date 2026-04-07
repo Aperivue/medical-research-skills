@@ -12,8 +12,8 @@ A collection of Claude Code skills covering the full medical research lifecycle 
 Literature Review -> Study Design -> Analysis -> Figures -> Writing -> Reporting -> Revision -> Presenting
       |                  |              |           |          |            |            |           |
   search-lit       design-study   analyze-stats make-figures write-paper check-reporting revise present-paper
-                                                                              |
-                                                                         self-review
+                                                                |             |
+                                                           self-review   manage-project
                                                                 |
                                                            meta-analysis
 
@@ -38,15 +38,10 @@ Literature Review -> Study Design -> Analysis -> Figures -> Writing -> Reporting
 | **grant-builder** | Structures grant proposals: significance, innovation, approach, milestones, and consortium roles. |
 | **present-paper** | Academic presentation preparation: paper analysis, supporting research, speaker scripts, slide note injection, and Q&A prep. |
 | **publish-skill** | Convert personal Claude Code skills into distributable, open-source-ready packages. PII audit, license compatibility check, generalization, and packaging workflow. |
-
-### Coming Soon (Phase 2-3)
-
-| Skill | Status |
-|-------|--------|
-| **write-paper** | Full IMRAD manuscript pipeline (8 phases) |
-| **self-review** | Pre-submission self-review from reviewer perspective |
-| **revise** | Response to reviewers with tracked changes |
-| **manage-project** | Research project scaffolding and progress tracking |
+| **write-paper** | Full IMRAD manuscript pipeline (8 phases). Outline to submission-ready manuscript with critic-fixer loops, AI pattern avoidance, and journal compliance. |
+| **self-review** | Pre-submission self-review from reviewer perspective. Systematic check across 7 categories (study design, reference standard, statistics, clinical framing, reproducibility, reporting, guidelines). |
+| **revise** | Response to reviewers with tracked changes. Parses decision letters, classifies comments as MAJOR/MINOR/REBUTTAL, generates point-by-point responses and cover letter. |
+| **manage-project** | Research project scaffolding and progress tracking. Commands: init, status, sync-memory, checklist, timeline. Backwards submission timelines and pre-submission checklists. |
 
 ## Installation
 
