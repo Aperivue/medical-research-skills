@@ -9,6 +9,12 @@ A collection of Claude Code skills covering the full medical research lifecycle 
 ## Skills
 
 ```
+                              ┌─────────────────────────────────┐
+                              │  orchestrate: single entry point │
+                              │  classifies intent, routes to    │
+                              │  the right skill or chains them  │
+                              └───────────────┬─────────────────┘
+                                              │
 Literature Review -> Study Design -> Analysis -> Figures -> Writing -> Reporting -> Revision -> Presenting
       |                  |              |           |          |            |            |           |
   search-lit       design-study   analyze-stats make-figures write-paper check-reporting revise present-paper
@@ -28,6 +34,7 @@ Literature Review -> Study Design -> Analysis -> Figures -> Writing -> Reporting
 
 | Skill | What It Does |
 |-------|-------------|
+| **orchestrate** | Single entry point for the full bundle. Classifies your request and routes to the right skill -- or chains multiple skills for multi-step workflows. Start here if you're unsure which skill to use. |
 | **search-lit** | PubMed + Semantic Scholar + bioRxiv search with anti-hallucination citation verification. Full-text OA retrieval pipeline (Unpaywall, PMC, OpenAlex). |
 | **check-reporting** | Manuscript compliance audit against 15 reporting guidelines and risk of bias tools (STROBE, STARD, TRIPOD+AI, PRISMA, PRISMA-DTA, ARRIVE, QUADAS-2, RoB 2, ROBINS-I, PROBAST, NOS, and more). |
 | **analyze-stats** | Statistical analysis code generation (Python/R) for diagnostic accuracy, DTA meta-analysis (bivariate/HSROC), inter-rater agreement, survival analysis, and demographics tables. |
@@ -60,6 +67,8 @@ cp -r medical-research-skills/skills/check-reporting ~/.claude/skills/
 ```
 
 After copying, restart Claude Code. Skills are automatically discovered from `~/.claude/skills/`.
+
+> **Tip:** Not sure which skill to use? Start with `/orchestrate` -- it will classify your request and route you to the right tool.
 
 ## Key Features
 
