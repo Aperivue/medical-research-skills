@@ -19,6 +19,29 @@
 
 ---
 
+## Live Demo: One Line of Code → Full Manuscript
+
+```python
+from sklearn.datasets import load_breast_cancer
+data = load_breast_cancer()  # 569 samples, zero download
+```
+
+**Output from the pipeline** ([see full demo](demo/01_wisconsin_bc/)):
+
+| Output | Description |
+|--------|-------------|
+| [Manuscript (PDF)](demo/01_wisconsin_bc/output/manuscript_draft.pdf) | IMRAD draft, ~2,200 words, 4 embedded figures |
+| [ROC Curve](demo/01_wisconsin_bc/figures/roc_curve.png) | 3-model comparison with DeLong 95% CIs |
+| [Confusion Matrices](demo/01_wisconsin_bc/figures/confusion_matrices.png) | Side-by-side for LR, RF, SVM |
+| [STARD Compliance](demo/01_wisconsin_bc/output/stard_compliance_report.md) | 30-item audit (19 PRESENT, 5 PARTIAL, 6 MISSING) |
+| [Presentation (PPTX)](demo/01_wisconsin_bc/output/presentation.pptx) | 12 slides with speaker notes |
+
+**Skills used:** `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
+
+> *More demos coming: metafor BCG (meta-analysis) and NHANES (epidemiology)*
+
+---
+
 ## Why This Repo?
 
 | | MedSci Skills | Aggregator repos (400-900 skills) |
@@ -73,7 +96,7 @@ search-lit -> fulltext-retrieval -> design-study ──> write-protocol -> manag
 
 | Skill | What It Does |
 |-------|-------------|
-| **orchestrate** | Single entry point for the full bundle. Classifies your request and routes to the right skill -- or chains multiple skills for multi-step workflows. Start here if you're unsure which skill to use. |
+| **orchestrate** | Single entry point for the full bundle. Classifies your request and routes to the right skill -- or chains multiple skills for multi-step workflows. **New:** Full Pipeline Mode runs `analyze-stats` → `make-figures` → `write-paper` → `check-reporting` → `self-review` end-to-end with automatic output discovery. |
 | **search-lit** | PubMed + Semantic Scholar + bioRxiv search with anti-hallucination citation verification. Token-efficient error handling -- CrossRef failures are silently batched, not repeated. |
 | **fulltext-retrieval** | Batch open-access PDF downloader. Unpaywall → PMC → OpenAlex → CrossRef pipeline. OA-only -- no paywall bypass. Input: DOI list or TSV. |
 | **check-reporting** | Manuscript compliance audit against 15 reporting guidelines and risk of bias tools (STROBE, STARD, TRIPOD+AI, PRISMA, PRISMA-DTA, ARRIVE, QUADAS-2, RoB 2, ROBINS-I, PROBAST, NOS, and more). Includes Results/Discussion section boundary check. |
@@ -115,6 +138,9 @@ After copying, restart Claude Code. Skills are automatically discovered from `~/
 > **Tip:** Not sure which skill to use? Start with `/orchestrate` -- it will classify your request and route you to the right tool.
 
 ## Key Features
+
+### End-to-End Pipeline (New in v2.1)
+`orchestrate` now supports Full Pipeline Mode: load your data and get a complete manuscript with figures, compliance audit, and presentation slides -- without manually invoking each skill. Skills pass outputs via `_analysis_outputs.md` manifests, so downstream tools auto-discover tables, figures, and predictions.
 
 ### Anti-Hallucination Citations
 Every reference produced by `search-lit` is verified against PubMed, Semantic Scholar, or CrossRef APIs. No citation is ever generated from memory alone. API errors are batched silently -- no token waste from repeated failure messages.
