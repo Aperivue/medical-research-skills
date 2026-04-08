@@ -21,7 +21,7 @@ color accessibility. Produce clean, data-focused visuals with no chartjunk.
 ## Reference Files
 
 - **Figure specifications**: `${CLAUDE_SKILL_DIR}/references/figure_specs.md`
-- **Figure style**: `~/.claude/skills/analyze-stats/references/style/figure_style.mplstyle`
+- **Figure style**: `${CLAUDE_SKILL_DIR}/../analyze-stats/references/style/figure_style.mplstyle` (or project's CLAUDE.md if available)
 - **Project data**: See CLAUDE.md for data locations under `2_Data/`
 
 Read `figure_specs.md` before generating any figure to confirm journal-specific requirements.
@@ -47,8 +47,9 @@ If the user provides enough context, infer missing parameters and confirm before
    ```python
    import matplotlib.pyplot as plt
    import os
-   plt.style.use(os.path.expanduser(
-       '~/.claude/skills/analyze-stats/references/style/figure_style.mplstyle'))
+   style_path = os.path.join(os.environ.get('CLAUDE_SKILL_DIR', '.'), '../analyze-stats/references/style/figure_style.mplstyle')
+   if os.path.exists(style_path):
+       plt.style.use(style_path)
    ```
 2. Look up journal-specific dimensions from `${CLAUDE_SKILL_DIR}/references/figure_specs.md`.
 3. Set the colorblind-safe palette (Wong palette by default).
@@ -70,8 +71,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-plt.style.use(os.path.expanduser(
-    '~/.claude/skills/analyze-stats/references/style/figure_style.mplstyle'))
+style_path = os.path.join(os.environ.get('CLAUDE_SKILL_DIR', '.'), '../analyze-stats/references/style/figure_style.mplstyle')
+if os.path.exists(style_path):
+    plt.style.use(style_path)
 
 # Wong colorblind-safe palette
 WONG = ['#000000', '#E69F00', '#56B4E9', '#009E73',
@@ -112,6 +114,27 @@ Before delivering the final figure, verify all items:
 - [ ] **Journal specs**: Dimensions, font, and format match target journal requirements
 - [ ] **No chartjunk**: No 3D effects, unnecessary gridlines, gradient fills, or decorative elements
 - [ ] **Caption**: Drafted with key finding, abbreviations, statistical details, and sample size
+
+---
+
+## Study-Type Figure Sets
+
+When the study type is known (from `/write-paper` Phase 0 or user specification), auto-detect and generate the complete required figure set without asking for each figure individually.
+
+| Study Type (Guideline) | Required Figures |
+|---|---|
+| Diagnostic accuracy (STARD) | STARD flow diagram, ROC curve, confusion matrix, calibration plot |
+| AI validation (TRIPOD+AI / CLAIM) | Flow diagram, ROC curve, confusion matrix, calibration plot, feature importance or SHAP, Grad-CAM (if imaging) |
+| Meta-analysis (PRISMA) | PRISMA flow diagram, forest plot, funnel plot |
+| DTA meta-analysis (PRISMA-DTA) | PRISMA flow diagram, paired forest plot (Se + Sp), SROC curve, Deeks funnel plot |
+| Observational cohort (STROBE) | Flow diagram, Kaplan-Meier curves (if survival endpoint) |
+| RCT (CONSORT) | CONSORT flow diagram, primary endpoint figure |
+
+After generating all figures, print a manifest:
+- List every output file with its path and one-line description
+- Save the manifest to `figures/_figure_manifest.md`
+
+**Flow diagram limitation:** STARD/CONSORT/PRISMA flow diagrams require D2, Mermaid, or manual tools. If these are unavailable, generate a text-based flow diagram in markdown and note that a graphical version should be created separately.
 
 ---
 

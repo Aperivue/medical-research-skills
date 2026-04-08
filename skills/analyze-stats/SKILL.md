@@ -108,6 +108,28 @@ Before running parametric tests, always check and report:
 - Always report both uncorrected and corrected p-values.
 - State the correction method used.
 
+#### Output Manifest
+
+After all analyses complete, save a manifest file `_analysis_outputs.md` in the output directory:
+
+```markdown
+# Analysis Outputs
+Generated: {YYYY-MM-DD}
+Study type: {detected or user-specified type}
+
+## Tables
+- `table1_demographics.csv` -- Baseline characteristics
+- `diagnostic_accuracy_table.csv` -- Performance metrics with 95% CIs
+
+## Figures  
+- `roc_curve.pdf` / `roc_curve.png` -- ROC curves (vector / 300 DPI)
+
+## Data
+- `predictions.csv` -- Per-subject model predictions with ground truth
+```
+
+This manifest enables downstream skills (`/make-figures`, `/write-paper`) to auto-discover analysis outputs without user intervention.
+
 ### Phase 4: Report
 
 After execution, generate manuscript-ready text:

@@ -35,9 +35,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-STYLE_PATH = os.path.expanduser(
-    "~/.claude/skills/analyze-stats/references/style/figure_style.mplstyle"
-)
+STYLE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "style", "figure_style.mplstyle")
 if os.path.exists(STYLE_PATH):
     plt.style.use(STYLE_PATH)
 
@@ -199,6 +197,83 @@ def plot_roc(y_true: np.ndarray, score_dict: dict, output_dir: str) -> None:
     print(f"Saved: {png_path}")
 
 
+def plot_confusion_matrix(y_true: np.ndarray, pred_dict: dict,
+                          model_names: list, output_dir: str) -> None:
+    """Generate side-by-side confusion matrices using matplotlib."""
+    n_models = len(pred_dict)
+    fig, axes = plt.subplots(1, n_models, figsize=(3.5 * n_models, 3.5))
+    if n_models == 1:
+        axes = [axes]
+
+    for ax, (name, y_pred) in zip(axes, pred_dict.items()):
+        from sklearn.metrics import confusion_matrix as cm_func
+        cm = cm_func(y_true, y_pred)
+        cm_pct = cm.astype(float) / cm.sum() * 100
+
+        im = ax.imshow(cm, interpolation="nearest", cmap=plt.cm.Blues)
+        ax.set_title(name, fontsize=10)
+        ax.set_xlabel("Predicted")
+        ax.set_ylabel("Actual")
+        ax.set_xticks([0, 1])
+        ax.set_yticks([0, 1])
+        ax.set_xticklabels(["Neg", "Pos"])
+        ax.set_yticklabels(["Neg", "Pos"])
+
+        # Annotate cells with count and percentage
+        thresh = cm.max() / 2.0
+        for i in range(2):
+            for j in range(2):
+                ax.text(j, i, f"{cm[i, j]}\n({cm_pct[i, j]:.1f}%)",
+                        ha="center", va="center", fontsize=9,
+                        color="white" if cm[i, j] > thresh else "black")
+
+    fig.tight_layout()
+    pdf_path = os.path.join(output_dir, "confusion_matrix.pdf")
+    png_path = os.path.join(output_dir, "confusion_matrix.png")
+    fig.savefig(pdf_path, format="pdf", bbox_inches="tight")
+    fig.savefig(png_path, format="png", dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {pdf_path}")
+    print(f"Saved: {png_path}")
+
+
+def plot_calibration(y_true: np.ndarray, score_dict: dict,
+                     output_dir: str) -> None:
+    """Generate calibration curves with Brier scores."""
+    from sklearn.calibration import calibration_curve
+    from sklearn.metrics import brier_score_loss
+
+    fig, ax = plt.subplots(figsize=(3.5, 3.5))
+    colors = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#F0E442"]
+
+    ax.plot([0, 1], [0, 1], color="gray", linestyle="--", linewidth=0.8,
+            label="Perfect calibration")
+
+    for i, (name, y_score) in enumerate(score_dict.items()):
+        brier = brier_score_loss(y_true, y_score)
+        fraction_pos, mean_predicted = calibration_curve(
+            y_true, y_score, n_bins=10, strategy="uniform"
+        )
+        ax.plot(mean_predicted, fraction_pos, marker="o", markersize=4,
+                color=colors[i % len(colors)], linewidth=1.5,
+                label=f"{name} (Brier = {brier:.3f})")
+
+    ax.set_xlabel("Mean predicted probability")
+    ax.set_ylabel("Fraction of positives")
+    ax.set_xlim([-0.02, 1.02])
+    ax.set_ylim([-0.02, 1.02])
+    ax.legend(loc="lower right", fontsize=7)
+
+    fig.tight_layout()
+    pdf_path = os.path.join(output_dir, "calibration_plot.pdf")
+    png_path = os.path.join(output_dir, "calibration_plot.png")
+    fig.savefig(pdf_path, format="pdf", bbox_inches="tight")
+    fig.savefig(png_path, format="png", dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved: {pdf_path}")
+    print(f"Saved: {png_path}")
+
+
 def save_performance_table(results: dict, output_dir: str) -> None:
     """Save performance metrics as CSV and print markdown."""
     rows = []
@@ -260,6 +335,7 @@ if __name__ == "__main__":
 
     all_results = {}
     score_dict = {}
+    pred_dict = {}
 
     for i, (score_col, pred_col, name) in enumerate(
         zip(SCORE_COLS, PRED_COLS, MODEL_NAMES)
@@ -275,6 +351,8 @@ if __name__ == "__main__":
         elif y_score is not None:
             thresh = youdens_threshold(y_true, y_score)
             print(f"Youden's optimal threshold: {thresh:.4f}")
+            print(f"  WARNING: Youden's threshold optimized on evaluation data.")
+            print(f"  For publication, use cross-validated thresholds or pre-specified cutoffs.")
         else:
             thresh = 0.5
 
@@ -287,12 +365,21 @@ if __name__ == "__main__":
             raise ValueError(f"Neither prediction column '{pred_col}' nor "
                              f"score column '{score_col}' found.")
 
+        pred_dict[name] = y_pred
         metrics = compute_metrics(y_true, y_pred, y_score)
         all_results[name] = metrics
 
     # ROC curve
     if score_dict:
         plot_roc(y_true, score_dict, OUTPUT_DIR)
+
+    # Confusion matrix
+    if pred_dict:
+        plot_confusion_matrix(y_true, pred_dict, MODEL_NAMES, OUTPUT_DIR)
+
+    # Calibration plot
+    if score_dict:
+        plot_calibration(y_true, score_dict, OUTPUT_DIR)
 
     # Model comparison (DeLong test)
     if COMPARE_MODELS and len(SCORE_COLS) >= 2:

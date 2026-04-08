@@ -128,6 +128,37 @@ When running a multi-skill chain:
 
 ---
 
+## Full Pipeline Mode
+
+When the user requests "run the full pipeline," "end-to-end," or similar, execute the complete research-to-manuscript chain without pausing for confirmation between skills. Only pause at built-in user gates within skills (e.g., write-paper outline approval).
+
+### Standard Pipeline: Data → Manuscript
+
+1. `/analyze-stats` → tables (CSV), figures, `_analysis_outputs.md`
+2. `/make-figures` → reads `_analysis_outputs.md` → `figures/*.pdf`, `figures/*.png`, `figures/_figure_manifest.md`
+3. `/write-paper` → reads tables, figures, manifests → `manuscript.md`, `manuscript.pdf`, `manuscript.docx`
+4. `/check-reporting` → reads `manuscript.md` → compliance report
+5. `/self-review` → reads `manuscript.md` → review comments
+
+### Data Flow Contract
+
+| Skill | Reads | Writes |
+|-------|-------|--------|
+| analyze-stats | raw data (CSV/Excel) | tables/*.csv, figures/*, `_analysis_outputs.md` |
+| make-figures | `_analysis_outputs.md`, data files | figures/*.pdf, figures/*.png, `_figure_manifest.md` |
+| write-paper | figures/, tables/, manifests, journal profile | manuscript.md, manuscript.pdf, manuscript.docx |
+| check-reporting | manuscript.md | reporting_checklist.md |
+| self-review | manuscript.md | review_comments.md |
+
+### Rules
+1. After each skill completes, read its output manifest to discover outputs.
+2. Pass discovered file paths as context to the next skill.
+3. Do NOT ask "shall I proceed?" between skills — proceed automatically.
+4. DO pause at write-paper's built-in gates (outline approval, discussion planning).
+5. If a skill fails, report the error and ask the user how to proceed.
+
+---
+
 ## Context Detection
 
 Before routing, check for context clues in the working directory:

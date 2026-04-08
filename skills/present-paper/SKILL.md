@@ -201,9 +201,29 @@ Only include if user requested in Phase 0. Examples:
 
 ### Two Modes
 
-**Mode A: Generate new slides**
-- Create slide content (text, tables, diagrams) as Markdown or PPTX
-- Follow presentation design principles: one idea per slide, visual elements on every slide
+**Mode A: Generate new slide deck**
+
+Create a PPTX presentation using `python-pptx`. Structure:
+
+1. Write a self-contained Python script that generates slides programmatically
+2. Use 16:9 widescreen format (13.333" x 7.5")
+3. Use blank layout for full design control
+4. Color scheme: navy headers (#1B2A4A), teal accents (#0072B2), white backgrounds
+
+Standard slide structure (10-15 min talk):
+1. Title slide (paper title, authors, date)
+2. Background (1-2 slides)
+3. Study design / Methods
+4. Key results with embedded figures (2-3 slides)
+5. Discussion highlights
+6. Limitations
+7. Conclusions / Take-home messages
+
+Figure embedding: Scan `figures/` directory for PNG files. Embed using `slide.shapes.add_picture(path, left, top, width, height)`.
+
+Speaker notes: Add Phase 2 script text to each slide's notes pane via `slide.notes_slide.notes_text_frame.text`.
+
+Save to `output/presentation.pptx`.
 
 **Mode B: Add notes to existing slides** (more common)
 - Read existing PPTX to understand slide structure and count

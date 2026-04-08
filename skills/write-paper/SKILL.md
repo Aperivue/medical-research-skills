@@ -134,6 +134,11 @@ Design all tables and figures BEFORE writing prose. This ensures the narrative s
    - Additional figures: performance curves, forest plots, calibration plots, etc.
 4. Call `/analyze-stats` if statistical analysis is needed.
 5. Call `/make-figures` if figure generation is needed.
+6. **Auto-detect required figures.** Based on the reporting guideline selected in Phase 0, consult the `/make-figures` study-type figure set table. Call `/make-figures` with the full figure set for the study type. Do not ask the user to name each figure individually.
+7. **Figure discovery and embedding.** After figure generation completes, scan the `figures/` directory for all PNG and PDF files. For each figure:
+   - Generate a markdown image reference: `![Figure N. Caption](figures/filename.png){width=80%}`
+   - Draft a figure legend based on the figure type and analysis context
+   - Insert the reference at the appropriate location in the Results section
 
 **Gate:** Present T&F plan to user. Do NOT proceed until user approves.
 
@@ -300,6 +305,11 @@ Final quality pass before submission.
    - Title page (with author info, word count, key points if required)
    - Reporting guideline checklist (filled)
    - Cover letter draft
+6. **Format conversion.** Convert the final manuscript to publication formats:
+   - PDF: `pandoc manuscript.md -o manuscript.pdf --pdf-engine=xelatex -V geometry:margin=1in -V fontsize=11pt -V mainfont="Times New Roman"`
+   - DOCX: `pandoc manuscript.md -o manuscript.docx`
+   Ensure all figure image references use relative paths so figures render in both formats.
+   If pandoc is unavailable, note this as a manual step for the user.
 
 ---
 
