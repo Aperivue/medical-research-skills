@@ -3,7 +3,7 @@ name: grant-builder
 description: >
   Grant and challenge proposal support for radiology and medical AI projects. Structures significance,
   innovation, approach, milestones, and consortium roles while keeping claims evidence-based and executable.
-triggers: grant, proposal, aims page, grant proposal, significance, innovation, approach, milestones
+triggers: grant, proposal, aims page, grant proposal, significance, innovation, approach, milestones, 산학과제, 산학협력, 과제계획서, 연구계획서, 연구비 신청, 첨부3
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: inherit
 ---
@@ -19,8 +19,53 @@ This skill supports competitive proposal writing for:
 - challenge proposals
 - internal pilot funding
 - translational medical AI project plans
+- **Korean government grants** (복지부, 산자부, 중기부, 지자체 산학협력 과제)
 
 It is optimized for projects where clinical relevance, multi-site coordination, and executable milestones matter as much as technical novelty.
+
+---
+
+## Korean Government Grant Mode (산학과제 / 연구계획서)
+
+When the user asks for a **Korean산학과제 or 연구계획서**, apply the following adaptations:
+
+### Document Structure (첨부 기반)
+Most Korean grants use a standardized 3-attachment format:
+- **첨부1 (기본정보)**: 과제명, 참여기관, 연구진 인적사항, 논문/특허 실적
+- **첨부2 (매칭확인서)**: 기관별 연구비 부담 비율 확인 (Zoom 미팅 후 작성)
+- **첨부3 (연구계획서)**: 10-page 본문 — 아래 구성
+
+### 첨부3 Standard Structure
+```
+1. 연구의 필요성 및 목적 (약 2p)
+   - 임상 문제점 + 수치 제시
+   - 국내외 동향 (최근 3-5년 논문/가이드라인 기반)
+   - 본 과제의 차별성
+
+2. 연구 내용 및 방법 (약 4p)
+   - 단계별 추진 계획 (Phase 1~N, 기간 명시)
+   - 연구 모식도 (AI 파이프라인 포함 시 도식화)
+   - 세부 과제별 담당 기관/인력
+
+3. 연구팀 역량 (약 1p)
+   - 각 참여자 전문성 + 대표 실적 (SCI 논문, 특허)
+   - 기관별 시너지 (병원 = 데이터/임상, 대학 = 알고리즘)
+
+4. 기대 성과 및 활용 방안 (약 2p)
+   - 정량 목표: SCI 논문 N편, 특허 N건
+   - 정성 목표: 임상 파급효과, 표준화 기여
+   - 후속 대형 과제 연계 가능성 (seed 역할)
+
+5. 연구비 집행 계획 (약 1p)
+   - 인건비(RA), 전산장비, 소모품, 학술활동비, 간접비
+```
+
+### Writing Tips for Small-Scale Grants (3천만원 미만)
+- 비전문가도 이해 가능한 서술 (심사위원이 비전공자일 수 있음)
+- 실현 가능성을 기술 혁신성보다 강조
+- 분량·형식 준수 우선 (양식 초과 감점)
+- 선행연구 데이터나 예비 결과가 있으면 반드시 포함
+- 정량 목표는 보수적으로 — 미달보다 초과 달성이 유리
 
 ---
 

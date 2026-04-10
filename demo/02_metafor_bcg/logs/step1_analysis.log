@@ -1,0 +1,265 @@
+============================================================
+MedSci Skills Demo 2: BCG Vaccine Meta-Analysis
+============================================================
+Date: 2026-04-08 
+R: R version 4.5.3 (2026-03-11) 
+필요한 패키지를 로딩중입니다: Matrix
+필요한 패키지를 로딩중입니다: metadat
+필요한 패키지를 로딩중입니다: numDeriv
+
+Loading the 'metafor' package (version 4.8-0). For an
+introduction to the package please type: help(metafor)
+
+Loading 'meta' package (version 8.2-1).
+Type 'help(meta)' for a brief overview.
+metafor: 4.8.0 
+meta: 8.2.1 
+
+Loaded: dat.bcg — 13 studies
+Years: 1948 - 1980 
+Total participants (treatment): 191064 
+Total participants (control): 166283 
+
+Saved: data/bcg_raw.csv
+
+--- Effect Sizes (log Risk Ratio) ---
+
+                 author year      yi     vi 
+1               Aronson 1948 -0.8893 0.3256 
+2      Ferguson & Simes 1949 -1.5854 0.1946 
+3       Rosenthal et al 1960 -1.3481 0.4154 
+4     Hart & Sutherland 1977 -1.4416 0.0200 
+5  Frimodt-Moller et al 1973 -0.2175 0.0512 
+6       Stein & Aronson 1953 -0.7861 0.0069 
+7      Vandiviere et al 1973 -1.6209 0.2230 
+8            TPT Madras 1980  0.0120 0.0040 
+9      Coetzee & Berjak 1968 -0.4694 0.0564 
+10      Rosenthal et al 1961 -1.3713 0.0730 
+11       Comstock et al 1974 -0.3394 0.0124 
+12   Comstock & Webster 1969  0.4459 0.5325 
+13       Comstock et al 1976 -0.0173 0.0714 
+
+
+============================================================
+PART A: Random-Effects Model (REML)
+============================================================
+
+
+Random-Effects Model (k = 13; tau^2 estimator: REML)
+
+  logLik  deviance       AIC       BIC      AICc   
+-12.2024   24.4047   28.4047   29.3746   29.7381   
+
+tau^2 (estimated amount of total heterogeneity): 0.3132 (SE = 0.1664)
+tau (square root of estimated tau^2 value):      0.5597
+I^2 (total heterogeneity / total variability):   92.22%
+H^2 (total variability / sampling variability):  12.86
+
+Test for Heterogeneity:
+Q(df = 12) = 152.2330, p-val < .0001
+
+Model Results:
+
+estimate      se     zval    pval    ci.lb    ci.ub      
+ -0.7145  0.1798  -3.9744  <.0001  -1.0669  -0.3622  *** 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+--- Pooled Risk Ratio ---
+RR = 0.489 (95% CI: 0.344 - 0.696)
+Interpretation: BCG vaccination reduced TB risk by 51.1% (95% CI: 30.4% - 65.6%)
+
+============================================================
+PART B: Heterogeneity Assessment
+============================================================
+Q statistic: 152.23 (df = 12, p < 0.001)
+I-squared: 92.2%
+tau-squared: 0.3132 (SE = 0.1664)
+tau: 0.5597
+H-squared: 12.86
+
+Prediction interval (RR): 0.155 - 1.549
+Interpretation: In a new study, the true RR would fall between 0.155 and 1.549 with 95% probability
+
+============================================================
+PART C: Forest Plot
+============================================================
+null device 
+          1 
+null device 
+          1 
+Saved: figures/forest_plot.pdf
+Saved: figures/forest_plot.png
+
+============================================================
+PART D: Funnel Plot + Publication Bias
+============================================================
+경고메시지(들):
+title(...)에서:
+  for 'Funnel Plot — BCG Vaccine Efficacy' in 'mbcsToSbcs': - substituted for — (U+2014)
+null device 
+          1 
+null device 
+          1 
+Saved: figures/funnel_plot.pdf
+Saved: figures/funnel_plot.png
+
+--- Egger's Regression Test ---
+
+Regression Test for Funnel Plot Asymmetry
+
+Model:     weighted regression with multiplicative dispersion
+Predictor: standard error
+
+Test for Funnel Plot Asymmetry: t = -1.4013, df = 11, p = 0.1887
+Limit Estimate (as sei -> 0):   b = -0.1909 (CI: -0.6753, 0.2935)
+
+
+--- Rank Correlation Test (Begg & Mazumdar) ---
+
+Rank Correlation Test for Funnel Plot Asymmetry
+
+Kendall's tau = 0.0256, p = 0.9524
+
+
+--- Trim-and-Fill Analysis ---
+
+Estimated number of missing studies on the right side: 1 (SE = 2.4528)
+
+Random-Effects Model (k = 14; tau^2 estimator: REML)
+
+tau^2 (estimated amount of total heterogeneity): 0.3313 (SE = 0.1701)
+tau (square root of estimated tau^2 value):      0.5756
+I^2 (total heterogeneity / total variability):   92.14%
+H^2 (total variability / sampling variability):  12.72
+
+Test for Heterogeneity:
+Q(df = 13) = 154.6750, p-val < .0001
+
+Model Results:
+
+estimate      se     zval    pval    ci.lb    ci.ub      
+ -0.6571  0.1785  -3.6805  0.0002  -1.0070  -0.3072  *** 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Trim-and-fill: 1 studies imputed
+Adjusted RR: 0.518 (95% CI: 0.365 - 0.736)
+null device 
+          1 
+null device 
+          1 
+Saved: figures/funnel_trimfill.pdf
+Saved: figures/funnel_trimfill.png
+
+============================================================
+PART E: Subgroup Analysis (Allocation Method)
+============================================================
+
+
+Mixed-Effects Model (k = 13; tau^2 estimator: REML)
+
+  logLik  deviance       AIC       BIC      AICc   
+-10.3301   20.6602   28.6602   29.8705   36.6602   
+
+tau^2 (estimated amount of residual heterogeneity):     0.3615 (SE = 0.2111)
+tau (square root of estimated tau^2 value):             0.6013
+I^2 (residual heterogeneity / unaccounted variability): 88.77%
+H^2 (unaccounted variability / sampling variability):   8.91
+R^2 (amount of heterogeneity accounted for):            0.00%
+
+Test for Residual Heterogeneity:
+QE(df = 10) = 132.3676, p-val < .0001
+
+Test of Moderators (coefficients 2:3):
+QM(df = 2) = 1.7675, p-val = 0.4132
+
+Model Results:
+
+                 estimate      se     zval    pval    ci.lb   ci.ub    
+intrcpt           -0.5180  0.4412  -1.1740  0.2404  -1.3827  0.3468    
+allocrandom       -0.4478  0.5158  -0.8682  0.3853  -1.4588  0.5632    
+allocsystematic    0.0890  0.5600   0.1590  0.8737  -1.0086  1.1867    
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+random (k=7): RR = 0.379 (95% CI: 0.221 - 0.650), I² = 89.9%
+
+alternate (k=2): RR = 0.582 (95% CI: 0.335 - 1.011), I² = 82.0%
+
+systematic (k=4): RR = 0.654 (95% CI: 0.323 - 1.324), I² = 86.4%
+
+============================================================
+PART F: Meta-Regression (Absolute Latitude)
+============================================================
+
+
+Mixed-Effects Model (k = 13; tau^2 estimator: REML)
+
+  logLik  deviance       AIC       BIC      AICc   
+ -8.0873   16.1746   22.1746   23.3683   25.6032   
+
+tau^2 (estimated amount of residual heterogeneity):     0.0764 (SE = 0.0591)
+tau (square root of estimated tau^2 value):             0.2763
+I^2 (residual heterogeneity / unaccounted variability): 68.39%
+H^2 (unaccounted variability / sampling variability):   3.16
+R^2 (amount of heterogeneity accounted for):            75.62%
+
+Test for Residual Heterogeneity:
+QE(df = 11) = 30.7331, p-val = 0.0012
+
+Test of Moderators (coefficient 2):
+QM(df = 1) = 16.3571, p-val < .0001
+
+Model Results:
+
+         estimate      se     zval    pval    ci.lb    ci.ub      
+intrcpt    0.2515  0.2491   1.0095  0.3127  -0.2368   0.7397      
+ablat     -0.0291  0.0072  -4.0444  <.0001  -0.0432  -0.0150  *** 
+
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+R-squared: 75.6%
+Interpretation: Absolute latitude explains 75.6% of between-study variance
+null device 
+          1 
+null device 
+          1 
+Saved: figures/bubble_plot.pdf
+Saved: figures/bubble_plot.png
+
+============================================================
+PART G: Sensitivity Analysis (Leave-One-Out)
+============================================================
+
+                         study    RR ci.lb ci.ub   I2     Q       Qp
+1               Aronson (1948) 0.493 0.340 0.716 93.2 151.6 7.08e-27
+2      Ferguson & Simes (1949) 0.520 0.365 0.741 92.3 145.3 1.35e-25
+3       Rosenthal et al (1960) 0.504 0.350 0.725 92.9 150.2 1.36e-26
+4     Hart & Sutherland (1977) 0.533 0.377 0.754 90.4  96.6 8.54e-16
+5  Frimodt-Moller et al (1973) 0.466 0.320 0.678 92.8 151.3 8.01e-27
+6       Stein & Aronson (1953) 0.491 0.332 0.727 90.9 128.2 4.05e-22
+7      Vandiviere et al (1973) 0.519 0.365 0.740 92.3 145.8 1.06e-25
+8            TPT Madras (1980) 0.452 0.317 0.643 87.0  68.0 2.94e-10
+9      Coetzee & Berjak (1968) 0.477 0.324 0.701 93.2 152.2 5.28e-27
+10      Rosenthal et al (1961) 0.520 0.363 0.747 92.2 139.8 1.77e-24
+11       Comstock et al (1974) 0.469 0.319 0.688 91.8 151.5 7.48e-27
+12   Comstock & Webster (1969) 0.468 0.327 0.668 92.7 150.8 1.03e-26
+13       Comstock et al (1976) 0.460 0.319 0.661 92.3 149.8 1.65e-26
+
+--- Influence Diagnostics ---
+No studies with |rstudent| > 2 detected.
+
+============================================================
+PART H: Summary Results Table
+============================================================
+Saved: output/study_results.csv
+에러: 객체 'pooled_ci'를 찾을 수 없습니다
+실행이 정지되었습니다

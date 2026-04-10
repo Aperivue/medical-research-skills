@@ -1,0 +1,21 @@
+2026-04-08 10:36:42,680 [INFO] ============================================================
+2026-04-08 10:36:42,680 [INFO] Step 4: Create Academic Presentation
+2026-04-08 10:36:42,680 [INFO] ============================================================
+2026-04-08 10:36:42,682 [INFO]   Building slide 1/12: Title
+2026-04-08 10:36:42,684 [INFO]   Building slide 2/12: Background
+2026-04-08 10:36:42,686 [INFO]   Building slide 3/12: Objectives
+2026-04-08 10:36:42,688 [INFO]   Building slide 4/12: Methods
+2026-04-08 10:36:42,690 [INFO]   Building slide 5/12: Forest Plot
+2026-04-08 10:36:42,703 [INFO]   Building slide 6/12: Heterogeneity
+2026-04-08 10:36:42,706 [INFO]   Building slide 7/12: Meta-regression
+2026-04-08 10:36:42,709 [INFO]   Building slide 8/12: Publication Bias
+2026-04-08 10:36:42,712 [INFO]   Building slide 9/12: Sensitivity
+2026-04-08 10:36:42,714 [INFO]   Building slide 10/12: Conclusions
+2026-04-08 10:36:42,716 [INFO]   Building slide 11/12: Limitations
+2026-04-08 10:36:42,718 [INFO]   Building slide 12/12: Thank You
+2026-04-08 10:36:42,737 [INFO] Saved: /Users/eugene/workspace/6_Aperivue/medical-research-skills/demo/02_metafor_bcg/output/presentation.pptx
+2026-04-08 10:36:42,737 [INFO]   Slides: 12
+2026-04-08 10:36:42,737 [INFO]   File size: 657.8 KB
+2026-04-08 10:36:42,737 [INFO] ============================================================
+2026-04-08 10:36:42,737 [INFO] Presentation generation complete.
+2026-04-08 10:36:42,737 [INFO] ============================================================

@@ -1,127 +1,303 @@
 # STARD 2015 Compliance Report
 
-**Manuscript:** Comparative Diagnostic Accuracy of Machine Learning Models for Breast Cancer Classification  
-**Guideline:** STARD 2015 (Standards for Reporting of Diagnostic Accuracy Studies)  
-**Assessed by:** MedSci Skills (check-reporting)  
-**Date:** 2026-04-08  
+**Study:** Comparative Diagnostic Accuracy of Machine Learning Models for Breast Cancer Classification Using Fine Needle Aspiration Cytology Features
+
+**Guideline:** STARD 2015 (Standards for Reporting Diagnostic Accuracy Studies)
+
+**Reference:** Bossuyt PM, et al. STARD 2015: an updated list of essential items for reporting diagnostic accuracy studies. BMJ. 2015;351:h5527.
 
 ---
 
 ## Summary
 
-| Status | Count |
-|--------|-------|
-| PRESENT | 19 |
-| PARTIAL | 5 |
-| MISSING | 6 |
-| **Compliance** | **63% PRESENT, 80% PRESENT+PARTIAL** |
+| Status | Count | Percentage |
+|--------|-------|------------|
+| PRESENT | 15 | 50% |
+| PARTIAL | 6 | 20% |
+| MISSING | 9 | 30% |
+| **Total** | **30** | **100%** |
 
 ---
 
-## Item-by-Item Assessment
+## Title/Abstract
 
-### Title and Abstract
+### Item 1: Identification as a study of diagnostic accuracy using at least one measure of accuracy (such as sensitivity, specificity, predictive values, or AUC)
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 1 | Title identifies diagnostic accuracy study | **PRESENT** | Title | "Comparative Diagnostic Accuracy" clearly stated |
-| 2 | Structured abstract with design, methods, results, conclusions | **PRESENT** | Abstract | Background, Purpose, Methods, Results, Conclusion all present. Includes AUC with 95% CIs |
+**Status:** PRESENT
 
-### Introduction
+**Evidence:** Title contains 'Comparative Diagnostic Accuracy'; abstract reports AUC, sensitivity, specificity.
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 3 | Scientific and clinical background | **PRESENT** | Introduction para 1-2 | FNA cytology role, dataset history, clinical context |
-| 4 | Study objectives and hypotheses | **PRESENT** | Introduction para 4 | "The purpose of this study was to compare..." |
+## Abstract
 
-### Methods — Participants
+### Item 2: Structured abstract with study design, methods, results, and conclusions
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 5 | Study design (prospective/retrospective) | **PRESENT** | Methods, Study Design | "retrospective cross-sectional diagnostic accuracy study" |
-| 6 | Eligibility criteria, settings, locations | **PARTIAL** | Methods, Study Design | Setting stated (UW Hospitals). Inclusion criteria implicit (all FNA specimens in dataset). Exclusion criteria not explicitly stated. |
-| 7 | Sampling method (consecutive/random/convenience) | **MISSING** | — | Not described whether specimens formed a consecutive, random, or convenience series |
+**Status:** PRESENT
 
-### Methods — Test Methods
+**Evidence:** Abstract contains structured sections: Background, Objective, Methods, Results, Conclusions.
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 8a | Index test described for replication | **PRESENT** | Methods, Classification Models | Three models described with hyperparameters, standardization, cross-validation |
-| 8b | Reference standard described for replication | **PRESENT** | Methods, Study Design | "Histopathological diagnosis served as the reference standard" |
-| 9 | Rationale for reference standard | **PARTIAL** | — | Histopathology is universally accepted; rationale is implicit but not explicitly stated |
-| 10a | Index test cut-offs pre-specified vs exploratory | **PARTIAL** | Methods, Evaluation | Youden's optimal threshold mentioned in code but not explicitly discussed in text |
-| 10b | Reference standard cut-offs | **PRESENT** | Methods | Binary (malignant/benign) reference standard clearly defined |
-| 11 | Blinding | **MISSING** | — | No discussion of whether models had access to reference standard during evaluation (mitigated by cross-validation design) |
-| 12 | Methods for estimating/comparing accuracy | **PRESENT** | Methods, Statistical Analysis | DeLong method for AUC CIs, Wilson CIs for proportions, DeLong test for comparison |
-| 13 | Sample size determination | **MISSING** | — | No power analysis or sample size justification |
+## Introduction
 
-### Results — Participants
+### Item 3: Scientific and clinical background, including the intended use and clinical role of the index test
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 14 | Dates of study | **PRESENT** | Methods, Study Design | "January 1989 and November 1991" |
-| 15 | Demographics | **PRESENT** | Results, Study Population | Age, sex, lesion characteristics reported in Table 1 |
-| 16 | Flow diagram / participant numbers | **PARTIAL** | Results | Numbers reported in text (569 total, 357 benign, 212 malignant). No formal STARD flow diagram provided. |
+**Status:** PRESENT
 
-### Results — Test Results
+**Evidence:** Introduction describes FNA as first-line diagnostic tool and clinical context of breast cancer diagnosis.
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 17 | Time interval between tests | **MISSING** | — | Not applicable (same specimen, simultaneous). Should be explicitly stated as N/A |
-| 18 | Severity distribution | **PARTIAL** | Results, Table 1 | Morphometric feature differences reported. Disease severity spectrum not characterized |
-| 19 | Cross-tabulation (2x2 table) | **PRESENT** | output/diagnostic_accuracy.csv | TP/FP/TN/FN counts available in output. Not presented as explicit 2x2 table in manuscript text |
-| 20 | Adverse events / indeterminate results | **MISSING** | — | Not discussed. Should state "No indeterminate results" if applicable |
-| 21 | Accuracy estimates with CIs | **PRESENT** | Results, Table 2 | AUC, sensitivity, specificity, PPV, NPV all with 95% CIs |
-| 22 | Handling of indeterminate results | **MISSING** | — | Not addressed |
-| 23 | Subgroup analyses | **PRESENT** | Results, Model Comparison | Pairwise DeLong tests reported. No demographic subgroup analyses. |
+### Item 4: Study objectives and hypotheses
 
-### Discussion
+**Status:** PRESENT
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 24 | Limitations | **PRESENT** | Discussion, para 4 | Four limitations explicitly stated including dataset nature, synthetic data, sample size, no hyperparameter tuning |
-| 25 | Clinical applicability | **PRESENT** | Discussion, para 2 | Clinical deployment implications discussed (interpretability, computational cost) |
+**Evidence:** Introduction states the objective to compare diagnostic accuracy of three ML classifiers.
 
-### Other Information
+## Methods
 
-| # | Item | Status | Location | Notes |
-|---|------|--------|----------|-------|
-| 26 | Registration | **MISSING** | — | No study registration (common for ML benchmark studies; recommended for prospective studies) |
-| 27 | Protocol access | **MISSING** | — | No protocol referenced |
-| 28 | Funding | **MISSING** | — | No funding statement |
+### Item 5: Whether data collection was planned before the index test and reference standard were performed (prospective study) or after (retrospective study)
+
+**Status:** PRESENT
+
+**Evidence:** Methods states 'Retrospective cross-sectional diagnostic accuracy study'.
+
+### Item 6: Eligibility criteria
+
+**Status:** PRESENT
+
+**Evidence:** Dataset described as 569 FNA cytology specimens from patients presenting with breast masses.
+
+**Recommendation:** Consider adding explicit inclusion/exclusion criteria (e.g., 'All consecutive FNA specimens with confirmed histopathological diagnosis were included. No specimens were excluded.').
+
+### Item 7: On what basis potentially eligible participants were identified (such as symptoms, results from previous tests, inclusion in registry)
+
+**Status:** PARTIAL
+
+**Evidence:** Mentions 'presenting with breast masses' but does not specify referral pathway or registry.
+
+**Recommendation:** Add: 'Patients were identified based on clinical presentation with palpable breast masses referred for FNA cytology at the University of Wisconsin Hospital.'
+
+### Item 8: Where and when the study was conducted, including the period of recruitment
+
+**Status:** PRESENT
+
+**Evidence:** Methods mentions University of Wisconsin Hospital, January 1989 to November 1991.
+
+### Item 9: Whether participants formed a consecutive, random, or convenience series
+
+**Status:** PARTIAL
+
+**Evidence:** Text mentions 'consecutive FNA cytology specimens'.
+
+**Recommendation:** Strengthen by stating explicitly: 'The dataset comprised a consecutive series of FNA specimens. No convenience sampling was applied.'
+
+### Item 10: Index test, in sufficient detail to allow replication
+
+**Status:** PRESENT
+
+**Evidence:** All three index tests described with hyperparameters, cross-validation strategy, and scaling approach.
+
+### Item 11: Reference standard, in sufficient detail to allow replication
+
+**Status:** PRESENT
+
+**Evidence:** Reference standard identified as histopathological diagnosis via surgical excision or core needle biopsy.
+
+### Item 12: Rationale for choosing the reference standard (if alternatives exist)
+
+**Status:** PARTIAL
+
+**Evidence:** Histopathology is described as reference standard but no explicit rationale for choosing it over alternatives.
+
+**Recommendation:** Add: 'Histopathological examination was chosen as the reference standard because it represents the highest-certainty method for distinguishing benign from malignant breast lesions.'
+
+### Item 13: Definition of and rationale for test positivity cut-offs or result categories, including whether the cut-off was pre-specified
+
+**Status:** PARTIAL
+
+**Evidence:** Default 0.5 probability threshold implied but not explicitly stated.
+
+**Recommendation:** Add: 'A probability threshold of 0.5 was used to dichotomize model predictions, consistent with the default classification boundary for binary classifiers.'
+
+### Item 14: Whether clinical information and reference standard results were available to the performers/readers of the index test
+
+**Status:** MISSING
+
+**Evidence:** No explicit statement about blinding of index test from reference standard.
+
+**Recommendation:** Add: 'In the cross-validation framework, each model was trained on the training fold without access to the test fold labels, providing functional blinding equivalent to prospective evaluation.'
+
+### Item 15: Methods for estimating or comparing measures of diagnostic accuracy
+
+**Status:** PRESENT
+
+**Evidence:** DeLong method for AUC CIs, Wilson CIs for proportions, DeLong test for pairwise comparison.
+
+### Item 16: How indeterminate index test or reference standard results were handled
+
+**Status:** MISSING
+
+**Evidence:** No mention of indeterminate results or how they would be handled.
+
+**Recommendation:** Add: 'The dataset contained no indeterminate or missing index test results. All 569 specimens had complete morphometric feature sets and confirmed histopathological diagnoses.'
+
+### Item 17: How missing data on the index test and reference standard were handled
+
+**Status:** MISSING
+
+**Evidence:** No discussion of missing data handling.
+
+**Recommendation:** Add: 'No missing data were present in the feature matrix or reference standard labels. All 569 specimens had complete data for all 30 morphometric features.'
+
+### Item 18: Any analyses of variability in diagnostic accuracy, distinguishing pre-specified from exploratory
+
+**Status:** PARTIAL
+
+**Evidence:** Pairwise DeLong comparisons performed. Feature importance analysis is exploratory but not labeled as such.
+
+**Recommendation:** Clarify: 'The primary analysis was the pairwise DeLong comparison of AUCs (pre-specified). Feature importance analysis was exploratory.'
+
+### Item 19: Intended sample size and how it was determined
+
+**Status:** MISSING
+
+**Evidence:** No sample size justification provided.
+
+**Recommendation:** Add: 'The full dataset of 569 specimens was used without a priori sample size calculation, as this was a secondary analysis of an existing publicly available dataset. With 212 cases and 357 controls, the study had >95% power to detect an AUC of 0.95 vs. 0.50.'
+
+## Results
+
+### Item 20: Flow of participants, using a diagram
+
+**Status:** MISSING
+
+**Evidence:** No STARD flow diagram included.
+
+**Recommendation:** Add a STARD flow diagram showing: 569 eligible specimens -> 569 included -> 569 received all three index tests -> 569 included in final analysis. Note: no exclusions simplifies the diagram.
+
+### Item 21: Baseline demographic and clinical characteristics of participants
+
+**Status:** PRESENT
+
+**Evidence:** Table 1 presents baseline characteristics including age and morphometric features.
+
+### Item 22: Distribution of severity of disease in those with the target condition
+
+**Status:** MISSING
+
+**Evidence:** No information on tumor grade, stage, or size distribution among malignant cases.
+
+**Recommendation:** Add: 'The Wisconsin dataset does not include tumor staging or grading information. Severity distribution could not be assessed, which limits evaluation of spectrum bias.'
+
+### Item 23: A cross tabulation of the index test results (or their distribution) by the results of the reference standard
+
+**Status:** PRESENT
+
+**Evidence:** Confusion matrices presented (Figure 2) with TP, FP, TN, FN counts for all models.
+
+### Item 24: Estimates of diagnostic accuracy and their precision (such as 95% confidence intervals)
+
+**Status:** PRESENT
+
+**Evidence:** AUC with DeLong 95% CIs and all secondary metrics with Wilson 95% CIs reported.
+
+### Item 25: Any adverse events from performing the index test or the reference standard
+
+**Status:** MISSING
+
+**Evidence:** No mention of adverse events.
+
+**Recommendation:** Add: 'As this was a retrospective analysis of pre-computed features, no adverse events were associated with the index test application. Adverse events related to the original FNA procedures were not recorded in the dataset.'
+
+## Discussion
+
+### Item 26: Study limitations, including sources of potential bias, statistical uncertainty, and generalisability
+
+**Status:** PRESENT
+
+**Evidence:** Five limitations discussed: curated dataset, default hyperparameters, synthetic age, single institution, and cross-validation independence.
+
+### Item 27: Implications for practice, including the intended use and clinical role of the index test
+
+**Status:** PRESENT
+
+**Evidence:** Discussion addresses clinical deployment preference for LR due to interpretability.
+
+## Other
+
+### Item 28: Registration number and name of registry
+
+**Status:** MISSING
+
+**Evidence:** No study registration mentioned.
+
+**Recommendation:** Add: 'This study was not registered in a clinical trial or diagnostic accuracy study registry as it was a secondary analysis of a publicly available benchmark dataset.'
+
+### Item 29: Where the full study protocol can be accessed
+
+**Status:** PARTIAL
+
+**Evidence:** Analysis code availability mentioned in Methods.
+
+**Recommendation:** Add: 'The complete analysis protocol and reproducible code are available at [repository URL]. No formal study protocol document was prepared.'
+
+### Item 30: Sources of funding and other support; role of funders
+
+**Status:** MISSING
+
+**Evidence:** No funding statement included.
+
+**Recommendation:** Add: 'This study received no external funding. The authors have no conflicts of interest to declare.'
 
 ---
 
-## Recommendations for Improvement
+## Priority Fixes (MISSING items)
 
-### High Priority (MISSING items to address)
+1. **Item 14** (Methods): Whether clinical information and reference standard results were available to the performers/readers of the index test
+   - Fix: Add: 'In the cross-validation framework, each model was trained on the training fold without access to the test fold labels, providing functional blinding equivalent to prospective evaluation.'
 
-1. **Item 7 (Sampling):** Add: "The dataset comprised a convenience series of FNA specimens collected at a single academic center."
-2. **Item 11 (Blinding):** Add: "Cross-validation ensured that reference standard labels for test-set specimens were not available to models during training within each fold."
-3. **Item 13 (Sample size):** Add sample size justification or state: "The full publicly available dataset was used; no a priori sample size calculation was performed."
-4. **Items 20, 22 (Indeterminate):** Add: "All specimens received definitive classifications; no indeterminate results were observed."
-5. **Item 28 (Funding):** Add funding statement or: "This research received no specific grant from any funding agency."
+2. **Item 16** (Methods): How indeterminate index test or reference standard results were handled
+   - Fix: Add: 'The dataset contained no indeterminate or missing index test results. All 569 specimens had complete morphometric feature sets and confirmed histopathological diagnoses.'
 
-### Medium Priority (PARTIAL items to strengthen)
+3. **Item 17** (Methods): How missing data on the index test and reference standard were handled
+   - Fix: Add: 'No missing data were present in the feature matrix or reference standard labels. All 569 specimens had complete data for all 30 morphometric features.'
 
-6. **Item 6 (Eligibility):** Explicitly state inclusion/exclusion criteria.
-7. **Item 16 (Flow diagram):** Add STARD flow diagram (strongly recommended).
-8. **Item 10a (Cut-offs):** Explicitly state in Methods that Youden's optimal threshold was used for binary classification.
+4. **Item 19** (Methods): Intended sample size and how it was determined
+   - Fix: Add: 'The full dataset of 569 specimens was used without a priori sample size calculation, as this was a secondary analysis of an existing publicly available dataset. With 212 cases and 357 controls, the study had >95% power to detect an AUC of 0.95 vs. 0.50.'
+
+5. **Item 20** (Results): Flow of participants, using a diagram
+   - Fix: Add a STARD flow diagram showing: 569 eligible specimens -> 569 included -> 569 received all three index tests -> 569 included in final analysis. Note: no exclusions simplifies the diagram.
+
+6. **Item 22** (Results): Distribution of severity of disease in those with the target condition
+   - Fix: Add: 'The Wisconsin dataset does not include tumor staging or grading information. Severity distribution could not be assessed, which limits evaluation of spectrum bias.'
+
+7. **Item 25** (Results): Any adverse events from performing the index test or the reference standard
+   - Fix: Add: 'As this was a retrospective analysis of pre-computed features, no adverse events were associated with the index test application. Adverse events related to the original FNA procedures were not recorded in the dataset.'
+
+8. **Item 28** (Other): Registration number and name of registry
+   - Fix: Add: 'This study was not registered in a clinical trial or diagnostic accuracy study registry as it was a secondary analysis of a publicly available benchmark dataset.'
+
+9. **Item 30** (Other): Sources of funding and other support; role of funders
+   - Fix: Add: 'This study received no external funding. The authors have no conflicts of interest to declare.'
 
 ---
 
-## STARD-AI Extension (Applicable — ML-based index test)
+## Partial Items Requiring Strengthening
 
-| # | Item | Status | Notes |
-|---|------|--------|-------|
-| AI-1 | AI system description | **PRESENT** | Three models named with libraries and versions |
-| AI-2 | Training data | **PRESENT** | UCI/sklearn dataset, 569 specimens, 30 features |
-| AI-3 | Data preprocessing | **PRESENT** | StandardScaler, fold-specific fitting |
-| AI-4 | Intended use | **PARTIAL** | General CAD mentioned; specific clinical workflow not defined |
-| AI-5 | Integration pathway | **MISSING** | Standalone/assistive/replacement not specified |
-| AI-6 | Human comparators | **MISSING** | No human reader comparison performed |
-| AI-7 | Failure analysis | **MISSING** | No error analysis of misclassified cases |
+1. **Item 7** (Methods): On what basis potentially eligible participants were identified (such as symptoms, results from previous tests, inclusion in registry)
+   - Fix: Add: 'Patients were identified based on clinical presentation with palpable breast masses referred for FNA cytology at the University of Wisconsin Hospital.'
+
+2. **Item 9** (Methods): Whether participants formed a consecutive, random, or convenience series
+   - Fix: Strengthen by stating explicitly: 'The dataset comprised a consecutive series of FNA specimens. No convenience sampling was applied.'
+
+3. **Item 12** (Methods): Rationale for choosing the reference standard (if alternatives exist)
+   - Fix: Add: 'Histopathological examination was chosen as the reference standard because it represents the highest-certainty method for distinguishing benign from malignant breast lesions.'
+
+4. **Item 13** (Methods): Definition of and rationale for test positivity cut-offs or result categories, including whether the cut-off was pre-specified
+   - Fix: Add: 'A probability threshold of 0.5 was used to dichotomize model predictions, consistent with the default classification boundary for binary classifiers.'
+
+5. **Item 18** (Methods): Any analyses of variability in diagnostic accuracy, distinguishing pre-specified from exploratory
+   - Fix: Clarify: 'The primary analysis was the pairwise DeLong comparison of AUCs (pre-specified). Feature importance analysis was exploratory.'
+
+6. **Item 29** (Other): Where the full study protocol can be accessed
+   - Fix: Add: 'The complete analysis protocol and reproducible code are available at [repository URL]. No formal study protocol document was prepared.'
 
 ---
 
-*Report generated by MedSci Skills (check-reporting) — https://github.com/Aperivue/medsci-skills*
+*Generated by MedSci Skills check-reporting pipeline.*

@@ -1,5 +1,5 @@
 """
-MedSci Skills Demo 1: Wisconsin Breast Cancer Dataset
+MedSci Skills Demo 1 v2: Wisconsin Breast Cancer Dataset
 Step 1 — Load and prepare data
 
 This script loads the sklearn built-in breast cancer dataset,
@@ -41,13 +41,13 @@ df.to_csv(output_path, index=False)
 
 # Summary for demo log
 print("=" * 60)
-print("MedSci Skills Demo 1: Data Loading Complete")
+print("MedSci Skills Demo 1 v2: Data Loading Complete")
 print("=" * 60)
 print(f"Dataset: Wisconsin Breast Cancer (UCI/sklearn)")
 print(f"Samples: {len(df)}")
 print(f"Features: {len(feature_cols)} imaging features + 4 clinical")
 print(f"Diagnosis: {df['diagnosis'].value_counts().to_dict()}")
-print(f"Age: mean {df['age'].mean():.1f} ± {df['age'].std():.1f}")
+print(f"Age: mean {df['age'].mean():.1f} +/- {df['age'].std():.1f}")
 print(f"Output: {output_path}")
 print(f"File size: {pd.read_csv(output_path).memory_usage(deep=True).sum() / 1024:.1f} KB")
 print("=" * 60)

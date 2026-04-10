@@ -1,13 +1,13 @@
 """
-MedSci Skills Demo 1: Wisconsin Breast Cancer Dataset
-Step 4 — Additional Publication Figures (make-figures skill)
+MedSci Skills Demo 1 v2: Wisconsin Breast Cancer Dataset
+Step 3 — Additional Publication Figures (make-figures skill)
 
 Generates:
   Figure 2: Confusion matrices (3 models side-by-side)
   Figure 3: Feature importance (top 10 features, LR coefficients vs RF importance)
   Figure 4: Calibration curves (3 models)
 
-Usage: python 04_additional_figures.py
+Usage: python 03_additional_figures.py
 """
 
 import os
@@ -18,8 +18,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+# v2: corrected style path after repo move
 STYLE_PATH = os.path.expanduser(
-    "~/Projects/medical-research-skills/skills/analyze-stats/references/style/figure_style.mplstyle"
+    "~/workspace/6_Aperivue/medical-research-skills/skills/analyze-stats/references/style/figure_style.mplstyle"
 )
 if os.path.exists(STYLE_PATH):
     plt.style.use(STYLE_PATH)

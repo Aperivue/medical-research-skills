@@ -1,0 +1,44 @@
+============================================================
+MedSci Skills Demo 3: NHANES Data Download
+============================================================
+Downloading: DEMO_J...
+  Saved: data/DEMO_J.XPT (3333 KB)
+Downloading: BMX_J...
+  Saved: data/BMX_J.XPT (1432 KB)
+Downloading: GHB_J...
+  Saved: data/GHB_J.XPT (101 KB)
+
+Loading XPT files...
+  DEMO_J: 9254 rows, 46 cols
+  BMX_J:  8704 rows, 21 cols
+  GHB_J:  6401 rows, 2 cols
+
+Merged: 6401 participants with complete data linkage
+Adults 20+ with complete BMI + HbA1c: 4940
+
+--- Dataset Summary ---
+Total participants: 4940
+Age: 51.4 +/- 17.6
+Female: 2568 (52.0%)
+BMI: 29.9 +/- 7.4
+HbA1c: 5.87 +/- 1.10
+
+BMI categories:
+bmi_category
+Underweight      74
+Normal         1189
+Overweight     1593
+Obese          2084
+Name: count, dtype: int64
+
+Glycemic status:
+glycemic_status
+Normal         2685
+Prediabetes    1530
+Diabetes        725
+Name: count, dtype: int64
+
+Diabetes prevalence: 14.7%
+
+Saved: data/nhanes_2017_2018.csv
+============================================================

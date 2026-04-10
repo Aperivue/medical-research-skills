@@ -1,9 +1,9 @@
 """
-MedSci Skills Demo 1: Wisconsin Breast Cancer Dataset
+MedSci Skills Demo 1 v2: Wisconsin Breast Cancer Dataset
 Step 2 — Statistical Analysis (analyze-stats skill)
 
 Demonstrates the analyze-stats skill pipeline:
-  Table 1 demographics → 3-model comparison → ROC curves → DeLong tests
+  Table 1 demographics -> 3-model comparison -> ROC curves -> DeLong tests
 
 Based on: skills/analyze-stats/references/templates/
   - table1_demographics.py
@@ -40,8 +40,9 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+# v2: corrected style path after repo move
 STYLE_PATH = os.path.expanduser(
-    "~/Projects/medical-research-skills/skills/analyze-stats/references/style/figure_style.mplstyle"
+    "~/workspace/6_Aperivue/medical-research-skills/skills/analyze-stats/references/style/figure_style.mplstyle"
 )
 if os.path.exists(STYLE_PATH):
     plt.style.use(STYLE_PATH)

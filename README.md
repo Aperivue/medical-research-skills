@@ -19,7 +19,17 @@
 
 ---
 
-## Live Demo: One Line of Code → Full Manuscript
+## Live Demos: Three Study Types, Three Full Pipelines
+
+Three public datasets. Three study types. Each produces a complete manuscript, publication-ready figures, reporting compliance audit, and presentation slides.
+
+| Demo | Dataset | Study Type | Compliance |
+|------|---------|------------|------------|
+| [Demo 1: Wisconsin BC](demo/01_wisconsin_bc/) | `sklearn` built-in | Diagnostic accuracy | STARD 2015 |
+| [Demo 2: BCG Vaccine](demo/02_metafor_bcg/) | `metafor::dat.bcg` (13 RCTs) | Meta-analysis | PRISMA 2020 |
+| [Demo 3: NHANES Obesity](demo/03_nhanes_obesity/) | CDC NHANES 2017-18 | Epidemiology (survey) | STROBE |
+
+### Demo 1: Diagnostic Accuracy — Wisconsin Breast Cancer
 
 ```python
 from sklearn.datasets import load_breast_cancer
@@ -30,7 +40,7 @@ data = load_breast_cancer()  # 569 samples, zero download
 
 | Output | Description |
 |--------|-------------|
-| [Manuscript (PDF)](demo/01_wisconsin_bc/output/manuscript_draft.pdf) | IMRAD draft, ~2,200 words, 4 embedded figures |
+| [Manuscript](demo/01_wisconsin_bc/output/manuscript_draft.md) | IMRAD draft, ~1,600 words, 4 embedded figures |
 | [ROC Curve](demo/01_wisconsin_bc/figures/roc_curve.png) | 3-model comparison with DeLong 95% CIs |
 | [Confusion Matrices](demo/01_wisconsin_bc/figures/confusion_matrices.png) | Side-by-side for LR, RF, SVM |
 | [STARD Compliance](demo/01_wisconsin_bc/output/stard_compliance_report.md) | 30-item audit (19 PRESENT, 5 PARTIAL, 6 MISSING) |
@@ -38,7 +48,41 @@ data = load_breast_cancer()  # 569 samples, zero download
 
 **Skills used:** `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
 
-> *More demos coming: metafor BCG (meta-analysis) and NHANES (epidemiology)*
+### Demo 2: Meta-Analysis — BCG Vaccine Efficacy
+
+```r
+library(metafor)
+data(dat.bcg)  # 13 RCTs, 357,347 participants (Colditz et al. 1994)
+```
+
+**Output from the pipeline** ([see full demo](demo/02_metafor_bcg/)):
+
+| Output | Description |
+|--------|-------------|
+| [Manuscript](demo/02_metafor_bcg/output/manuscript_draft.md) | Pooled RR = 0.49 (95% CI: 0.34–0.70) |
+| Forest plot, funnel plot, bubble plot | 300 dpi, PRISMA-ready |
+| [PRISMA Compliance](demo/02_metafor_bcg/output/prisma_compliance_report.md) | With fix recommendations |
+| [Presentation (PPTX)](demo/02_metafor_bcg/output/presentation.pptx) | Slide deck with speaker notes |
+
+**Skills used:** `meta-analysis` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
+
+### Demo 3: Epidemiology — NHANES Obesity & Diabetes
+
+```python
+# Downloads 3 XPT files from CDC (~5 MB) — run 01_download_data.py first
+# NHANES 2017-2018: 4,866 US adults after exclusions
+```
+
+**Output from the pipeline** ([see full demo](demo/03_nhanes_obesity/)):
+
+| Output | Description |
+|--------|-------------|
+| [Manuscript](demo/03_nhanes_obesity/output/manuscript_draft.md) | Adjusted OR = 4.08 (95% CI: 3.19–5.22) |
+| Prevalence by BMI figure | With survey-weighted CIs |
+| [STROBE Compliance](demo/03_nhanes_obesity/output/strobe_compliance_report.md) | With fix recommendations |
+| [Presentation (PPTX)](demo/03_nhanes_obesity/output/presentation.pptx) | Slide deck with speaker notes |
+
+**Skills used:** `clean-data` &rarr; `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
 
 ---
 

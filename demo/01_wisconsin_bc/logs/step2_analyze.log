@@ -21,9 +21,9 @@ PART A: Table 1 — Baseline Characteristics
 | Mean area (pixels), median (IQR) | 458.4 (378.2-551.1) | 932.0 (705.3-1203.8) | 551.1 (420.3-782.7) | <0.001    |
 | Mean smoothness, mean +/- SD     | 0.1 +/- 0.0         | 0.1 +/- 0.0          | 0.1 +/- 0.0         | <0.001    |
 | Sex, n (%)                       |                     |                      |                     | N/A       |
-| Sex, n (%)                       |                     |                      |                     | N/A       |
+| F                                | 357 (100.0%)        | 212 (100.0%)         | 569 (100.0%)        |           |
 | Imaging modality, n (%)          |                     |                      |                     | N/A       |
-| Imaging modality, n (%)          |                     |                      |                     | N/A       |
+| FNA cytology                     | 357 (100.0%)        | 212 (100.0%)         | 569 (100.0%)        |           |
 
 Saved: output/table1.csv
 
@@ -70,3 +70,5 @@ The SVM (RBF) achieved an AUC of 0.994 (0.989-0.999), sensitivity of 0.958 (0.92
 
 ROC curves for all three models are shown in Figure 1.
 ============================================================
+
+Saved: output/_analysis_outputs.md
