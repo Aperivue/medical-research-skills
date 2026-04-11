@@ -30,3 +30,10 @@ translational medicine, clinical trials, biomarkers, precision medicine, oncolog
 
 ## Special Notes
 Nature Medicine is highly receptive to medical AI studies that demonstrate clinical validation at scale. It values multi-center studies, external validation, and studies that combine novel methodology with clinical endpoints. Acceptance requires work at the intersection of innovation and clinical relevance. Preprints are allowed and even encouraged.
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only
+- **Disclosure location:** Methods
+- **AI-generated images:** Banned
+- **Policy URL:** https://www.nature.com/nature-portfolio/editorial-policies/ai

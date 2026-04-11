@@ -65,7 +65,8 @@ ${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/*.md
 ```
 
 This yields 58 profiles total (27 + 31). Parse each profile's Scope, Scope Keywords,
-Article Types Accepted, Classification (Tier, OA, Field), and Special Notes.
+Article Types Accepted, Classification (Tier, OA, Field), Special Notes, and
+AI Writing Disclosure Policy (if present — currently available for Tier 1 journals).
 
 ### 3.2 Scoring Algorithm
 
@@ -108,6 +109,8 @@ Reference specific keywords, disease areas, or methodological preferences from t
 
 **Homepage:** [URL]
 **Author guidelines:** [URL]
+
+**AI disclosure:** [Required / Recommended / Not specified] — [brief summary of permitted scope and disclosure location, if available in profile]
 ```
 
 After all 5 recommendations, add a brief comparison note (2-3 sentences) highlighting

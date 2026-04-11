@@ -116,17 +116,7 @@ Received both index test AND reference standard (N = ?)
 
 ## STARD-AI Extension
 
-For studies evaluating AI-based diagnostic tests, also report:
-
-| # | Item | Description |
-|---|------|-------------|
-| AI-1 | AI system description | Name, version, manufacturer, and regulatory status of the AI system. |
-| AI-2 | Training data | Description of training data: source, size, demographic characteristics. |
-| AI-3 | Data preprocessing | Description of any preprocessing or augmentation applied to the input data. |
-| AI-4 | Intended use | The intended use of the AI system in clinical practice. |
-| AI-5 | Integration | How the AI output was integrated into the diagnostic pathway (standalone, assistive, replacement). |
-| AI-6 | Human comparators | If comparing AI to human readers: experience level, specialty, and reading conditions. |
-| AI-7 | Failure analysis | Analysis of cases where the AI system produced incorrect or indeterminate results. |
+For studies evaluating AI-based diagnostic tests, use the dedicated **STARD-AI checklist** (`STARD_AI.md`) instead of this file. STARD-AI (Sounderajah et al., Nat Med 2025) provides a comprehensive 40-item checklist that incorporates all STARD 2015 items plus 14 new and 4 modified AI-specific items. Do NOT apply both STARD 2015 and STARD-AI simultaneously.
 
 ---
 
@@ -136,4 +126,4 @@ For studies evaluating AI-based diagnostic tests, also report:
 - Item 11 (blinding): in retrospective studies with AI, consider whether the AI had access to clinical information beyond the intended input.
 - Item 19 (cross-tabulation): a 2x2 table is the minimum; report TP, FP, TN, FN counts.
 - Items 26-27 (registration/protocol): many diagnostic accuracy studies are not registered, but this is increasingly expected. Mark as MISSING if absent, with a note that registration is recommended.
-- For AI studies, always also apply the STARD-AI extension items.
+- For AI studies, use the dedicated STARD-AI checklist (`STARD_AI.md`).

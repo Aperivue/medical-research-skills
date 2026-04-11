@@ -554,14 +554,25 @@ as an author and did not contribute to study conception, design, or data interpr
 
 ### Journal-Specific Overrides
 
-Some journals have stricter requirements:
-- **Science/AAAS**: Most restrictive. LLM use limited; treated as potential misconduct if undisclosed.
-- **Lancet**: Permits only "readability and language" improvements.
-- **Nature**: Requires Methods section disclosure. AI-generated images banned.
-- **Radiology/RSNA**: Requires CLAIM 2024 checklist for AI studies; explicit AI disclosure for writing.
+When a journal profile is loaded in Phase 0, check for the `## AI Writing Disclosure Policy`
+section in the profile. Tier 1 profiles now include structured fields:
+- **Requirement level** (Required / Recommended / Not specified)
+- **Permitted scope** (All tasks / Language editing only / Not permitted)
+- **Disclosure location** (Methods / Acknowledgments / Cover letter / Submission form)
+- **AI-generated images** (Allowed / Banned / Not specified)
+- **Policy URL**
 
-When a journal profile is loaded in Phase 0, check for journal-specific AI policies
-and adjust the disclosure language accordingly.
+Use these fields to adjust disclosure language automatically. Key known policies:
+- **Radiology/RSNA**: Required; language editing only; Methods + Acknowledgments; AI images banned.
+- **RYAI/RSNA**: Required; language editing only; Methods + Acknowledgments; AI images banned.
+- **JAMA/AMA**: Required; language editing only; Methods + Cover letter.
+- **Lancet**: Required; language editing only ("readability and language"); Acknowledgments + prompts disclosed.
+- **BMJ**: Required; all tasks permitted but must disclose; Methods + Acknowledgments; applies to text, images, data, diagrams.
+- **Nature/Springer Nature**: Required; language editing only; Methods; AI images banned.
+- **Science/AAAS**: Most restrictive. LLM use limited; treated as potential misconduct if undisclosed.
+
+If the loaded journal profile has no AI Writing Disclosure Policy section, fall back to
+ICMJE 2025 defaults (disclose in Methods + Acknowledgments, language editing scope).
 
 ---
 

@@ -110,3 +110,12 @@
   - Null primary findings reduce appeal for high-impact general journal
 - **Alternative BMJ journals**: BMJ Open (IF ~3.0, more realistic), or stay with BMC Medical Education
 - **Transfer service**: If rejected from The BMJ, can transfer to BMJ Open automatically
+
+---
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** All tasks — AI tools may be used for writing, editing, and other manuscript preparation tasks, but cannot be listed as authors; authors are accountable for all content including AI-generated text; follows ICMJE + COPE guidance
+- **Disclosure location:** Methods + Acknowledgments — must disclose the AI tool name, version, and how it was used; applies to all content types (text, audio, video, images, data, diagrams)
+- **AI-generated images:** Must be declared — AI-generated or AI-manipulated images, diagrams, and data visualizations must be explicitly disclosed; not blanket banned but full transparency required
+- **Policy URL:** https://www.bmj.com/company/the-bmjs-position-on-ai-and-large-language-models/

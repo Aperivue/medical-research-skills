@@ -113,3 +113,12 @@ Multiple checklists may apply (e.g., CLAIM + STARD-AI for a diagnostic AI study)
 - CLAIM checklist is mandatory for both.
 - Emphasis on reproducibility: pipeline code, prompt templates, and evaluation criteria should be described in detail or provided as supplements.
 - For LLM/MLLM studies: model version, API date, temperature settings, prompt text (or reference to supplement) must be reported in Methods.
+
+---
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only — AI/LLM tools may assist with language editing and manuscript preparation but cannot be listed as authors; must not generate scientific content, interpret data, or draw conclusions
+- **Disclosure location:** Methods + Acknowledgments — must describe the AI tool name, version, and specific role in both the Methods section (under "AI Disclosure in Methods") and Acknowledgments (under "AI Disclosure in Acknowledgments"); this is distinct from AI used as the research subject
+- **AI-generated images:** Banned — AI-generated or AI-manipulated images in figures are not permitted; AI models studied as research subjects must follow CLAIM checklist reporting
+- **Policy URL:** https://pubs.rsna.org/page/ai-policy

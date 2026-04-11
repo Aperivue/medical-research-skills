@@ -170,3 +170,12 @@ Not appropriate for: pure technical methodology (use Nature Methods or Nature Ma
 | Body | ~3000-5000 words | 1500 words |
 | Figures | 8 | 4 |
 | Use when | Comprehensive study | Striking result, rapid publication |
+
+---
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only — AI/LLM tools (e.g., ChatGPT, Claude) may assist with language, grammar, and readability but cannot be listed as authors; AI must not generate scientific content, interpret results, or draw conclusions; authors bear full responsibility for accuracy and integrity
+- **Disclosure location:** Methods — describe the AI tool name, version, and how it was used in the Methods section; Nature Portfolio requires disclosure in the manuscript body, not just a cover letter; also captured in the Nature Research Reporting Summary
+- **AI-generated images:** Banned — AI-generated images are not permitted in published figures; any image manipulation must follow Nature's image integrity policies; computational visualizations from AI research tools must be clearly labeled
+- **Policy URL:** https://www.nature.com/nature-portfolio/editorial-policies/ai

@@ -162,3 +162,12 @@ Radiology is appropriate when:
 - Landmark AI study with external validation and clinical endpoint
 
 Not appropriate for: small retrospective series, incremental technical improvements, studies limited to a rare condition (unless first of its kind with major impact).
+
+---
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only — AI/LLM tools may assist with language polishing and editing but cannot be listed as authors and must not generate scientific content, interpret data, or draw conclusions
+- **Disclosure location:** Methods + Acknowledgments — describe the AI tool, version, and how it was used; RSNA requires disclosure in both the Methods section and Acknowledgments
+- **AI-generated images:** Banned — AI-generated or AI-manipulated images in figures are not permitted; AI use in image analysis as part of the study methodology is acceptable and must be described in Methods
+- **Policy URL:** https://pubs.rsna.org/page/ai-policy

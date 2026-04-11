@@ -101,3 +101,12 @@ Strict in-house statistical conventions enforced by statistical editors:
 - **AI policy**: generative AI only for readability/language; disclose in Acknowledgments with tool name, version, exact prompts.
 - **Author signatures** from all authors required before publication.
 - **Tables**: supply in separate Word document (not Excel/PDF); do not merge cells.
+
+---
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only — generative AI may be used only for readability and language improvement; AI cannot be listed as an author; authors are fully responsible for accuracy of all content
+- **Disclosure location:** Acknowledgments — must disclose the AI tool name, version, and the exact prompts used; also reference in the cover letter
+- **AI-generated images:** Banned — Elsevier policy explicitly prohibits use of generative AI or AI-assisted tools to create or alter images in submitted manuscripts (including enhancing, obscuring, moving, removing, or introducing features); AI-generated artwork and graphical abstracts also not permitted; sole exception is when AI imaging is part of the research methodology itself (e.g., biomedical imaging research), which must be fully described in Methods; The Lancet further restricts AI use to language/readability only (Elsevier policy; confirmed Apr 2026)
+- **Policy URL:** https://www.thelancet.com/publishing-with-the-lancet

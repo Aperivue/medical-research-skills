@@ -31,3 +31,10 @@ clinical research, public health, health policy, randomized controlled trial, ep
 
 ## Special Notes
 JAMA and JAMA Network journals (JAMA Internal Medicine, JAMA Surgery, JAMA Network Open, etc.) share a submission system. If rejected from JAMA, authors can transfer to a JAMA Network specialty journal. JAMA has a strong statistical review process and values structured reporting. Diagnostic accuracy studies and AI papers are considered if they demonstrate clear clinical utility.
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only
+- **Disclosure location:** Methods + Cover letter
+- **AI-generated images:** Not specified — disclosure required if used
+- **Policy URL:** https://jamanetwork.com/journals/jama/pages/instructions-for-authors#702720037

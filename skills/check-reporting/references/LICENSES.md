@@ -6,6 +6,7 @@ Attribution for bundled reporting guideline checklists.
 |------|-----------|-----------|---------|
 | STROBE.md | STROBE 2007 | von Elm E et al. PLoS Med 2007 | CC BY |
 | STARD.md | STARD 2015 | Bossuyt PM et al. BMJ 2015 | CC BY 4.0 |
+| STARD_AI.md | STARD-AI 2025 | Sounderajah V et al. Nat Med 2025;31:3283-3289 | CC BY |
 | TRIPOD_AI.md | TRIPOD+AI 2024 | Collins GS et al. BMJ 2024 | CC BY 4.0 |
 | PRISMA_2020.md | PRISMA 2020 | Page MJ et al. BMJ 2021 | CC BY |
 | ARRIVE_2.md | ARRIVE 2.0 | Percie du Sert N et al. PLoS Biol 2020 | CC0 |

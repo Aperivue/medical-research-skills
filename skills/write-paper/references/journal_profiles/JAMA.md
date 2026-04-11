@@ -177,3 +177,12 @@ JAMA is appropriate when:
 - Diagnostic accuracy study with clear clinical decision impact
 
 Not appropriate for: small retrospective studies, technical AI methodology without clinical validation, narrow subspecialty findings (use JAMA Network journals instead).
+
+---
+
+## AI Writing Disclosure Policy
+- **Requirement level:** Required
+- **Permitted scope:** Language editing only — AI/LLM tools may be used for editing, grammar, and language improvement but cannot be listed as authors; AI must not generate scientific content, data analysis, or conclusions; authors bear full responsibility for all content including any AI-assisted text
+- **Disclosure location:** Methods + Cover letter — describe the AI tool name, version, and how it was used in the Methods section; also disclose in the cover letter; ICMJE-compliant disclosure required
+- **AI-generated images:** Discouraged — submission and publication of clinical images created by AI tools is discouraged unless part of formal research design or methods; if used, authors must provide a clear description of the content created and the AI tool name, version, and manufacturer; AI-generated or AI-manipulated images must be disclosed; fabrication/falsification policies apply (JAMA editorial 2024; confirmed Apr 2026)
+- **Policy URL:** https://jamanetwork.com/journals/jama/pages/instructions-for-authors#702720037
