@@ -154,7 +154,7 @@ Also read ONE existing find-journal profile from any field for the compact forma
 
 ### 3.2 Generate Write-Paper Profile
 
-Follow the canonical 10-section order exactly:
+Follow the canonical 11-section order exactly:
 
 ```markdown
 # Journal Profile: {Full Name}
@@ -233,6 +233,25 @@ Should include:
 
 ---
 
+## AI Writing Disclosure Policy
+
+- **Requirement level:** {Required / Recommended / Not specified — follows ICMJE recommendations}
+- **Permitted scope:** {Language editing only / All tasks / describe specific policy}
+- **Disclosure location:** {Methods / Acknowledgments / Cover letter / Submission form}
+- **AI-generated images:** {Banned / Must be declared / Not specified}
+- **Policy URL:** {URL to journal's AI policy page, or author guidelines URL if no dedicated page}
+
+<!-- Use WebFetch to check the journal's Author Guidelines for AI policy.
+     If no specific AI policy found, use ICMJE default:
+     - Requirement level: Not specified — follows ICMJE recommendations
+     - Permitted scope: Language editing only — per ICMJE 2025
+     - Disclosure location: Methods
+     - AI-generated images: Not specified
+     - Policy URL: [author guidelines URL] (no dedicated AI policy page)
+     Add [VERIFY] tag if uncertain about any field. -->
+
+---
+
 ## Author Guidelines URL
 
 {URL}
@@ -282,7 +301,7 @@ Follow the canonical 5-section format exactly:
 - **Field:** {field}
 
 ## Special Notes
-{2-3 sentences on positioning, unique aspects, society affiliation.}
+{2-3 sentences on positioning, unique aspects, society affiliation.} AI policy: {1-line summary from write-paper profile's AI Writing Disclosure Policy section — e.g., "language editing only, dual disclosure required, AI images banned." or "follows ICMJE — disclose AI use in Methods."}
 ```
 
 ### --- Gate 2: Profile Review ---
