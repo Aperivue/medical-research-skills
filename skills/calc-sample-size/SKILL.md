@@ -322,6 +322,58 @@ If the user requests any of these, respond:
    - Pilot data
    - Cohen's conventions (as a last resort, with a note that convention-based estimates are less precise)
 
+### Phase 2b: Retrospective Study — Experience-Based Sample Size Justification
+
+For retrospective studies, formal power analysis is often impractical because the dataset
+already exists. In these cases, an experience-based justification is acceptable for IRB
+and many journals. Offer this path when the user describes a retrospective design.
+
+**Two approaches**:
+
+#### Approach A: Institution Volume-Based
+
+Estimate N from the number of examinations performed at the institution during the study period.
+
+```
+Total exams in period × prevalence of target condition × (1 - exclusion rate) = Expected N
+```
+
+- Ask the user for: annual exam volume for the modality, study period length, estimated
+  prevalence, and expected exclusion rate
+- This gives a realistic upper bound for N
+
+**IRB justification template**:
+> Based on approximately [X] [modality] examinations performed annually at [institution],
+> and an estimated prevalence of [condition] of [Y]%, we anticipate identifying approximately
+> [N] eligible patients over the [Z]-year study period. After accounting for an estimated
+> [W]% exclusion rate (due to [reasons]), we expect a final sample of approximately [N_adj]
+> patients for analysis.
+
+#### Approach B: Prior Study-Based
+
+Use sample sizes from published studies with similar designs as justification.
+
+- Search for 3-5 comparable studies and report their sample sizes
+- The user's N should be in the same range or larger
+- Cite the specific studies in the IRB justification
+
+**IRB justification template**:
+> Previous studies evaluating [similar topic] with [similar design] enrolled [N1] (Author1
+> et al., Year), [N2] (Author2 et al., Year), and [N3] (Author3 et al., Year) patients.
+> Our anticipated sample of [N] patients is [comparable to / larger than] these prior studies.
+
+#### When to Use Formal Calculation Instead
+
+Even for retrospective studies, a formal sample size calculation is preferred when:
+- The study is prospective or will prospectively enroll a subset
+- The primary analysis involves hypothesis testing (not just estimation)
+- The journal explicitly requires power analysis (check Instructions for Authors)
+- The IRB requires it for approval
+
+In these cases, proceed to Phase 3 with the appropriate test from the decision tree.
+
+---
+
 ### Phase 3: Calculate and Report
 
 1. Read `${CLAUDE_SKILL_DIR}/references/formulas.md` for the exact formula.

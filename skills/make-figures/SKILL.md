@@ -38,6 +38,58 @@ Read `figure_specs.md` before generating any figure to confirm journal-specific 
 
 ---
 
+## AI-Generated Figure Warning
+
+AI-generated illustrations (from Genspak, Canva AI, DALL-E, etc.) are immediately
+recognizable to experienced reviewers and audiences. Telltale signs include:
+
+- **Small decorative icons** that add no information
+- **Overly uniform layouts** with templated grid patterns
+- **Text too small** to read at print resolution
+- **Generic medical clip-art style** that does not match the study specifics
+
+**Rule**: AI tools may assist with figure drafting, but the final figure must not look
+AI-generated. Always customize layouts, replace generic icons with study-specific visuals,
+adjust text sizing, and verify that every visual element serves a purpose.
+
+For important presentations and journal submissions, an AI-looking figure gives the
+impression of low effort. When time permits, use Canva (for illustrations) or manual
+PPT drawing (for anatomical sketches) to produce figures that show intentional design.
+
+---
+
+## DPI and Resolution Guide
+
+| Output | Minimum DPI | Notes |
+|--------|------------|-------|
+| Journal halftone (photos, screenshots) | 300 | Standard for most journals |
+| Journal line art (diagrams, graphs) | 600 | Required by Radiology, most Elsevier journals |
+| Poster presentation | 150-200 | Lower is acceptable for large-format prints |
+| Screen/web only | 72-150 | Not for print submission |
+
+**Practical workflow for screen captures**:
+- Use HyperSnap or similar tool with DPI pre-set to the journal requirement
+- Compose the figure in PPT at high zoom → capture at target DPI → save as TIFF/PNG
+- Verify final file dimensions match journal column width requirements
+
+---
+
+## Visual Abstract
+
+Many journals recommend or require visual abstracts. Submitting one voluntarily (even when
+not required) signals effort and can improve editorial impression.
+
+**Design principles**:
+- One page, landscape or portrait per journal template
+- Three sections: Study question → Key method → Main result
+- Use the study's actual figures (ROC curve, flow diagram) rather than generic graphics
+- Minimize text — let visuals carry the message
+- Follow the journal's visual abstract template if available
+
+**Tools**: Canva (recommended for non-designers), Figma, or PPT with consistent styling.
+
+---
+
 ## Workflow
 
 ### Step 1: Specify

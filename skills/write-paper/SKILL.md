@@ -18,6 +18,7 @@ academic physician.
 - **Journal profiles (built-in)**: `${CLAUDE_SKILL_DIR}/references/journal_profiles/`
 - **Paper type templates**: `${CLAUDE_SKILL_DIR}/references/paper_types/`
 - **Section templates**: `${CLAUDE_SKILL_DIR}/references/section_templates/`
+- **Section guides**: `${CLAUDE_SKILL_DIR}/references/section_guides/` (on-demand per phase)
 - **Manuscript workspace**: determined at Phase 0 (typically `7_Manuscript/{PaperN}/`)
 
 ---
@@ -76,9 +77,10 @@ When paper type is "case report":
 10. For extended case reports with literature review, user can specify `--extended` to raise
     the word limit to 2000-3000 words and add a structured review section.
 
-5. Summarize the setup to the user and confirm before proceeding.
+5. **Identify a backbone article**: Ask the user for a published study with a similar design in the target journal (or comparable journal). This article serves as a structural template for Methods, Tables, and Figures. Record it in the project scaffold for reference throughout writing.
+6. Summarize the setup to the user and confirm before proceeding.
 
-**Output:** Setup summary with journal constraints, paper type, reporting guideline, directory path, and LLM disclosure status (ON/OFF).
+**Output:** Setup summary with journal constraints, paper type, reporting guideline, backbone article, directory path, and LLM disclosure status (ON/OFF).
 
 ---
 
@@ -153,6 +155,8 @@ Design all tables and figures BEFORE writing prose. This ensures the narrative s
 
 Write the Methods section first -- it is the most objective and anchors the rest of the paper.
 
+**Before writing:** Load `${CLAUDE_SKILL_DIR}/references/section_guides/methods.md` for PICO structure, backbone article usage, checklist cross-reference, and terminology conventions.
+
 **Writing order within Methods:**
 1. Study Design and Setting
 2. Participants / Dataset (inclusion/exclusion, recruitment period)
@@ -175,6 +179,8 @@ Write the Methods section first -- it is the most objective and anchors the rest
 
 Write Results aligned to the approved tables and figures. **Results = "What did we find?"
 — nothing more.** Every sentence must be a factual statement backed by a number.
+
+**Before writing:** Load `${CLAUDE_SKILL_DIR}/references/section_guides/results.md` for mirror-symmetry rules, flowchart requirements, missing data handling, and the anti-interpretation self-check.
 
 **Rules:**
 - Every number in the text must match the corresponding table cell exactly.
@@ -214,7 +220,9 @@ Write Results aligned to the approved tables and figures. **Results = "What did 
 
 ### Phase 5: Discussion
 
-**Before writing, collect user input (Discussion Planning Gate).**
+**Before writing:** Load `${CLAUDE_SKILL_DIR}/references/section_guides/discussion.md` for the 4-paragraph structure, word limits, limitation writing guidelines, and Table/Figure citation rules.
+
+**Before drafting, collect user input (Discussion Planning Gate).**
 
 #### Step 5a: Discussion Planning (interactive)
 
@@ -282,6 +290,8 @@ Incorporate user feedback before running the critic-fixer loop.
 
 Write these LAST because they frame the paper and depend on knowing what was actually found.
 
+**Before writing:** Load `${CLAUDE_SKILL_DIR}/references/section_guides/introduction.md` for the Gap Storytelling 5-step structure, word/paragraph/reference targets, and common mistakes. Also load `${CLAUDE_SKILL_DIR}/references/section_guides/title_abstract.md` for Title 3-type selection, 4-component checklist, Abstract Conclusion-first priority, and Visual Abstract guidance.
+
 **Introduction structure (3-4 paragraphs):**
 1. Clinical context establishing importance (cite prevalence, burden, current practice).
 2. Knowledge gap that this study addresses.
@@ -348,6 +358,18 @@ This is an optional post-pipeline step. Do NOT generate automatically — only w
 Automatically flag and rewrite any of these words in cover letters: "first," "novel," "unprecedented," "groundbreaking," "paradigm-shifting," "revolutionary." Replace with specific factual statements about what the study contributes.
 
 **Word limit:** 300-500 words. Cover letters exceeding 500 words should be trimmed.
+
+---
+
+## LLM-Assisted Writing Principles
+
+When using this skill (or any LLM) for manuscript drafting, follow this 3-step process:
+
+1. **Structure first**: The user (or the skill) outlines the logical flow, key arguments, and paragraph-level plan *before* generating prose. An LLM cannot evaluate its own output without a pre-defined target.
+2. **LLM drafts**: Generate prose based on the structured plan.
+3. **Critical evaluation**: Review LLM output against the plan. Check for logical gaps, unsupported claims, AI pattern phrases, and deviation from the intended argument. Revise or reject sections that do not meet the standard.
+
+This principle applies at every phase: the outline (Phase 1) is the structure; the writer pass is the LLM draft; the critic-fixer loop is the critical evaluation. The user remains the final arbiter of scientific accuracy and narrative direction.
 
 ---
 

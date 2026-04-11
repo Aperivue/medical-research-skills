@@ -175,6 +175,80 @@ because [reason]. We hope the reviewer finds this explanation satisfactory.
 
 ---
 
+## 5-Category Triage Strategy
+
+Before writing individual responses, classify every comment into one of five categories.
+This classification determines the response template and effort level. Process Category 1
+(Simple) comments first — they are the most numerous and clearing them early reduces the
+perceived workload.
+
+### Category 1: Simple Question (most common)
+
+Reviewer asks for additional description, clarification, or minor data.
+**Response**: Add the requested text and point to the location. Keep the response short.
+**Example**: "Please specify the study period" → add dates, reply "Done. See page X, line Y."
+
+### Category 2: Misunderstanding
+
+Reviewer misinterpreted the study design, population, or analysis.
+**Response**: Never say "you are wrong." Instead: "We apologize for the lack of clarity"
+→ re-explain the intended meaning → revise the manuscript text to prevent future confusion.
+
+### Category 3: Further Discussion
+
+Reviewer raises a contextual concern (different healthcare system, different clinical practice).
+**Response**: Acknowledge the valid perspective → explain your study context → add a brief
+note in Discussion if appropriate. The full explanation can stay in the response letter
+without bloating the manuscript.
+
+### Category 4: Additional Results
+
+Reviewer requests new analysis (subgroup, sensitivity, additional metric).
+**Response**: Perform the analysis → add results to Supplementary (or main text if important)
+→ describe what was done and what was found. Treat this as a constructive contribution,
+not an attack. **Never ignore these requests** — reviewer engagement is a positive signal.
+
+### Category 5: Statistical Method Challenge
+
+Reviewer questions or requests changes to statistical methods.
+**Response**: Consult a biostatistician if unfamiliar → provide a reasoned justification
+for your method choice with references → if the reviewer's suggestion is valid, perform
+both analyses and show results are consistent. "This analysis was reviewed in consultation
+with our biostatistician" adds credibility.
+
+### Mapping to MAJ/MIN/REB
+
+| Category | Typical Classification |
+|----------|----------------------|
+| 1. Simple Question | MIN |
+| 2. Misunderstanding | MIN or REB |
+| 3. Further Discussion | MIN (if text change) or REB (if disagree) |
+| 4. Additional Results | MAJ |
+| 5. Statistical Challenge | MAJ |
+
+Use the 5-category triage to inform the MAJ/MIN/REB classification in Step 1, not replace it.
+
+---
+
+## Handling Low-Quality Reviews
+
+Reviewer quality varies widely. When facing comments that suggest the reviewer did not
+carefully read the manuscript:
+
+1. **Do not get combative.** Respond with the same professionalism regardless of review quality.
+2. **Address every point**, even trivial or off-topic ones. Skipping a comment signals
+   disrespect to the editor.
+3. **For irrelevant comments**: Add a clarifying sentence to Discussion or Methods, and
+   reply: "We have added clarification in [section] to address this concern." This shows
+   effort without conceding a scientific point.
+4. **For factually incorrect comments**: Provide evidence (with references) politely.
+   Frame as "We believe there may be a misunderstanding" rather than "The reviewer is wrong."
+5. **Remember the audience**: The response letter is read by the editor, not just the
+   reviewer. A measured, thorough response demonstrates manuscript quality even when
+   the review does not.
+
+---
+
 ## Step 5: Cover Letter to Editor
 
 **Output location:** `revision/R[N]/cover_letter_R[N].md`
