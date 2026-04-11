@@ -66,6 +66,18 @@ For Focus on Research Methods:
 - Declaration of Helsinki compliance
 - COPE Code of Conduct
 
+## Statistical Reporting
+
+Follows ICMJE recommendations and Medical Education editorial standards:
+- Report exact p-values; avoid P < .05 as sole reporting.
+- 95% CI required for primary outcomes in quantitative studies.
+- Effect sizes (Cohen's d, eta-squared, Hedges' g) required for educational intervention studies; accompany with CI to convey educational significance.
+- Report both numerators and denominators (n/N, %) -- percentages alone are not acceptable.
+- For qualitative studies: no quantitative statistical reporting requirements; follow SRQR or COREQ.
+- Mixed-methods: report quantitative and qualitative components separately per their respective conventions.
+- Statistical software and version identified in Methods.
+- No additional journal-specific statistical reporting requirements beyond ICMJE are published.
+
 ## Special Notes
 
 - **Title**: 15 words or fewer (90 characters including spaces); editor may edit.
@@ -77,5 +89,4 @@ For Focus on Research Methods:
 - **AI policy**: AI tools cannot be listed as author; authors responsible for AI-generated content accuracy; disclosure encouraged when AI use is fundamental to research.
 - **Really Good Stuff**: max 4 authors, 1 reference, no figures/tables.
 - **Decision timeline**: initial decision < 1 month; nearly all within 12 weeks.
-- Report both numbers and percentages (not percentages alone).
 - Figures embedded at end of manuscript in single document preferred.

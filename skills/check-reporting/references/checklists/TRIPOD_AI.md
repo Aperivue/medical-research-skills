@@ -89,6 +89,12 @@ Items marked with **(AI)** are specific to the AI extension. All other items are
 |---|------|-------------|
 | 11 | Risk groups | Provide details on how risk groups were created, if done. |
 
+#### Development vs. Validation
+
+| # | Item | Description |
+|---|------|-------------|
+| 12 | Development vs. validation | For validation, identify any differences from the development data in setting, eligibility criteria, outcome, and predictors. |
+
 ### Results
 
 | # | Item | Description |

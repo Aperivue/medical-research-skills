@@ -61,6 +61,16 @@ Required after abstract. Follow JMIR keyword guidelines.
 
 Upload completed checklists as Multimedia Appendix.
 
+## Statistical Reporting
+
+Follows ICMJE statistical reporting conventions:
+- Report exact p-values; avoid reporting only P < .05.
+- 95% CI required for primary outcomes in quantitative studies.
+- For educational effectiveness studies: effect sizes (Cohen's d or equivalent) required alongside p-values; distinguish clinical/educational significance from statistical significance.
+- For qualitative studies: no quantitative reporting requirements; follow COREQ or SRQR.
+- Statistical software and version must be named in Methods.
+- No journal-specific statistical reporting requirements beyond ICMJE are published.
+
 ## Special Notes
 
 - **Single-blind review** with named reviewers (reviewer names published with accepted articles).

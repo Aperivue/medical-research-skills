@@ -1,6 +1,6 @@
 ---
 name: check-reporting
-description: Check manuscript compliance with medical research reporting guidelines. Supports 15 guidelines including STROBE, CONSORT, STARD, TRIPOD+AI, ARRIVE, PRISMA, PRISMA-DTA, CARE, SPIRIT, CLAIM, and risk of bias tools (QUADAS-2, RoB 2, ROBINS-I, PROBAST, NOS). Generates item-by-item assessment with PRESENT/MISSING/PARTIAL status.
+description: Check manuscript compliance with medical research reporting guidelines. Supports 16 guidelines including STROBE, CONSORT, STARD, TRIPOD, TRIPOD+AI, ARRIVE, PRISMA, PRISMA-DTA, CARE, SPIRIT, CLAIM, and risk of bias tools (QUADAS-2, RoB 2, ROBINS-I, PROBAST, NOS). Generates item-by-item assessment with PRESENT/MISSING/PARTIAL status.
 triggers: checklist, reporting guideline, STROBE, CONSORT, STARD, TRIPOD, PRISMA, PRISMA-DTA, ARRIVE, CARE, CLAIM, SPIRIT, QUADAS, RoB, ROBINS, PROBAST, NOS, risk of bias, compliance check
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: inherit
@@ -23,7 +23,8 @@ compliance report suitable for journal submission.
 - **Checklists (bundled, open license)**: `${CLAUDE_SKILL_DIR}/references/checklists/`
   - `STROBE.md` -- observational studies (CC BY)
   - `STARD.md` -- diagnostic accuracy studies (CC BY 4.0)
-  - `TRIPOD_AI.md` -- prediction models with AI/ML (CC BY 4.0)
+  - `TRIPOD.md` -- prediction models, classic 2015 version (CC BY, Moons et al. Ann Intern Med 2015)
+  - `TRIPOD_AI.md` -- prediction models with AI/ML (CC BY 4.0, Collins et al. BMJ 2024)
   - `PRISMA_2020.md` -- systematic reviews (CC BY)
   - `ARRIVE_2.md` -- animal studies (CC0)
   - `PRISMA_DTA.md` -- DTA systematic reviews (CC BY, McInnes et al. JAMA 2018)
@@ -32,13 +33,11 @@ compliance report suitable for journal submission.
   - `ROBINS_I.md` -- non-randomised studies risk of bias (CC BY, Sterne et al. BMJ 2016)
   - `PROBAST.md` -- prediction model risk of bias (CC BY, Wolff et al. Ann Intern Med 2019)
   - `NOS.md` -- observational study quality (public domain, Ottawa Hospital)
-- **External checklists (not bundled due to license restrictions)**:
-  Users should download these from official sources when needed:
-  - CONSORT 2010 -- https://www.consort-statement.org
-  - CARE -- https://www.care-statement.org
-  - SPIRIT -- https://www.spirit-statement.org
-  - CLAIM 2024 -- https://pubs.rsna.org/doi/10.1148/radiol.2020200267
-  If a local checklist file is not found, the skill constructs checklist items from its knowledge of the guideline.
+  - `CONSORT.md` -- randomised controlled trials
+  - `CARE.md` -- case reports
+  - `SPIRIT.md` -- study protocols
+  - `CLAIM_2024.md` -- AI/ML in clinical imaging
+- If a local checklist file is not found for a requested guideline, the skill constructs checklist items from its knowledge of the guideline.
 
 ---
 
@@ -72,6 +71,7 @@ user specification.
 
 **Rules:**
 - If the study involves AI/ML, always apply the AI extension in addition to the base guideline.
+  - **Exception — TRIPOD**: TRIPOD+AI 2024 (Collins et al., BMJ 2024) is a complete rewrite, not an addendum to TRIPOD 2015 (Moons et al., Ann Intern Med 2015). For non-AI prediction models, use TRIPOD 2015 only. For AI/ML prediction models, use TRIPOD+AI 2024 only. Do NOT apply both simultaneously.
 - If multiple guidelines apply (e.g., a diagnostic accuracy study that is also an AI study), check against all relevant guidelines and merge into one report.
 - If the user requests a specific guideline, use that one regardless of auto-detection.
 

@@ -89,12 +89,21 @@ Multiple checklists may apply (e.g., CLAIM + STARD-AI for a diagnostic AI study)
 - Pages numbered consecutively.
 - Abbreviations defined at first use in both abstract and body (independently).
 - SI units preferred; conventional units acceptable with SI in parentheses.
-- Statistical significance: report exact p-values; do not use "p < 0.05" except when p < 0.001.
+
+## Statistical Reporting
+
+- Report exact p-values (e.g., P = .034); use P < .001 only when value is below that threshold. Never report only "P < .05".
+- 95% CI required for all primary performance metrics (AUC, sensitivity, specificity, accuracy).
+- For AI model comparisons: use DeLong test for AUC comparison; McNemar test for paired sensitivity/specificity.
+- Calibration must accompany discrimination for prediction models: calibration plot + Hosmer-Lemeshow or calibration slope/intercept.
+- Subgroup performance metrics required for fairness assessment (CLAIM requirement).
+- Effect sizes with units; avoid "significant" without accompanying statistics.
+- Statistical software and version must be named in Methods.
+- Statistical review for all accepted manuscripts.
 
 ## Review Process
 
 - Single-blind peer review.
-- Statistical review for all accepted manuscripts.
 - Typical first decision: 4-6 weeks.
 - Revisions usually due within 60 days.
 

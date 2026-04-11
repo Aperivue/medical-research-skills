@@ -62,6 +62,16 @@ Required after abstract.
 
 Upload completed checklists as Multimedia Appendix.
 
+## Statistical Reporting
+
+Follows ICMJE statistical reporting recommendations:
+- Report exact p-values; use P < .001 for values below that threshold.
+- 95% CI required for primary outcomes.
+- For ML studies: independent validation dataset required; performance metrics (AUC, sensitivity, specificity) with 95% CI.
+- Effect sizes and confidence intervals preferred over p-values alone for clinical meaningfulness.
+- Statistical software and version must be identified in Methods.
+- No journal-specific statistical reporting requirements beyond ICMJE and study-type guidelines (CONSORT, PRISMA) are published.
+
 ## Special Notes
 
 - **Highly selective flagship journal** of JMIR Publications.

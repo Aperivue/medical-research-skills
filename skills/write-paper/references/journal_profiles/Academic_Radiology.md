@@ -71,6 +71,16 @@ Additional required elements:
 | AI/ML studies | CLAIM |
 | Randomized trials | CONSORT |
 
+## Statistical Reporting
+
+Follows standard biomedical statistical reporting conventions:
+- Report exact p-values; use P < .001 only when value is below that threshold.
+- 95% CI required for all primary outcomes.
+- For AI/ML studies: CLAIM checklist compliance required; discrimination and calibration both expected.
+- Effect sizes with units; identify specific statistical tests used.
+- Statistical software and version must be named in Methods.
+- No journal-specific statistical reporting requirements beyond standard practice; SAMPL guidelines recommended as reference.
+
 ## Special Notes
 
 - **Double-blind review**: author information must be completely removed from the blinded manuscript file.

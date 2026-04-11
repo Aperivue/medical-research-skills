@@ -75,6 +75,19 @@ Mandatory additional elements:
 | Global health estimates | GATHER |
 | Sex/gender reporting | SAGER |
 
+## Statistical Reporting
+
+Strict in-house statistical conventions enforced by statistical editors:
+- Exact p-values to 2 significant figures (e.g., P = .023); cap at P < .0001.
+- 95% CI required for all primary outcomes; report alongside (not instead of) p-values.
+- Means with SDs for normal distributions; medians with IQRs for skewed data.
+- Absolute risk differences required alongside relative measures (RR, OR, HR).
+- RCT abstracts: include effect size with CI and p-value for primary outcome; adverse events quantified.
+- Decimal separator: midline dot (·) per Lancet house style.
+- Sex/gender disaggregated results required per SAGER guidelines.
+- Statistical editors review all accepted manuscripts.
+- Statistical software and version must be identified in Methods.
+
 ## Special Notes
 
 - **Single-blind peer review**; most papers rejected at editorial triage.
@@ -82,7 +95,6 @@ Mandatory additional elements:
 - **Decimal points**: use midline dots (·), not periods.
 - **Serial comma required** before final "and"/"or".
 - **Drug names**: use rINN (recommended international non-proprietary name).
-- **Data reporting**: exact p-values to 2 significant figures (cap at p<0.0001); means with SDs; medians with IQRs; primary outcomes with 95% CI.
 - **Supplementary material**: single PDF with table of contents, numbered pages, references numbered separately.
 - **Proofs**: must return within 48 hours; no stylistic changes permitted.
 - **Sex/gender/race/ethnicity**: detailed reporting required per SAGER guidelines; explain data collection methods in Methods.

@@ -78,6 +78,18 @@ Mandatory additional elements:
 
 Completed checklist with page numbers must be uploaded at submission.
 
+## Statistical Reporting
+
+Follows Lancet Group statistical conventions:
+- Exact p-values to 2 significant figures (e.g., P = .023); cap at P < .0001.
+- 95% CI required for all primary outcomes; report as (lower--upper) with en-dash.
+- Means with SDs for normally distributed data; medians with IQRs for skewed data.
+- For AI/ML studies: discrimination (AUC/C-statistic with 95% CI) and calibration (calibration plot minimum) required.
+- TRIPOD+AI or CLAIM checklist compliance is mandatory for AI studies; statistical reporting must align with checklist items.
+- For diagnostic accuracy: sensitivity, specificity, PPV, NPV, likelihood ratios -- all with 95% CI.
+- Decimal separator: midline dot (·) per Lancet house style.
+- Statistical software and version must be identified in Methods.
+
 ## Special Notes
 
 - **Ranked #1** in medical informatics by IF and CiteScore.

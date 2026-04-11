@@ -117,7 +117,8 @@ Match the manuscript type to the appropriate checklist and verify key items:
 | Manuscript type | Checklist | Critical items to verify |
 |----------------|-----------|------------------------|
 | Diagnostic accuracy | STARD / STARD-AI | Flow diagram, reference standard, spectrum |
-| Prediction model | TRIPOD+AI | Model development vs validation, calibration, leakage |
+| Prediction model (non-AI) | TRIPOD 2015 | Model development vs validation, calibration, missing data |
+| Prediction model (AI/ML) | TRIPOD+AI 2024 | Model development vs validation, calibration, leakage, fairness |
 | AI / Radiomics | CLAIM 2024 / CLEAR | Feature selection transparency, external validation |
 | RCT | CONSORT / CONSORT-AI | Randomization, blinding, ITT |
 | Systematic review | PRISMA 2020 | Search strategy, screening, risk of bias |

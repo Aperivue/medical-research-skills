@@ -65,9 +65,18 @@ Additional required:
 - Pilot/feasibility: follow CONSORT extension for pilot trials if applicable
 - Completed checklist must be uploaded at submission
 
+## Statistical Reporting
+
+Follows BioMed Central and ICMJE statistical conventions:
+- Report exact p-values; use P < .001 for values below that threshold.
+- 95% CI required for primary outcomes in quantitative studies.
+- Effect sizes (Cohen's d, eta-squared, or equivalent) required for educational intervention studies; accompany with CI.
+- For pilot/feasibility studies: report effect size estimates for sample size calculation in the future full-scale study; do not overclaim based on underpowered p-values.
+- Statistical software and version must be identified in Methods.
+- No journal-specific statistical reporting requirements beyond ICMJE and SQUIRE 2.0 are published.
+
 ## Special Notes for Pilot Studies
 
-- Frame as feasibility/acceptability study, not efficacy
-- Emphasize: recruitment, retention, instrument reliability, effect size estimation
-- Sample size calculation for future full-scale study is expected
-- Do not overclaim based on underpowered p-values
+- Frame as feasibility/acceptability study, not efficacy.
+- Emphasize: recruitment, retention, instrument reliability, effect size estimation.
+- Sample size calculation for future full-scale study is expected.

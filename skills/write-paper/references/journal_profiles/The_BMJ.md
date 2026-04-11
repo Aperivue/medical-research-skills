@@ -89,6 +89,18 @@
 5. Decisions: provisional acceptance, request revisions, rejection
 6. Open peer review: all reviews published with accepted article
 
+## Statistical Reporting
+
+- Dedicated statistics editor reviews all research articles.
+- Report exact p-values to 2-3 significant figures (e.g., P = .023); use P < .001 for values below that threshold.
+- 95% CI mandatory for all primary outcomes; report alongside (not instead of) p-values.
+- Absolute risk differences preferred over relative risks alone; report NNT where clinically meaningful.
+- Effect sizes with units required.
+- For observational studies: report both adjusted and unadjusted estimates.
+- Sex and gender disaggregation of results required (SAGER guidelines).
+- Avoid "significant" without accompanying statistics; use "statistically significant (P = .03)" or report the effect size with CI.
+- Statistical software and version must be identified in Methods.
+
 ## Strategic Notes for MeducAI Paper 3
 
 - **Education section**: NOT suitable (commissioned only, proposal required)

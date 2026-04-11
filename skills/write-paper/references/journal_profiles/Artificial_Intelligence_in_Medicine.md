@@ -62,6 +62,16 @@ Additional required elements:
 - Clinical trials: register before enrollment; include registration number in title page and abstract; follow CONSORT
 - SAGER guidelines for sex/gender reporting
 
+## Statistical Reporting
+
+Follows ICMJE and SAGER guidelines:
+- Report exact p-values where applicable.
+- 95% CI for primary outcomes; effect sizes with units.
+- For AI model evaluations: discrimination metrics (AUC, F1, accuracy) with CI; calibration expected for prediction models; external or independent test set required.
+- Sex and gender disaggregation of results per SAGER guidelines.
+- Statistical software and version identified in Methods.
+- No journal-specific statistical reporting requirements beyond ICMJE and SAGER are published.
+
 ## Special Notes
 
 - **Single-blind review** (reviewers know author identity).

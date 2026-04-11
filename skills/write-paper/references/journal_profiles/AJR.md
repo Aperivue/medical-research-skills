@@ -131,6 +131,17 @@ KEY POINTS
 - Statistical review for accepted manuscripts.
 - Revisions typically due within 45 days.
 
+## Statistical Reporting
+
+AJR endorses the SAMPL (Statistical Analyses and Methods in the Published Literature) guidelines:
+- Report exact p-values (e.g., P = .034); never report only P < .05.
+- 95% CI for all primary outcomes and diagnostic performance metrics.
+- Diagnostic accuracy studies: sensitivity, specificity, AUC, PPV, NPV -- all with 95% CI.
+- For AI studies: calibration required in addition to discrimination; AUC alone is insufficient.
+- Effect sizes with units; name the specific statistical test used for each comparison.
+- Statistical review for accepted manuscripts.
+- Statistical software and version must be reported in Methods.
+
 ## Special Considerations for MeducAI Papers
 
 - Paper 3 (Educational Effectiveness) could fit AJR's scope if framed around radiology education and AI-assisted learning tools.

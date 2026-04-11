@@ -66,6 +66,16 @@ Additional required elements:
 | Quality improvement | SQUIRE |
 | AI/ML studies | CLAIM |
 
+## Statistical Reporting
+
+Follows ICMJE and ACR statistical reporting conventions:
+- Report exact p-values where feasible; avoid "P < .05" alone.
+- 95% CI required for primary outcomes in quantitative studies.
+- Health services research: include measures of effect (odds ratios, risk ratios) with CI; report absolute differences alongside relative measures.
+- AI/data science studies: follow CLAIM checklist; discrimination with CI required; calibration required for prediction models.
+- Statistical software and version must be identified in Methods.
+- No journal-specific statistical reporting requirements beyond ICMJE are published.
+
 ## Special Notes
 
 - **Five domains**: health services research/policy, clinical practice management, data science, training/education, leadership.

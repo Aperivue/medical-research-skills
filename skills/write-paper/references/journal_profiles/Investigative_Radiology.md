@@ -63,6 +63,17 @@ Required submission files (all separate):
 - ARRIVE guidelines for animal studies
 - CONSORT for randomized trials
 
+## Statistical Reporting
+
+Follows ICMJE statistical reporting recommendations:
+- Report exact p-values; do not use "P < .05" as a substitute for exact values.
+- 95% CI required for all primary outcomes.
+- Specify the statistical test used for each comparison; parametric vs non-parametric choice must be justified.
+- For diagnostic/prognostic studies: AUC with 95% CI; calibration required for prediction models.
+- Missing data handling must be described in Methods.
+- Statistical software and version required in Methods.
+- No journal-specific statistical reporting requirements beyond ICMJE standards are published; follow discipline-appropriate guidelines (STARD, TRIPOD, STROBE).
+
 ## Special Notes
 
 - **Emphasizes early and timely publication** of diagnostic imaging research.
