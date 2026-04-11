@@ -2,9 +2,9 @@
 name: deidentify
 description: >
   De-identify clinical research data before LLM-assisted analysis. Standalone Python CLI
-  detects PHI (Korean SSN, phone, names, dates, addresses) via regex + heuristics.
-  Interactive terminal review. No LLM touches raw data — the script runs locally
-  without any network or AI calls.
+  detects PHI via regex + heuristics with 10 country locale packs (kr, us, jp, cn, de, uk,
+  fr, ca, au, in). Interactive terminal review. No LLM touches raw data — the script runs
+  locally without any network or AI calls.
 triggers: deidentify, de-identify, anonymize, 비식별화, 익명화, remove PHI, remove PII, strip patient info
 tools: Read, Bash, Glob
 model: inherit
@@ -52,8 +52,13 @@ Ask the researcher:
 4. Do you need to re-identify later? (affects mapping file choice)
 
 Based on answers, recommend the appropriate command:
-- Full pipeline (most common): `python deidentify.py full <file>`
-- Step-by-step (cautious): `python deidentify.py scan <file>` first
+- Full pipeline (most common): `python deidentify.py full <file> --locale <code>`
+- Step-by-step (cautious): `python deidentify.py scan <file> --locale <code>` first
+
+Available locale codes: `kr` (Korea), `us` (USA), `jp` (Japan), `cn` (China), `de` (Germany),
+`uk` (United Kingdom), `fr` (France), `ca` (Canada), `au` (Australia), `in` (India).
+If `--locale` is omitted, the script shows an interactive country selection menu.
+Users can provide a custom locale file via `--locale-file custom.json`.
 
 ### Phase 2: Script Execution
 
@@ -65,6 +70,7 @@ ${CLAUDE_SKILL_DIR}/deidentify.py
 **Full pipeline** (recommended for most users):
 ```bash
 python ${CLAUDE_SKILL_DIR}/deidentify.py full data.xlsx \
+    --locale kr \
     --output-dir ./deidentified/ \
     --auto-accept-safe
 ```
@@ -72,7 +78,7 @@ python ${CLAUDE_SKILL_DIR}/deidentify.py full data.xlsx \
 **Step-by-step** (for careful review):
 ```bash
 # Step 1: Scan
-python ${CLAUDE_SKILL_DIR}/deidentify.py scan data.xlsx --output-dir ./deidentified/
+python ${CLAUDE_SKILL_DIR}/deidentify.py scan data.xlsx --locale kr --output-dir ./deidentified/
 
 # Step 2: Review (interactive)
 python ${CLAUDE_SKILL_DIR}/deidentify.py review ./deidentified/scan_report.json
@@ -82,6 +88,8 @@ python ${CLAUDE_SKILL_DIR}/deidentify.py apply ./deidentified/reviewed_report.js
 ```
 
 **Options:**
+- `--locale CODE`: Country locale for PHI patterns (kr, us, jp, cn, de, uk, fr, ca, au, in)
+- `--locale-file PATH`: Custom locale JSON file (copy `locales/_template.json` to create one)
 - `--auto-accept-safe`: Skip confirmation for columns classified as SAFE (faster for large datasets)
 - `--hash-mapping`: Store SHA-256 hashes instead of original values in mapping file (one-way, more secure)
 - `--output-dir`: Where to save de-identified file, mapping, and audit log
@@ -131,14 +139,15 @@ Generate a de-identification methods paragraph for the manuscript or IRB:
 
 Template:
 > Protected health information was removed from the dataset prior to analysis using
-> a rule-based de-identification tool (deidentify.py, medsci-skills). The tool scanned
-> column names and cell values using regex patterns for Korean resident registration
-> numbers, phone numbers, email addresses, dates, and addresses. Each column classification
-> was reviewed by the researcher in an interactive terminal session. Names were replaced
-> with pseudonyms (P0001, P0002, ...), dates were shifted by a random per-patient offset
-> (±365 days) preserving relative temporal intervals, and direct identifiers (phone numbers,
-> email addresses, registration numbers) were suppressed. A total of [N] cells across
-> [M] columns were de-identified. The de-identification mapping file was stored separately
+> a rule-based de-identification tool (deidentify.py, medsci-skills) with the [COUNTRY]
+> locale pattern pack. The tool scanned column names and cell values using regex patterns
+> for country-specific identifiers (e.g., national ID numbers, phone numbers), email
+> addresses, dates, and addresses. Each column classification was reviewed by the
+> researcher in an interactive terminal session. Names were replaced with pseudonyms
+> (P0001, P0002, ...), dates were shifted by a random per-patient offset (±365 days)
+> preserving relative temporal intervals, and direct identifiers (phone numbers, email
+> addresses, national ID numbers) were suppressed. A total of [N] cells across [M]
+> columns were de-identified. The de-identification mapping file was stored separately
 > under restricted access (file permissions 0600).
 
 Customize based on the actual audit log statistics.
@@ -165,8 +174,20 @@ Customize based on the actual audit log statistics.
 
 **Supported (v1)**:
 - Structured tabular data: CSV, TSV, Excel (.xlsx)
-- Korean PHI patterns: 주민번호, 전화번호, 이메일, 주소, 이름, 날짜, 차트번호
-- English PHI column names (SSN, MRN, DOB, phone, address, email, etc.)
+- 10 country locales with country-specific PHI patterns:
+  - Korea (kr): 주민번호, 전화번호, 이메일, 주소, 이름, 날짜
+  - USA (us): SSN, US phone, US address, zip codes
+  - Japan (jp): マイナンバー, Japanese phone, 都道府県 address, Kanji names
+  - China (cn): 身份证号, Chinese phone, 省市区 address, Chinese names
+  - Germany (de): Steuer-ID, German phone, Straße address
+  - UK (uk): NHS Number, NI Number, UK phone, postcodes
+  - France (fr): NIR/INSEE, French phone, Rue address
+  - Canada (ca): SIN, Canadian phone, postal codes
+  - Australia (au): TFN, Medicare number, AU phone
+  - India (in): Aadhaar, PAN, Indian phone, pin codes
+- Universal patterns (all locales): email, ISO dates, high-cardinality numeric IDs (MRN)
+- English column names recognized across all locales
+- Custom locale support via `--locale-file` with template
 - Pseudonymization, date shifting, ID replacement, suppression
 
 **NOT supported (planned for v2)**:

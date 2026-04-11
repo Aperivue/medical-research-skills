@@ -1,0 +1,43 @@
+{
+  "name": "Australia",
+  "native_name": "Australia",
+  "code": "au",
+
+  "national_id": {
+    "label": "Tax File Number (TFN) / Medicare Number",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{3}\\s?\\d{3}\\s?\\d{3}\\b",
+      "\\b\\d{4}\\s?\\d{5}\\s?\\d{1}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "AU Mobile", "pattern": "\\b04\\d{2}\\s?\\d{3}\\s?\\d{3}\\b"},
+    {"label": "AU Landline", "pattern": "\\b0[2378]\\s?\\d{4}\\s?\\d{4}\\b"},
+    {"label": "AU +61", "pattern": "\\b\\+61\\s?4\\d{2}\\s?\\d{3}\\s?\\d{3}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Street", "St", "Road", "Rd", "Avenue", "Ave", "Drive", "Dr", "Crescent", "Cres", "Court", "Ct", "Place", "Pl", "Lane", "Ln"],
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])/(0?[1-9]|1[0-2])/(19|20)\\d{2}\\b", "label": "AU date (DD/MM/YYYY)"}
+  ],
+
+  "column_names": {
+    "tfn": "national_id", "tax_file_number": "national_id",
+    "medicare_number": "national_id", "medicare_no": "national_id",
+    "postcode": "address"
+  }
+}

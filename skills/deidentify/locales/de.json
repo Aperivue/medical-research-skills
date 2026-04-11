@@ -1,0 +1,48 @@
+{
+  "name": "Germany",
+  "native_name": "Deutschland",
+  "code": "de",
+
+  "national_id": {
+    "label": "Steuerliche Identifikationsnummer (Tax ID)",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{2}\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "German phone", "pattern": "\\b0\\d{2,5}[/-]?\\d{3,9}\\b"},
+    {"label": "German phone +49", "pattern": "\\b\\+49\\s?\\d{2,5}[/-]?\\d{3,9}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Straße", "Strasse", "Str.", "Weg", "Platz", "Allee", "Gasse", "Ring", "Damm"],
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])\\.(0?[1-9]|1[0-2])\\.(19|20)\\d{2}\\b", "label": "German date (DD.MM.YYYY)"}
+  ],
+
+  "column_names": {
+    "patientenname": "name", "vorname": "name", "nachname": "name",
+    "name": "name", "familienname": "name",
+    "steuer_id": "national_id", "steuernummer": "national_id",
+    "geburtsdatum": "date", "geb_datum": "date",
+    "telefon": "phone", "telefonnummer": "phone", "handy": "phone", "mobilnummer": "phone",
+    "adresse": "address", "anschrift": "address", "wohnort": "address", "plz": "address",
+    "postleitzahl": "address",
+    "e_mail": "email",
+    "patientennummer": "id", "fallnummer": "id", "krankenhaus_id": "id",
+    "versichertennummer": "insurance", "krankenversicherung": "insurance"
+  }
+}

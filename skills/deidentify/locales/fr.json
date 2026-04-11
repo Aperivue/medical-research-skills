@@ -1,0 +1,48 @@
+{
+  "name": "France",
+  "native_name": "France",
+  "code": "fr",
+
+  "national_id": {
+    "label": "Numéro de sécurité sociale (NIR/INSEE)",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b[12]\\s?\\d{2}\\s?\\d{2}\\s?\\d{2}\\s?\\d{3}\\s?\\d{3}\\s?\\d{2}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "French phone", "pattern": "\\b0[1-9]\\s?\\d{2}\\s?\\d{2}\\s?\\d{2}\\s?\\d{2}\\b"},
+    {"label": "French phone +33", "pattern": "\\b\\+33\\s?[1-9]\\s?\\d{2}\\s?\\d{2}\\s?\\d{2}\\s?\\d{2}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Rue", "Avenue", "Boulevard", "Place", "Allée", "Impasse", "Chemin", "Cours", "Passage"],
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])/(0?[1-9]|1[0-2])/(19|20)\\d{2}\\b", "label": "French date (DD/MM/YYYY)"}
+  ],
+
+  "column_names": {
+    "nom_patient": "name", "nom": "name", "prénom": "name", "prenom": "name",
+    "nom_de_famille": "name",
+    "numéro_sécu": "national_id", "numero_secu": "national_id",
+    "nir": "national_id", "insee": "national_id",
+    "date_de_naissance": "date", "date_naissance": "date",
+    "téléphone": "phone", "telephone": "phone", "portable": "phone", "mobile": "phone",
+    "adresse": "address", "code_postal": "address",
+    "courriel": "email",
+    "numéro_patient": "id", "numero_patient": "id", "ipp": "id",
+    "numéro_assurance": "insurance", "numero_assurance": "insurance"
+  }
+}

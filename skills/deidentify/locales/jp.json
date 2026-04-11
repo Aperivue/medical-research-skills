@@ -1,0 +1,48 @@
+{
+  "name": "Japan",
+  "native_name": "日本",
+  "code": "jp",
+
+  "national_id": {
+    "label": "マイナンバー (My Number)",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{4}\\s?\\d{4}\\s?\\d{4}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "Mobile (090/080/070)", "pattern": "\\b0[789]0-?\\d{4}-?\\d{4}\\b"},
+    {"label": "Landline", "pattern": "\\b0\\d{1,4}-?\\d{1,4}-?\\d{4}\\b"}
+  ],
+
+  "address": {
+    "type": "suffix_regex",
+    "pattern": "(都|道|府|県|市|区|町|村|丁目|番地|号)",
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "regex",
+    "pattern": "^[\\u4E00-\\u9FFF\\u3040-\\u309F\\u30A0-\\u30FF]{2,6}$",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(令和|平成|昭和)\\s?\\d{1,2}年\\s?\\d{1,2}月\\s?\\d{1,2}日\\b", "label": "Japanese era date"},
+    {"pattern": "\\b(19|20)\\d{2}年\\s?\\d{1,2}月\\s?\\d{1,2}日\\b", "label": "Japanese date (YYYY年MM月DD日)"}
+  ],
+
+  "column_names": {
+    "患者名": "name", "氏名": "name", "姓名": "name", "名前": "name",
+    "姓": "name", "名": "name",
+    "マイナンバー": "national_id", "個人番号": "national_id",
+    "生年月日": "date", "誕生日": "date",
+    "電話番号": "phone", "携帯番号": "phone", "連絡先": "phone",
+    "住所": "address", "自宅住所": "address", "居住地": "address",
+    "メール": "email", "メールアドレス": "email",
+    "患者番号": "id", "カルテ番号": "id", "診察券番号": "id",
+    "保険番号": "insurance", "被保険者番号": "insurance"
+  }
+}

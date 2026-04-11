@@ -1,0 +1,48 @@
+{
+  "name": "India",
+  "native_name": "भारत",
+  "code": "in",
+
+  "national_id": {
+    "label": "Aadhaar / PAN",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{4}\\s?\\d{4}\\s?\\d{4}\\b",
+      "\\b[A-Z]{5}\\d{4}[A-Z]\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "Indian Mobile", "pattern": "\\b[6-9]\\d{9}\\b"},
+    {"label": "Indian Mobile +91", "pattern": "\\b\\+91[-.\\s]?[6-9]\\d{9}\\b"},
+    {"label": "Indian Landline", "pattern": "\\b0\\d{2,4}[-.\\s]?\\d{6,8}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Road", "Rd.", "Nagar", "Colony", "Street", "Marg", "Path", "Lane", "Gali", "Mohalla", "Chowk", "District", "Dist."],
+    "postcode_pattern": "\\b\\d{6}\\b",
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])/(0?[1-9]|1[0-2])/(19|20)\\d{2}\\b", "label": "Indian date (DD/MM/YYYY)"},
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])-(0?[1-9]|1[0-2])-(19|20)\\d{2}\\b", "label": "Indian date (DD-MM-YYYY)"}
+  ],
+
+  "column_names": {
+    "aadhaar": "national_id", "aadhaar_number": "national_id",
+    "aadhar": "national_id", "aadhar_number": "national_id",
+    "pan": "national_id", "pan_number": "national_id",
+    "pin_code": "address", "pincode": "address",
+    "uhid": "id", "hospital_registration": "id",
+    "abha_number": "id", "health_id": "id"
+  }
+}

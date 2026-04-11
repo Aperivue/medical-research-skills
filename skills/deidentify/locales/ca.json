@@ -1,0 +1,44 @@
+{
+  "name": "Canada",
+  "native_name": "Canada",
+  "code": "ca",
+
+  "national_id": {
+    "label": "Social Insurance Number (SIN)",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{3}[- ]?\\d{3}[- ]?\\d{3}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "Canadian phone", "pattern": "\\b\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b"},
+    {"label": "Canadian phone +1", "pattern": "\\b\\+?1[-.\\s]?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Street", "St.", "Avenue", "Ave.", "Boulevard", "Blvd.", "Drive", "Dr.", "Road", "Rd.", "Rue", "Chemin"],
+    "postcode_pattern": "\\b[A-Z]\\d[A-Z]\\s?\\d[A-Z]\\d\\b",
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])/(0?[1-9]|1[0-2])/(19|20)\\d{2}\\b", "label": "DD/MM/YYYY"},
+    {"pattern": "\\b(0?[1-9]|1[0-2])/(0?[1-9]|[12]\\d|3[01])/(19|20)\\d{2}\\b", "label": "MM/DD/YYYY"}
+  ],
+
+  "column_names": {
+    "sin": "national_id", "social_insurance": "national_id",
+    "health_card": "national_id", "ohip": "national_id",
+    "postal_code": "address",
+    "numéro_assurance_sociale": "national_id"
+  }
+}

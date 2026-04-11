@@ -1,0 +1,47 @@
+{
+  "name": "China",
+  "native_name": "中国",
+  "code": "cn",
+
+  "national_id": {
+    "label": "身份证号 (Citizen ID)",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{17}[\\dXx]\\b",
+      "\\b\\d{15}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "Mobile", "pattern": "\\b1[3-9]\\d{9}\\b"},
+    {"label": "Landline", "pattern": "\\b0\\d{2,3}-?\\d{7,8}\\b"}
+  ],
+
+  "address": {
+    "type": "suffix_regex",
+    "pattern": "(省|市|区|县|镇|乡|村|街道|路|号|弄|室)",
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "regex",
+    "pattern": "^[\\u4E00-\\u9FFF]{2,4}$",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(19|20)\\d{2}年\\s?(0?[1-9]|1[0-2])月\\s?(0?[1-9]|[12]\\d|3[01])日\\b", "label": "Chinese date (YYYY年MM月DD日)"}
+  ],
+
+  "column_names": {
+    "患者姓名": "name", "姓名": "name", "名字": "name",
+    "身份证号": "national_id", "身份证": "national_id", "证件号": "national_id",
+    "出生日期": "date", "生日": "date",
+    "电话": "phone", "手机": "phone", "联系电话": "phone", "手机号": "phone",
+    "地址": "address", "住址": "address", "家庭住址": "address",
+    "邮箱": "email", "电子邮件": "email",
+    "病历号": "id", "住院号": "id", "门诊号": "id", "患者编号": "id",
+    "医保号": "insurance", "社保号": "insurance"
+  }
+}

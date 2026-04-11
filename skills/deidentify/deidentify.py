@@ -7,11 +7,14 @@ and column-name heuristics, walks the researcher through an interactive
 terminal review, then produces a de-identified copy with mapping and
 audit trail.
 
+Supports 10 country locales (kr, us, jp, cn, de, uk, fr, ca, au, in)
+with country-specific PHI patterns.  Custom locales via --locale-file.
+
 Usage:
-    python deidentify.py scan  input.xlsx [--output-dir .]
+    python deidentify.py scan  input.xlsx [--locale kr]
     python deidentify.py review scan_report.json
     python deidentify.py apply  reviewed_report.json [--hash-mapping]
-    python deidentify.py full   input.xlsx [--output-dir .] [--auto-accept-safe]
+    python deidentify.py full   input.xlsx [--locale kr] [--auto-accept-safe]
 """
 
 import argparse
@@ -32,24 +35,13 @@ log = logging.getLogger("deidentify")
 REPORT_VERSION = 1
 
 # ================================================================
-# Section 1: Constants
+# Section 1: Constants + Locale Loading
 # ================================================================
 
-# Column names strongly suggesting PHI (lowercase for matching).
-# Maps pattern -> PHI type.
-PHI_COLUMN_NAMES: dict[str, str] = {
-    # Korean
-    "환자명": "name", "성명": "name", "이름": "name", "성함": "name",
-    "주민번호": "rrn", "주민등록번호": "rrn",
-    "생년월일": "date", "생년": "date", "출생일": "date",
-    "전화번호": "phone", "연락처": "phone", "핸드폰": "phone",
-    "휴대폰": "phone", "휴대전화": "phone", "자택전화": "phone",
-    "주소": "address", "자택주소": "address", "거주지": "address",
-    "이메일": "email",
-    "차트번호": "id", "등록번호": "id", "환자번호": "id",
-    "의무기록번호": "id", "원무번호": "id",
-    "보험번호": "insurance",
-    # English
+LOCALES_DIR = Path(__file__).parent / "locales"
+
+# Universal column names (English — common across all research locales).
+UNIVERSAL_COLUMN_NAMES: dict[str, str] = {
     "patient_name": "name", "patientname": "name", "pt_name": "name",
     "name": "name", "first_name": "name", "last_name": "name",
     "ssn": "rrn", "social_security": "rrn",
@@ -66,31 +58,149 @@ PHI_COLUMN_NAMES: dict[str, str] = {
     "insurance_no": "insurance", "insurance_number": "insurance",
 }
 
-# Value-level regex patterns.  Each tuple: (compiled regex, PHI type).
-PHI_VALUE_PATTERNS: list[tuple[re.Pattern, str]] = [
-    # Korean resident registration number  NNNNNN-NNNNNNN
-    (re.compile(r"\b\d{6}-[1-4]\d{6}\b"), "rrn"),
-    # Mobile phone  010-NNNN-NNNN (with optional dashes)
-    (re.compile(r"\b01[016789]-?\d{3,4}-?\d{4}\b"), "phone"),
-    # Landline phone  0N-NNNN-NNNN or 0NN-NNN-NNNN
-    (re.compile(r"\b0[2-6][0-9]{0,2}-?\d{3,4}-?\d{4}\b"), "phone"),
+# Universal value patterns (always active regardless of locale).
+UNIVERSAL_VALUE_PATTERNS: list[tuple[re.Pattern, str]] = [
     # Email
     (re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"), "email"),
     # ISO date  YYYY-MM-DD or YYYY.MM.DD or YYYY/MM/DD
     (re.compile(r"\b(19|20)\d{2}[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[12]\d|3[01])\b"), "date"),
-    # Korean date  YYYY년 MM월 DD일
-    (re.compile(r"\b(19|20)\d{2}년\s*(0?[1-9]|1[0-2])월\s*(0?[1-9]|[12]\d|3[01])일\b"), "date"),
     # YYMMDD (6 digits that look like a birthdate, standalone)
     (re.compile(r"\b([5-9]\d|0[0-4])(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\b"), "date"),
 ]
 
-# Korean address suffixes
-_KR_ADDR_SUFFIXES = re.compile(
-    r"(특별시|광역시|특별자치시|특별자치도|도\s|시\s|군\s|구\s|읍\s|면\s|동\s|리\s|로\s|길\s)"
-)
 
-# Korean name pattern (2-4 Hangul syllables).  Only applied to name-hinted columns.
-_KR_NAME_RE = re.compile(r"^[\uAC00-\uD7AF]{2,4}$")
+def list_locales() -> list[dict]:
+    """List available locales from the locales/ directory."""
+    locales = []
+    if not LOCALES_DIR.is_dir():
+        return locales
+    for f in sorted(LOCALES_DIR.glob("*.json")):
+        if f.name.startswith("_"):
+            continue
+        try:
+            data = json.loads(f.read_text(encoding="utf-8"))
+            locales.append({
+                "code": data.get("code", f.stem),
+                "name": data.get("name", f.stem),
+                "native_name": data.get("native_name", ""),
+                "path": str(f),
+            })
+        except (json.JSONDecodeError, OSError):
+            continue
+    return locales
+
+
+def load_locale(code: str) -> dict:
+    """Load locale by country code (e.g., 'kr', 'us')."""
+    path = LOCALES_DIR / f"{code}.json"
+    if not path.exists():
+        sys.exit(f"Locale not found: {code}\n"
+                 f"Available: {', '.join(l['code'] for l in list_locales())}\n"
+                 f"Or use --locale-file for a custom locale.")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_locale_file(path: str) -> dict:
+    """Load a custom locale from an arbitrary JSON file."""
+    p = Path(path)
+    if not p.exists():
+        sys.exit(f"Locale file not found: {path}")
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def select_locale_interactive() -> dict:
+    """Interactive country selection prompt."""
+    locales = list_locales()
+    if not locales:
+        sys.exit("No locale files found in locales/ directory.")
+
+    print(f"\n{_bold('Select country / 국가 선택:')}")
+    for i, loc in enumerate(locales, 1):
+        native = f" ({loc['native_name']})" if loc['native_name'] != loc['name'] else ""
+        print(f"  {i:2d}. {loc['name']}{native}")
+    print(f"   0. Other (provide custom locale file)")
+
+    while True:
+        choice = input(f"\n> ").strip()
+        if choice == "0":
+            custom_path = input("  Path to custom locale JSON: ").strip()
+            locale = load_locale_file(custom_path)
+            print(f"  Loaded custom locale: {locale.get('name', 'Custom')}")
+            return locale
+        try:
+            idx = int(choice)
+            if 1 <= idx <= len(locales):
+                locale = load_locale(locales[idx - 1]["code"])
+                print(f"  Loading {locale['name']} patterns...")
+                return locale
+        except ValueError:
+            # Try as code
+            for loc in locales:
+                if choice.lower() == loc["code"]:
+                    locale = load_locale(choice.lower())
+                    print(f"  Loading {locale['name']} patterns...")
+                    return locale
+        print(f"  Invalid choice. Enter 1-{len(locales)} or a country code.")
+
+
+def build_locale_patterns(locale: dict) -> tuple[
+    dict[str, str],
+    list[tuple[re.Pattern, str]],
+    re.Pattern | None,
+    re.Pattern | None,
+    float,
+    list[str],
+]:
+    """Build scanning patterns from a locale dict.
+
+    Returns:
+        (column_names, value_patterns, address_re, name_re, name_min_ratio, name_columns)
+    """
+    # Column names: universal + locale-specific
+    column_names = dict(UNIVERSAL_COLUMN_NAMES)
+    column_names.update(locale.get("column_names", {}))
+
+    # Value patterns: universal + locale-specific
+    value_patterns = list(UNIVERSAL_VALUE_PATTERNS)
+
+    # National ID
+    nid = locale.get("national_id", {})
+    nid_type = nid.get("phi_type", "national_id")
+    for pat in nid.get("patterns", []):
+        value_patterns.append((re.compile(pat), nid_type))
+
+    # Phone
+    for phone in locale.get("phone", []):
+        value_patterns.append((re.compile(phone["pattern"]), "phone"))
+
+    # Extra date formats
+    for df in locale.get("date_formats", []):
+        value_patterns.append((re.compile(df["pattern"]), "date"))
+
+    # Address pattern
+    addr_cfg = locale.get("address", {})
+    address_re = None
+    if addr_cfg.get("type") == "suffix_regex" and addr_cfg.get("pattern"):
+        address_re = re.compile(addr_cfg["pattern"])
+    elif addr_cfg.get("type") == "keywords" and addr_cfg.get("keywords"):
+        # Build a regex from keywords (case-insensitive word boundary match)
+        escaped = [re.escape(kw) for kw in addr_cfg["keywords"]]
+        address_re = re.compile(r"(?:" + "|".join(escaped) + r")", re.IGNORECASE)
+    # Postcode pattern (if available, add to value_patterns as address type)
+    if addr_cfg.get("postcode_pattern"):
+        value_patterns.append((re.compile(addr_cfg["postcode_pattern"]), "address"))
+
+    # Name heuristic
+    name_cfg = locale.get("name_heuristic", {})
+    name_re = None
+    if name_cfg.get("type") == "regex" and name_cfg.get("pattern"):
+        name_re = re.compile(name_cfg["pattern"])
+    name_min_ratio = name_cfg.get("min_ratio", 0.3)
+
+    # Name columns (for restricting name heuristic)
+    name_columns = [k for k, v in column_names.items() if v == "name"]
+
+    return column_names, value_patterns, address_re, name_re, name_min_ratio, name_columns
 
 # Confidence thresholds
 CONF_HIGH = "high"
@@ -250,15 +360,18 @@ def _col_name_matches(norm_col: str, pattern: str) -> bool:
     return False
 
 
-def scan_column_names(headers: list[str]) -> dict[str, dict]:
+def scan_column_names(headers: list[str],
+                      column_names: dict[str, str] | None = None) -> dict[str, dict]:
     """Match column names against PHI dictionary.
 
     Returns {col: {"phi_type": str, "confidence": str, "source": "column_name"}}.
     """
+    if column_names is None:
+        column_names = UNIVERSAL_COLUMN_NAMES
     results: dict[str, dict] = {}
     for col in headers:
         norm = _normalize_col(col)
-        for pattern, phi_type in PHI_COLUMN_NAMES.items():
+        for pattern, phi_type in column_names.items():
             if _col_name_matches(norm, pattern):
                 results[col] = {
                     "phi_type": phi_type,
@@ -278,11 +391,21 @@ def _sample_values(values: list[str], n: int = 500) -> list[str]:
 
 
 def scan_column_values(col: str, values: list[str],
-                       col_phi_hint: str | None = None) -> dict | None:
+                       col_phi_hint: str | None = None,
+                       value_patterns: list[tuple[re.Pattern, str]] | None = None,
+                       address_re: re.Pattern | None = None,
+                       name_re: re.Pattern | None = None,
+                       name_min_ratio: float = 0.3,
+                       name_columns: list[str] | None = None) -> dict | None:
     """Scan cell values in a column for PHI patterns.
 
     Returns a detection dict or None.
     """
+    if value_patterns is None:
+        value_patterns = UNIVERSAL_VALUE_PATTERNS
+    if name_columns is None:
+        name_columns = [k for k, v in UNIVERSAL_COLUMN_NAMES.items() if v == "name"]
+
     sample = _sample_values(values)
     if not sample:
         return None
@@ -290,24 +413,23 @@ def scan_column_values(col: str, values: list[str],
     # Count matches per PHI type
     type_counts: dict[str, int] = {}
     for val in sample:
-        for regex, phi_type in PHI_VALUE_PATTERNS:
+        for regex, phi_type in value_patterns:
             if regex.search(val):
                 type_counts[phi_type] = type_counts.get(phi_type, 0) + 1
                 break  # one match per value is enough
 
-    # Korean name check (only if column name hints at a name)
-    if col_phi_hint == "name" or _normalize_col(col) in (
-        "이름", "성명", "환자명", "name", "patient_name", "성함",
-        "first_name", "last_name", "pt_name", "patientname",
-    ):
-        name_count = sum(1 for v in sample if _KR_NAME_RE.match(v.strip()))
-        if name_count > len(sample) * 0.3:
-            type_counts["name"] = name_count
+    # Name heuristic check (only if column name hints at a name)
+    if name_re is not None:
+        if col_phi_hint == "name" or _normalize_col(col) in name_columns:
+            name_count = sum(1 for v in sample if name_re.match(v.strip()))
+            if name_count > len(sample) * name_min_ratio:
+                type_counts["name"] = name_count
 
-    # Korean address check
-    addr_count = sum(1 for v in sample if _KR_ADDR_SUFFIXES.search(v))
-    if addr_count > len(sample) * 0.3:
-        type_counts["address"] = addr_count
+    # Address check
+    if address_re is not None:
+        addr_count = sum(1 for v in sample if address_re.search(v))
+        if addr_count > len(sample) * 0.3:
+            type_counts["address"] = addr_count
 
     if not type_counts:
         return None
@@ -339,13 +461,26 @@ def is_high_cardinality_numeric(values: list[str], threshold: float = 0.9) -> bo
     return unique_ratio > 0.8
 
 
-def classify_columns(data: list[dict], headers: list[str]) -> list[dict]:
+def classify_columns(data: list[dict], headers: list[str],
+                      locale: dict | None = None) -> list[dict]:
     """Classify every column as PHI, SAFE, or REVIEW_NEEDED.
 
     Returns a list of classification dicts (one per column).
     """
+    # Build patterns from locale (or use universal defaults)
+    if locale is not None:
+        col_names, val_patterns, addr_re, name_re, name_ratio, name_cols = \
+            build_locale_patterns(locale)
+    else:
+        col_names = UNIVERSAL_COLUMN_NAMES
+        val_patterns = UNIVERSAL_VALUE_PATTERNS
+        addr_re = None
+        name_re = None
+        name_ratio = 0.3
+        name_cols = [k for k, v in UNIVERSAL_COLUMN_NAMES.items() if v == "name"]
+
     # Pass 1: column name matching
-    name_hits = scan_column_names(headers)
+    name_hits = scan_column_names(headers, col_names)
 
     classifications = []
     for col in headers:
@@ -359,14 +494,18 @@ def classify_columns(data: list[dict], headers: list[str]) -> list[dict]:
                 **name_hits[col],
             }
             # Refine with value scan
-            val_hit = scan_column_values(col, values, name_hits[col]["phi_type"])
+            val_hit = scan_column_values(
+                col, values, name_hits[col]["phi_type"],
+                val_patterns, addr_re, name_re, name_ratio, name_cols)
             if val_hit:
                 entry["value_scan"] = val_hit
             classifications.append(entry)
             continue
 
         # Pass 2: value pattern scan
-        val_hit = scan_column_values(col, values)
+        val_hit = scan_column_values(
+            col, values, None,
+            val_patterns, addr_re, name_re, name_ratio, name_cols)
         if val_hit:
             classifications.append({
                 "column": col,
@@ -397,7 +536,7 @@ def classify_columns(data: list[dict], headers: list[str]) -> list[dict]:
                 # Scan for embedded PHI in free text
                 embedded_phi = False
                 for val in _sample_values(non_empty, 100):
-                    for regex, _ in PHI_VALUE_PATTERNS:
+                    for regex, _ in val_patterns:
                         if regex.search(val):
                             embedded_phi = True
                             break
@@ -426,15 +565,22 @@ def classify_columns(data: list[dict], headers: list[str]) -> list[dict]:
 
 
 def build_scan_report(input_path: Path, data: list[dict],
-                      meta: dict, classifications: list[dict]) -> dict:
+                      meta: dict, classifications: list[dict],
+                      locale: dict | None = None) -> dict:
     """Build the full scan report JSON."""
-    return {
+    report = {
         "version": REPORT_VERSION,
         "timestamp": datetime.now().isoformat(),
         "input_file": str(input_path),
         "meta": meta,
         "classifications": classifications,
     }
+    if locale is not None:
+        report["locale"] = {
+            "code": locale.get("code", "custom"),
+            "name": locale.get("name", "Custom"),
+        }
+    return report
 
 
 # ================================================================
@@ -834,6 +980,20 @@ def write_audit_log(audit: list[dict], path: Path) -> Path:
 # Section 7: Main + CLI
 # ================================================================
 
+def _resolve_locale(args: argparse.Namespace) -> dict | None:
+    """Resolve locale from CLI args or interactive selection."""
+    if getattr(args, "locale_file", None):
+        locale = load_locale_file(args.locale_file)
+        log.info("Using custom locale: %s", locale.get("name", "Custom"))
+        return locale
+    if getattr(args, "locale", None):
+        locale = load_locale(args.locale)
+        log.info("Using locale: %s (%s)", locale["name"], locale["code"])
+        return locale
+    # Interactive selection
+    return select_locale_interactive()
+
+
 def cmd_scan(args: argparse.Namespace) -> None:
     """Scan command: profile and classify columns."""
     input_path = Path(args.input_file)
@@ -843,14 +1003,16 @@ def cmd_scan(args: argparse.Namespace) -> None:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    locale = _resolve_locale(args)
+
     log.info("Loading %s ...", input_path)
     data, meta = load_tabular(input_path)
     log.info("Loaded %d rows, %d columns", meta["rows"], meta["columns"])
 
     log.info("Scanning for PHI ...")
-    classifications = classify_columns(data, meta["headers"])
+    classifications = classify_columns(data, meta["headers"], locale)
 
-    report = build_scan_report(input_path, data, meta, classifications)
+    report = build_scan_report(input_path, data, meta, classifications, locale)
     report_path = output_dir / "scan_report.json"
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -940,14 +1102,16 @@ def cmd_full(args: argparse.Namespace) -> None:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    locale = _resolve_locale(args)
+
     # Scan
     log.info("Loading %s ...", input_path)
     data, meta = load_tabular(input_path)
     log.info("Loaded %d rows, %d columns", meta["rows"], meta["columns"])
 
     log.info("Scanning for PHI ...")
-    classifications = classify_columns(data, meta["headers"])
-    report = build_scan_report(input_path, data, meta, classifications)
+    classifications = classify_columns(data, meta["headers"], locale)
+    report = build_scan_report(input_path, data, meta, classifications, locale)
 
     # Quick summary before review
     phi = sum(1 for c in classifications if c["classification"] == "PHI")
@@ -1002,10 +1166,20 @@ def main() -> None:
                         help="Enable verbose logging")
     sub = parser.add_subparsers(dest="command", required=True)
 
+    # Locale options (shared by scan and full)
+    def _add_locale_args(p: argparse.ArgumentParser) -> None:
+        g = p.add_mutually_exclusive_group()
+        g.add_argument("--locale", type=str, metavar="CODE",
+                       help="Country code (kr, us, jp, cn, de, uk, fr, ca, au, in). "
+                            "If omitted, interactive selection is shown.")
+        g.add_argument("--locale-file", type=str, metavar="PATH",
+                       help="Path to a custom locale JSON file")
+
     # scan
     p_scan = sub.add_parser("scan", help="Scan a file for PHI")
     p_scan.add_argument("input_file", help="Path to CSV/TSV/XLSX file")
     p_scan.add_argument("-o", "--output-dir", default=".", help="Output directory (default: .)")
+    _add_locale_args(p_scan)
 
     # review
     p_review = sub.add_parser("review", help="Interactive review of scan report")
@@ -1023,6 +1197,7 @@ def main() -> None:
     p_full = sub.add_parser("full", help="Full pipeline: scan + review + apply")
     p_full.add_argument("input_file", help="Path to CSV/TSV/XLSX file")
     p_full.add_argument("-o", "--output-dir", default=".", help="Output directory (default: .)")
+    _add_locale_args(p_full)
     p_full.add_argument("--auto-accept-safe", action="store_true",
                         help="Automatically accept SAFE columns without prompting")
     p_full.add_argument("--hash-mapping", action="store_true",

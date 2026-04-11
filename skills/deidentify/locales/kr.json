@@ -1,0 +1,48 @@
+{
+  "name": "Korea",
+  "native_name": "한국",
+  "code": "kr",
+
+  "national_id": {
+    "label": "주민등록번호 (RRN)",
+    "phi_type": "rrn",
+    "patterns": [
+      "\\b\\d{6}-[1-4]\\d{6}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "Mobile", "pattern": "\\b01[016789]-?\\d{3,4}-?\\d{4}\\b"},
+    {"label": "Landline", "pattern": "\\b0[2-6][0-9]{0,2}-?\\d{3,4}-?\\d{4}\\b"}
+  ],
+
+  "address": {
+    "type": "suffix_regex",
+    "pattern": "(특별시|광역시|특별자치시|특별자치도|도\\s|시\\s|군\\s|구\\s|읍\\s|면\\s|동\\s|리\\s|로\\s|길\\s)",
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "regex",
+    "pattern": "^[\\uAC00-\\uD7AF]{2,4}$",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(19|20)\\d{2}년\\s*(0?[1-9]|1[0-2])월\\s*(0?[1-9]|[12]\\d|3[01])일\\b", "label": "Korean date (YYYY년 MM월 DD일)"}
+  ],
+
+  "column_names": {
+    "환자명": "name", "성명": "name", "이름": "name", "성함": "name",
+    "주민번호": "rrn", "주민등록번호": "rrn",
+    "생년월일": "date", "생년": "date", "출생일": "date",
+    "전화번호": "phone", "연락처": "phone", "핸드폰": "phone",
+    "휴대폰": "phone", "휴대전화": "phone", "자택전화": "phone",
+    "주소": "address", "자택주소": "address", "거주지": "address",
+    "이메일": "email",
+    "차트번호": "id", "등록번호": "id", "환자번호": "id",
+    "의무기록번호": "id", "원무번호": "id",
+    "보험번호": "insurance"
+  }
+}

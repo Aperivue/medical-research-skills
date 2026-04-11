@@ -1,0 +1,45 @@
+{
+  "_comment": "Template for adding a new country locale to deidentify.py",
+  "_instructions": "Copy this file, rename to {country_code}.json, fill in patterns.",
+
+  "name": "Country Name",
+  "native_name": "Native Name",
+  "code": "xx",
+
+  "national_id": {
+    "label": "National ID Name",
+    "phi_type": "national_id",
+    "patterns": [
+      "REGEX_PATTERN_HERE"
+    ]
+  },
+
+  "phone": [
+    {"label": "Mobile", "pattern": "REGEX_PATTERN_HERE"},
+    {"label": "Landline", "pattern": "REGEX_PATTERN_HERE"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Street", "Avenue"],
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "REGEX_PATTERN_HERE", "label": "Local date format"}
+  ],
+
+  "column_names": {
+    "patient_name": "name",
+    "ssn": "national_id",
+    "phone": "phone",
+    "address": "address"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "United States",
+  "native_name": "United States",
+  "code": "us",
+
+  "national_id": {
+    "label": "Social Security Number (SSN)",
+    "phi_type": "rrn",
+    "patterns": [
+      "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "US Phone", "pattern": "\\b\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b"},
+    {"label": "US Phone +1", "pattern": "\\b\\+?1[-.\\s]?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Street", "St.", "Avenue", "Ave.", "Boulevard", "Blvd.", "Drive", "Dr.", "Lane", "Ln.", "Road", "Rd.", "Court", "Ct.", "Suite", "Ste.", "Apt.", "P.O. Box"],
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|1[0-2])/(0?[1-9]|[12]\\d|3[01])/(19|20)\\d{2}\\b", "label": "US date (MM/DD/YYYY)"},
+    {"pattern": "\\b(0?[1-9]|1[0-2])-(0?[1-9]|[12]\\d|3[01])-(19|20)\\d{2}\\b", "label": "US date (MM-DD-YYYY)"}
+  ],
+
+  "column_names": {
+    "social_security_number": "rrn", "social_security": "rrn",
+    "ssn": "rrn", "ss_number": "rrn",
+    "zip": "address", "zipcode": "address", "zip_code": "address",
+    "state": "address"
+  }
+}

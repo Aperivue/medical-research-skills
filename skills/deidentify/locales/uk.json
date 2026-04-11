@@ -1,0 +1,45 @@
+{
+  "name": "United Kingdom",
+  "native_name": "United Kingdom",
+  "code": "uk",
+
+  "national_id": {
+    "label": "NHS Number / National Insurance Number",
+    "phi_type": "national_id",
+    "patterns": [
+      "\\b\\d{3}\\s?\\d{3}\\s?\\d{4}\\b",
+      "\\b[A-CEGHJ-PR-TW-Z]{2}\\d{6}[A-D]\\b"
+    ]
+  },
+
+  "phone": [
+    {"label": "UK Mobile", "pattern": "\\b07\\d{3}\\s?\\d{6}\\b"},
+    {"label": "UK Landline", "pattern": "\\b0\\d{4}\\s?\\d{6}\\b"},
+    {"label": "UK +44", "pattern": "\\b\\+44\\s?\\d{4}\\s?\\d{6}\\b"}
+  ],
+
+  "address": {
+    "type": "keywords",
+    "keywords": ["Street", "St.", "Road", "Rd.", "Avenue", "Ave.", "Lane", "Ln.", "Close", "Crescent", "Terrace", "Drive"],
+    "postcode_pattern": "\\b[A-Z]{1,2}\\d[A-Z\\d]?\\s?\\d[A-Z]{2}\\b",
+    "min_ratio": 0.3
+  },
+
+  "name_heuristic": {
+    "type": "none",
+    "pattern": "",
+    "min_ratio": 0.3,
+    "only_in_name_columns": true
+  },
+
+  "date_formats": [
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])/(0?[1-9]|1[0-2])/(19|20)\\d{2}\\b", "label": "UK date (DD/MM/YYYY)"},
+    {"pattern": "\\b(0?[1-9]|[12]\\d|3[01])-(0?[1-9]|1[0-2])-(19|20)\\d{2}\\b", "label": "UK date (DD-MM-YYYY)"}
+  ],
+
+  "column_names": {
+    "nhs_number": "national_id", "nhs_no": "national_id",
+    "ni_number": "national_id", "national_insurance": "national_id",
+    "postcode": "address", "post_code": "address"
+  }
+}
