@@ -90,17 +90,19 @@ These are referenced in routing tables but have no checklist file. The skill sil
 
 ---
 
-## Remaining: Tier 3 — Journal Profiles
+## Completed: Tier 3 High Priority — Journal Profiles (session 2026-04-11b)
 
-### High priority (complete big-4 general medicine + methods journals)
+| Journal | write-paper | find-journal | Status |
+|---------|:-----------:|:------------:|--------|
+| **JAMA** | Created | Existed | Done |
+| **Nature Medicine** | Created | Existed | Done |
+| **Annals of Internal Medicine** | Created | Created | Done |
+| **Medical Image Analysis** | Created | Existed | Done |
+| **IEEE TMI** | Created | Created | Done |
 
-| Journal | Why | Unique format considerations |
-|---------|-----|------------------------------|
-| **JAMA** | Big-4 gap | JAMA structured abstract, "Key Points" box, tight word limits |
-| **Nature Medicine** | AI landmark target | 150-word abstract, Brief Communication format, strict figure limits |
-| **Annals of Internal Medicine** | Big-4 completion | "Summaries for Patients", unique structured abstract |
-| **Medical Image Analysis** | Methods flagship | No word limit, LaTeX-heavy, methods-first structure |
-| **IEEE TMI** | Top technical | IEEE 2-column, page limits not word limits, IEEE keywords |
+Also updated: find-journal SKILL.md counts (21→23 local, 19→24 write-paper, 40→47 total), README.md (40→47 journal profiles).
+
+## Remaining: Tier 3 — Journal Profiles (Medium + Lower Priority)
 
 ### Medium priority (subspecialty + IR)
 
