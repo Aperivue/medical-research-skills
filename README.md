@@ -297,6 +297,8 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 Bundled reporting guideline checklists retain their original Creative Commons licenses. See each checklist file for attribution.
 
+Optional dependency: `pdf_to_md.py` uses [pymupdf4llm](https://pymupdf.readthedocs.io) (AGPL-3.0). Not bundled -- installed separately by the user via `pip install pymupdf4llm`.
+
 ## About
 
 Built by [Aperivue](https://aperivue.com) -- tools for medical AI research and education.
