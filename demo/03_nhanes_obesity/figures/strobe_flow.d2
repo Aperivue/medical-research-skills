@@ -1,0 +1,100 @@
+title: |md
+  # Study Flow Diagram — NHANES 2017-2018 Obesity & Diabetes
+| {
+  near: top-center
+  style.font-size: 20
+}
+
+direction: down
+
+# Source population
+source: |md
+  NHANES 2017-2018 participants
+  **(N = 9,254)**
+| {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+# Exclusions step 1
+excluded1: |md
+  Excluded **(n = 4,314)**
+  - Age < 20 years (n = 3,540)
+  - Missing BMI (n = 412)
+  - Missing HbA1c (n = 362)
+| {
+  shape: rectangle
+  style.fill: "#FFEBEE"
+  style.stroke: "#C62828"
+}
+
+eligible: |md
+  Eligible participants
+  **(n = 4,940)**
+| {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+}
+
+# Exclusions step 2
+excluded2: |md
+  Excluded: underweight
+  BMI < 18.5
+  **(n = 74)**
+| {
+  shape: rectangle
+  style.fill: "#FFEBEE"
+  style.stroke: "#C62828"
+}
+
+analysis: |md
+  Analysis sample
+  **(n = 4,866)**
+| {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+  style.stroke: "#2E7D32"
+  style.stroke-width: 3
+}
+
+# BMI categories
+normal: |md
+  Normal BMI
+  (18.5-24.9)
+  **n = 1,189**
+| {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+  style.stroke: "#2E7D32"
+}
+
+overweight: |md
+  Overweight
+  (25.0-29.9)
+  **n = 1,593**
+| {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+}
+
+obese: |md
+  Obese
+  (>=30.0)
+  **n = 2,084**
+| {
+  shape: rectangle
+  style.fill: "#FBE9E7"
+  style.stroke: "#D55E00"
+}
+
+# Connections
+source -> eligible
+source -> excluded1
+eligible -> analysis
+eligible -> excluded2
+analysis -> normal
+analysis -> overweight
+analysis -> obese

@@ -36,17 +36,19 @@ from sklearn.datasets import load_breast_cancer
 data = load_breast_cancer()  # 569 samples, zero download
 ```
 
-**Output from the pipeline** ([see full demo](demo/01_wisconsin_bc/)):
+**Output from `orchestrate --e2e`** ([see full demo](demo/01_wisconsin_bc/)):
 
 | Output | Description |
 |--------|-------------|
-| [Manuscript](demo/01_wisconsin_bc/output/manuscript_draft.md) | IMRAD draft, ~1,600 words, 4 embedded figures |
+| [Manuscript](demo/01_wisconsin_bc/manuscript.md) | IMRAD draft, ~1,900 words |
+| [DOCX](demo/01_wisconsin_bc/manuscript_final.docx) | Submission-ready Word document |
 | [ROC Curve](demo/01_wisconsin_bc/figures/roc_curve.png) | 3-model comparison with DeLong 95% CIs |
-| [Confusion Matrices](demo/01_wisconsin_bc/figures/confusion_matrices.png) | Side-by-side for LR, RF, SVM |
-| [STARD Compliance](demo/01_wisconsin_bc/output/stard_compliance_report.md) | 30-item audit (19 PRESENT, 5 PARTIAL, 6 MISSING) |
-| [Presentation (PPTX)](demo/01_wisconsin_bc/output/presentation.pptx) | 12 slides with speaker notes |
+| [STARD Flow](demo/01_wisconsin_bc/figures/stard_flow.svg) | D2-generated STARD 2015 flow diagram |
+| [Reporting Checklist](demo/01_wisconsin_bc/reporting_checklist.md) | STARD 2015 — 82.1% compliance (23/28 PRESENT) |
+| [Self-Review](demo/01_wisconsin_bc/review_comments.md) | Score 74/100, 4 major / 5 minor |
+| [Pipeline Log](demo/01_wisconsin_bc/_pipeline_log.md) | 7-step E2E execution trace |
 
-**Skills used:** `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
+**Pipeline:** `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; AI pattern scan &rarr; `check-reporting` (STARD) &rarr; `self-review` &rarr; DOCX build
 
 ### Demo 2: Meta-Analysis — BCG Vaccine Efficacy
 
@@ -55,34 +57,42 @@ library(metafor)
 data(dat.bcg)  # 13 RCTs, 357,347 participants (Colditz et al. 1994)
 ```
 
-**Output from the pipeline** ([see full demo](demo/02_metafor_bcg/)):
+**Output from `orchestrate --e2e`** ([see full demo](demo/02_metafor_bcg/)):
 
 | Output | Description |
 |--------|-------------|
-| [Manuscript](demo/02_metafor_bcg/output/manuscript_draft.md) | Pooled RR = 0.49 (95% CI: 0.34–0.70) |
-| Forest plot, funnel plot, bubble plot | 300 dpi, PRISMA-ready |
-| [PRISMA Compliance](demo/02_metafor_bcg/output/prisma_compliance_report.md) | With fix recommendations |
-| [Presentation (PPTX)](demo/02_metafor_bcg/output/presentation.pptx) | Slide deck with speaker notes |
+| [Manuscript](demo/02_metafor_bcg/manuscript.md) | Pooled RR = 0.489 (95% CI: 0.344–0.696), ~2,600 words |
+| [DOCX](demo/02_metafor_bcg/manuscript_final.docx) | Submission-ready Word document |
+| [Forest Plot](demo/02_metafor_bcg/figures/forest_plot.png) | 13 studies, RE model (REML), 300 dpi |
+| [Bubble Plot](demo/02_metafor_bcg/figures/bubble_plot.png) | Meta-regression: latitude vs. RR (R² = 75.6%) |
+| [PRISMA Flow](demo/02_metafor_bcg/figures/prisma_flow.svg) | D2-generated PRISMA 2020 flow diagram |
+| [Reporting Checklist](demo/02_metafor_bcg/reporting_checklist.md) | PRISMA 2020 — 77.8% compliance (21/27 PRESENT) |
+| [Self-Review](demo/02_metafor_bcg/review_comments.md) | Score 72/100, 4 major / 5 minor |
+| [Pipeline Log](demo/02_metafor_bcg/_pipeline_log.md) | 7-step E2E execution trace |
 
-**Skills used:** `meta-analysis` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
+**Pipeline:** `analyze-stats` (R metafor) &rarr; `make-figures` &rarr; `write-paper` &rarr; AI pattern scan &rarr; `check-reporting` (PRISMA 2020) &rarr; `self-review` &rarr; DOCX build
 
 ### Demo 3: Epidemiology — NHANES Obesity & Diabetes
 
 ```python
-# Downloads 3 XPT files from CDC (~5 MB) — run 01_download_data.py first
-# NHANES 2017-2018: 4,866 US adults after exclusions
+# Pre-processed NHANES 2017-2018 CSV included
+# 4,866 US adults after exclusions
 ```
 
-**Output from the pipeline** ([see full demo](demo/03_nhanes_obesity/)):
+**Output from `orchestrate --e2e`** ([see full demo](demo/03_nhanes_obesity/)):
 
 | Output | Description |
 |--------|-------------|
-| [Manuscript](demo/03_nhanes_obesity/output/manuscript_draft.md) | Adjusted OR = 4.08 (95% CI: 3.19–5.22) |
-| Prevalence by BMI figure | With survey-weighted CIs |
-| [STROBE Compliance](demo/03_nhanes_obesity/output/strobe_compliance_report.md) | With fix recommendations |
-| [Presentation (PPTX)](demo/03_nhanes_obesity/output/presentation.pptx) | Slide deck with speaker notes |
+| [Manuscript](demo/03_nhanes_obesity/manuscript.md) | Adjusted OR = 4.50 (95% CI: 3.23–6.27), ~2,800 words |
+| [DOCX](demo/03_nhanes_obesity/manuscript_final.docx) | Submission-ready Word document |
+| [Prevalence Chart](demo/03_nhanes_obesity/figures/prevalence_by_bmi.png) | Diabetes prevalence by BMI with Wilson 95% CIs |
+| [OR Forest Plot](demo/03_nhanes_obesity/figures/or_forest_plot.png) | Adjusted odds ratios for 7 variables |
+| [Study Flow](demo/03_nhanes_obesity/figures/strobe_flow.svg) | D2-generated participant flow diagram |
+| [Reporting Checklist](demo/03_nhanes_obesity/reporting_checklist.md) | STROBE — 81.8% compliance (18/22 PRESENT) |
+| [Self-Review](demo/03_nhanes_obesity/review_comments.md) | Score 75/100, 4 major / 5 minor |
+| [Pipeline Log](demo/03_nhanes_obesity/_pipeline_log.md) | 7-step E2E execution trace |
 
-**Skills used:** `clean-data` &rarr; `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; `check-reporting` &rarr; `present-paper`
+**Pipeline:** `analyze-stats` &rarr; `make-figures` &rarr; `write-paper` &rarr; AI pattern scan &rarr; `check-reporting` (STROBE) &rarr; `self-review` &rarr; DOCX build
 
 ---
 

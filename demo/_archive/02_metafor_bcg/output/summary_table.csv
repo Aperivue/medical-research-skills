@@ -1,0 +1,6 @@
+"Analysis","k","RR","CI_lower","CI_upper","I2","tau2"
+"Overall (REML)",13,0.489,0.344,0.696,92.2,0.3132
+"Subgroup: random",7,0.379,0.221,0.65,89.9,0.3925
+"Subgroup: alternate",2,0.582,0.335,1.011,82,0.1326
+"Subgroup: systematic",4,0.654,0.323,1.324,86.4,0.4003
+"Trim-and-fill adjusted",14,0.518,0.365,0.736,92.1,0.3313

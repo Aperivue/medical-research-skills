@@ -1,0 +1,129 @@
+title: |md
+  # PRISMA 2020 Flow Diagram — BCG Vaccine Meta-Analysis
+| {
+  near: top-center
+  style.font-size: 20
+}
+
+direction: down
+
+# Identification
+id_label: Identification {
+  style.fill: transparent
+  style.stroke: transparent
+  style.font-size: 14
+  style.bold: true
+}
+
+databases: |md
+  Records identified from databases
+  (PubMed, Embase, CENTRAL)
+  **(n = 847)**
+| {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+other: |md
+  Records identified from
+  other sources
+  **(n = 42)**
+| {
+  shape: rectangle
+  style.fill: "#E3F2FD"
+  style.stroke: "#1565C0"
+}
+
+# Screening
+sc_label: Screening {
+  style.fill: transparent
+  style.stroke: transparent
+  style.font-size: 14
+  style.bold: true
+}
+
+dup_removed: |md
+  Records after duplicates removed
+  **(n = 612)**
+| {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+}
+
+screened: |md
+  Records screened
+  **(n = 612)**
+| {
+  shape: rectangle
+  style.fill: "#FFF3E0"
+  style.stroke: "#E65100"
+}
+
+excluded_screen: |md
+  Records excluded
+  **(n = 541)**
+| {
+  shape: rectangle
+  style.fill: "#FFEBEE"
+  style.stroke: "#C62828"
+}
+
+# Eligibility
+el_label: Eligibility {
+  style.fill: transparent
+  style.stroke: transparent
+  style.font-size: 14
+  style.bold: true
+}
+
+fulltext: |md
+  Full-text articles assessed
+  **(n = 71)**
+| {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+  style.stroke: "#2E7D32"
+}
+
+excluded_ft: |md
+  Full-text excluded **(n = 58)**
+  - Not RCT (n = 23)
+  - No TB outcome (n = 14)
+  - Duplicate population (n = 11)
+  - Insufficient data (n = 10)
+| {
+  shape: rectangle
+  style.fill: "#FFEBEE"
+  style.stroke: "#C62828"
+}
+
+# Included
+inc_label: Included {
+  style.fill: transparent
+  style.stroke: transparent
+  style.font-size: 14
+  style.bold: true
+}
+
+included: |md
+  Studies included in
+  meta-analysis
+  **(k = 13)**
+  357,347 participants
+| {
+  shape: rectangle
+  style.fill: "#E8F5E9"
+  style.stroke: "#2E7D32"
+  style.stroke-width: 3
+}
+
+# Connections
+databases -> dup_removed
+other -> dup_removed
+dup_removed -> screened
+screened -> fulltext
+screened -> excluded_screen
+fulltext -> included
+fulltext -> excluded_ft

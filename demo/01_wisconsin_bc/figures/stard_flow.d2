@@ -1,0 +1,83 @@
+direction: down
+
+eligible: "Assessed for eligibility\n(N = 569)" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#E8F4FD"
+  style.stroke: "#0072B2"
+  style.font-size: 14
+}
+
+enrolled: "Enrolled\n(n = 569)" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#E8F4FD"
+  style.stroke: "#0072B2"
+  style.font-size: 14
+}
+
+excluded: "Excluded (n = 0)\n• No exclusion criteria applied\n• Public dataset with complete data" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#FFF3E0"
+  style.stroke: "#E69F00"
+  style.font-size: 12
+}
+
+index_test: "Received index test\nFNA cytology features (30 variables)\n(n = 569)" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#E8F4FD"
+  style.stroke: "#0072B2"
+  style.font-size: 14
+}
+
+split: "Stratified random split\n(seed = 42)" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#F3E5F5"
+  style.stroke: "#CC79A7"
+  style.font-size: 13
+}
+
+train: "Training set\n(n = 455)\nMalignant: 170 | Benign: 285" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#E8F5E9"
+  style.stroke: "#009E73"
+  style.font-size: 13
+}
+
+test: "Test set\n(n = 114)\nMalignant: 42 | Benign: 72" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#E8F5E9"
+  style.stroke: "#009E73"
+  style.font-size: 13
+}
+
+models: "Index test classifiers\n• Logistic Regression\n• Random Forest\n• Support Vector Machine" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#FFF8E1"
+  style.stroke: "#D55E00"
+  style.font-size: 13
+}
+
+results: "Diagnostic accuracy evaluated\nAUC, Sensitivity, Specificity,\nPPV, NPV (all 3 models)" {
+  shape: rectangle
+  style.border-radius: 8
+  style.fill: "#E8F4FD"
+  style.stroke: "#0072B2"
+  style.font-size: 14
+}
+
+eligible -> enrolled
+eligible -> excluded
+enrolled -> index_test
+index_test -> split
+split -> train
+split -> test
+train -> models
+test -> models
+models -> results

@@ -1,0 +1,4 @@
+Characteristic,Malignant (n=212),Benign (n=357),P value
+n,212,357,
+"Age, mean (SD)",55.1 (10.6),53.8 (11.9),0.219
+"Sex, Female n (%)",212 (100.0),357 (100.0),
