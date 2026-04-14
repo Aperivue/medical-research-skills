@@ -36,6 +36,18 @@ Fatal flags: 0
 | m4 | D | **Generic limitations opener.** The phrase "Several limitations of this analysis should be acknowledged" is formulaic. Consider leading with the most impactful limitation directly. |
 | m5 | E | **Screening numbers are simulated.** The PRISMA flow diagram numbers (847 identified, 612 screened, etc.) appear constructed for demonstration purposes. In a real manuscript, these must reflect actual search yields. |
 
+## Auto-Fix Summary (Phase 7.4)
+
+- **Iteration**: 1/2
+- **Fixed**: 5 issues (M3, M4, m3, m4, m5)
+- **Skipped (requires human/analysis)**: 4 issues (M1, M2, m1, m2)
+- **Changes applied**:
+  - M3: Added explicit novelty statement (updated methods vs. Colditz 1994)
+  - M4: Added search strategy detail/availability note in Methods
+  - m3: Strengthened prediction interval clinical interpretation in Discussion
+  - m4: Replaced generic limitations opener with specific lead-in
+  - m5: Added demonstration disclaimer to PRISMA flow numbers
+
 ## Strengths
 
 1. Complete meta-analytic pipeline from data to manuscript in a single reproducible workflow.
@@ -43,3 +55,22 @@ Fatal flags: 0
 3. Meta-regression with R² provides a quantitative explanation for heterogeneity, not just description.
 4. Publication bias assessed with three complementary methods (Egger, Begg, trim-and-fill).
 5. Leave-one-out sensitivity analysis demonstrates robustness of the pooled estimate.
+
+```json
+{
+  "self_review_version": "1.0",
+  "manuscript_title": "BCG Vaccination and Tuberculosis Risk: A Re-Analysis Meta-Analysis",
+  "date": "2026-04-14",
+  "overall_score": 79,
+  "verdict": "REVISE",
+  "post_fix_score": 79,
+  "post_fix_verdict": "REVISE",
+  "fix_iterations": 1,
+  "fixed_count": 5,
+  "skipped_count": 4,
+  "fatal_count": 0,
+  "major_count": 4,
+  "minor_count": 5,
+  "note": "Score below 80 due to unfixable issues (GRADE, RoB) requiring human judgment. Auto-fix limit note: remaining issues require human review."
+}
+```

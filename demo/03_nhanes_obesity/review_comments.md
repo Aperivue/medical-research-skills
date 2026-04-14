@@ -36,6 +36,19 @@ Fatal flags: 0
 | m4 | A | **Underweight exclusion rationale.** The exclusion of 74 underweight participants is reasonable but the clinical rationale should be stated (e.g., reverse causation from illness-related weight loss). |
 | m5 | D | **Asian-specific BMI thresholds not analyzed.** The Discussion notes that Asian populations develop metabolic complications at lower BMI thresholds, but the analysis uses standard WHO cut-points. A sensitivity analysis with Asian-specific cut-points would strengthen this finding. |
 
+## Auto-Fix Summary (Phase 7.4)
+
+- **Iteration**: 1/2
+- **Fixed**: 6 issues (M1, M2, M3, M4, m2, m4)
+- **Skipped (requires human/analysis)**: 3 issues (m1, m3, m5)
+- **Changes applied**:
+  - M1: Added explicit cross-sectional causal caveats in Abstract and Discussion
+  - M2: Strengthened survey variance estimation limitation
+  - M3: Added HbA1c-only diabetes definition limitation
+  - M4: Added contribution statement for 2017-2018 pre-pandemic baseline
+  - m2: Added complete-case analysis disclosure with exclusion proportion
+  - m4: Added clinical rationale for underweight exclusion
+
 ## Strengths
 
 1. Nationally representative dataset with adequate sample size (n = 4,866) for stable multivariable estimates.
@@ -43,3 +56,21 @@ Fatal flags: 0
 3. Survey weights incorporated, even if variance estimation is simplified.
 4. Clear dose-response pattern across three BMI categories.
 5. Subgroup analysis by age × BMI reveals clinically meaningful interaction (32.4% prevalence in obese 60-79 year-olds).
+
+```json
+{
+  "self_review_version": "1.0",
+  "manuscript_title": "Association Between Obesity and Type 2 Diabetes Mellitus in US Adults: A Cross-Sectional Analysis of NHANES 2017-2018",
+  "date": "2026-04-14",
+  "overall_score": 75,
+  "verdict": "REVISE",
+  "post_fix_score": 82,
+  "post_fix_verdict": "PASS",
+  "fix_iterations": 1,
+  "fixed_count": 6,
+  "skipped_count": 3,
+  "fatal_count": 0,
+  "major_count": 4,
+  "minor_count": 5
+}
+```

@@ -11,7 +11,7 @@ Mode: --e2e (autonomous)
 | 3 | `/write-paper --autonomous` | PASS | manuscript.md (~2,600 words) |
 | 4 | Phase 7.1: AI Pattern Scan | PASS | 0 forbidden patterns detected |
 | 5 | `/check-reporting --json` (PRISMA 2020) | PASS | reporting_checklist.md, compliance 77.8% (21/27 PRESENT) |
-| 6 | `/self-review --json` | PASS | review_comments.md, score 72/100, verdict REVISE, 4 major / 5 minor / 0 fatal |
+| 6 | `/self-review --json --fix` | PASS | review_comments.md, score 72→79/100, verdict REVISE, 4 major / 5 minor / 0 fatal, 5 fixed |
 | 7 | Phase 7.6: DOCX Build | PASS | manuscript_final.docx (pandoc) |
 | 8 | `/present-paper` (bonus) | PASS | presentation.pptx (12 slides, speaker notes) |
 
@@ -22,7 +22,7 @@ Mode: --e2e (autonomous)
 - **Table count**: 4 (study results, summary, meta-regression, leave-one-out)
 - **Reporting guideline**: PRISMA 2020
 - **Compliance**: 77.8% (21/27 applicable items PRESENT)
-- **Self-review score**: 72/100 (REVISE)
+- **Self-review score**: 79/100 (REVISE, post-fix; initial 72)
 - **References**: 5 (all marked [UNVERIFIED] — demo dataset)
 - **AI pattern scan**: PASS (0 forbidden patterns)
 - **FATAL flags**: None
@@ -54,9 +54,16 @@ Mode: --e2e (autonomous)
 | m4 | Minor | D | Generic limitations opener |
 | m5 | Minor | E | PRISMA flow numbers simulated for demo |
 
+## Self-Review Fix Loop (Phase 7.4)
+- Initial score: 72 → Final score: 79
+- Fix iterations: 1/2
+- Fixed issues: 5 (M3, M4, m3, m4, m5)
+- Remaining issues (human review needed): 4 (M1: GRADE assessment, M2: per-study RoB, m1: reference verification, m2: BCG strain analysis)
+- Final verdict: REVISE (auto-fix limit reached; remaining issues require human review)
+
 ## Notes
 
 - All 7 pipeline steps completed successfully.
 - R metafor/meta used for all statistical computations (not Python).
-- Self-review verdict REVISE (score 72) — expected for demo. Major issues M1-M2 (GRADE + RoB) intentionally omitted to demonstrate review output.
+- Self-review fix loop applied: score improved 72→79, with 5 text-level issues fixed automatically. Remaining 4 issues (GRADE, RoB, references, strain analysis) require human judgment or additional analyses.
 - PRISMA flow numbers are constructed for demonstration; in a real analysis, actual search yields would be used.

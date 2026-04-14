@@ -338,20 +338,33 @@ Call `/search-lit --verify-only` to verify all citations in the manuscript are r
 
 #### Step 7.4: Self-Review + Fix Loop
 
-Call `/self-review --json` on the current `manuscript.md`.
-- Parse the JSON output block.
-- If `verdict` is `"PASS"` (overall_score >= 80, no fatal issues), proceed to Step 7.5.
-- If `verdict` is `"REVISE"`:
-  - Filter issues where `fixable_by_ai` is true.
-  - Apply text edits to `manuscript.md` (text rewrites, missing sentences, numerical corrections).
-  - Do NOT invoke other skills during fix iterations — text edits only. If self-review suggests new figures or analyses, flag in `_pipeline_log.md` but do not invoke.
-  - Re-run `/self-review --json`. Maximum 2 fix-and-re-review iterations total.
-  - After 2 iterations, proceed to Step 7.5 regardless of score. Log remaining issues.
-- If any `severity: "fatal"` issue is found:
-  - In autonomous mode: log the fatal issue, flag `_pipeline_log.md` with `FATAL_ISSUE_DETECTED`, and proceed (the manuscript will be generated but flagged).
+Call `/self-review --json --fix` on the current `manuscript.md`.
+
+This delegates the entire fix loop to the self-review skill, which:
+1. Runs systematic review (Phase 2) and generates a JSON report (Phase 3c).
+2. If `verdict` is `"REVISE"`: filters `fixable_by_ai` issues, applies text edits to `manuscript.md`, and re-reviews — up to 2 fix-and-re-review iterations.
+3. If `verdict` is `"PASS"` after any iteration: stops early.
+4. Returns the final JSON report with updated scores.
+
+After `/self-review --json --fix` completes:
+- Parse the final JSON output block.
+- Log the final `overall_score`, `verdict`, fix iteration count, and any remaining issues to `_pipeline_log.md`.
+- If any `severity: "fatal"` issue remains:
+  - In autonomous mode: flag `_pipeline_log.md` with `FATAL_ISSUE_DETECTED` and proceed (the manuscript will be generated but flagged).
   - In interactive mode: halt and present the fatal issue to the user.
+- Proceed to Step 7.5 regardless of final verdict (the fix loop is best-effort).
 
 #### Step 7.5: Generate Deliverables
+
+Log the self-review fix loop results to `_pipeline_log.md`:
+```
+## Self-Review Fix Loop (Phase 7.4)
+- Initial score: {score_before} → Final score: {score_after}
+- Fix iterations: {N}/2
+- Fixed issues: {count}
+- Remaining issues (human review needed): {count}
+- Final verdict: {PASS|REVISE}
+```
 
 Generate the following files:
 - `manuscript.md`: Complete manuscript (with LLM disclosure in Methods and Acknowledgments if enabled)

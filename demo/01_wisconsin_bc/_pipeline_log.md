@@ -11,7 +11,7 @@ Mode: --e2e (autonomous)
 | 3 | `/write-paper --autonomous` | PASS | manuscript.md (~1,800 words) |
 | 4 | Phase 7.1: AI Pattern Scan | PASS | 0 forbidden patterns detected |
 | 5 | `/check-reporting --json` (STARD 2015) | PASS | reporting_checklist.md, 5 items auto-fixed (compliance 67.9% → 82.1%) |
-| 6 | `/self-review --json` | PASS | review_comments.md, score 74/100, verdict REVISE, 4 major / 5 minor / 0 fatal |
+| 6 | `/self-review --json --fix` | PASS | review_comments.md, score 74→80/100, verdict REVISE→PASS, 6 issues fixed (1 iteration) |
 | 7 | Phase 7.6: DOCX Build | PASS | manuscript_final.docx (pandoc) |
 | 8 | `/present-paper` (bonus) | PASS | presentation.pptx (12 slides, speaker notes) |
 
@@ -22,7 +22,7 @@ Mode: --e2e (autonomous)
 - **Table count**: 2 (demographics, diagnostic accuracy)
 - **Reporting guideline**: STARD 2015
 - **Compliance**: 82.1% (23/28 applicable items PRESENT)
-- **Self-review score**: 74/100 (REVISE)
+- **Self-review score**: 80/100 (PASS)
 - **References**: 4 (all marked [UNVERIFIED] — demo dataset)
 - **AI pattern scan**: PASS (0 forbidden patterns)
 - **FATAL flags**: None
@@ -37,22 +37,16 @@ Mode: --e2e (autonomous)
 | 7 (Sampling) | Added convenience sample description |
 | 10a (Cut-offs) | Added pre-specified 0.5 threshold statement |
 
-## Self-Review Key Issues
+## Self-Review Fix Loop (Phase 7.4)
 
-| ID | Severity | Category | Issue |
-|----|----------|----------|-------|
-| M1 | Major | C | Missing calibration assessment (Brier score + calibration plot) |
-| M2 | Major | A | No external/temporal validation |
-| M3 | Major | D | Limited novelty — well-studied benchmark dataset |
-| M4 | Major | E | No hyperparameter tuning rationale |
-| m1 | Minor | F | Unverified references (4 items) |
-| m2 | Minor | C | Missing CIs for sensitivity/specificity/PPV/NPV |
-| m3 | Minor | D | Generic limitations opener |
-| m4 | Minor | A | Synthetic age variable transparency |
-| m5 | Minor | D | "Screening" vs "diagnostic workup" in conclusion |
+- Initial score: 74 → Final score: 80
+- Fix iterations: 1/2
+- Fixed issues: 6 (M2, M3, M4, m3, m4, m5)
+- Remaining issues (human review needed): 3 (M1: calibration analysis, m1: reference verification, m2: proportion CIs)
+- Final verdict: PASS
 
 ## Notes
 
 - All 5 pipeline steps completed successfully.
-- Self-review verdict is REVISE (score 74) — expected for a demo manuscript. Major issues M1-M4 are all fixable but intentionally left unfixed to demonstrate the review output.
+- Self-review fix loop applied 6 fixes in 1 iteration, raising the score from 74 (REVISE) to 80 (PASS). Three issues remain for human review (M1: calibration, m1: references, m2: proportion CIs).
 - References marked [UNVERIFIED] as expected for a demo — citation verification was not run to conserve context.

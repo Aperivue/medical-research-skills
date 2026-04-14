@@ -158,8 +158,9 @@ Without `--e2e`, the existing behavior is preserved: announce plan, confirm befo
 1. `/analyze-stats` → tables (CSV), figures, `_analysis_outputs.md`
 2. `/make-figures --study-type {type}` → reads `_analysis_outputs.md` → `figures/*.pdf`, `figures/*.png`, `figures/_figure_manifest.md`
 3. `/write-paper --autonomous` (if --e2e) → reads tables, figures, manifests → `manuscript.md`, `manuscript_final.docx`
+   - Phase 7.4 internally calls `/self-review --json --fix` (fix loop: up to 2 iterations of auto-fix + re-review)
 4. `/check-reporting` → reads `manuscript.md` → compliance report (called within write-paper Phase 7, but orchestrator verifies output)
-5. `/self-review --json` → reads `manuscript.md` → review report (called within write-paper Phase 7, but orchestrator verifies output)
+5. `/self-review --json --fix` → reads `manuscript.md` → review report + auto-fix (called within write-paper Phase 7.4, but orchestrator verifies final output)
 
 ### Post-Skill Validation
 
