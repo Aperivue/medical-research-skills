@@ -2,10 +2,10 @@
 
 # MedSci Skills
 
-**23 skills that actually work.** Built by a physician-researcher, tested on real publications.
+**26 skills that actually work.** Built by a physician-researcher, tested on real publications.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Skills](https://img.shields.io/badge/Skills-23-brightgreen?style=flat-square)
+![Skills](https://img.shields.io/badge/Skills-26-brightgreen?style=flat-square)
 ![Platform](https://img.shields.io/badge/Platform-Claude_Code-blueviolet?style=flat-square)
 ![Built by](https://img.shields.io/badge/Built_by-Physician--Researcher-blue?style=flat-square)
 
@@ -171,6 +171,10 @@ search-lit -> fulltext-retrieval -> design-study ──> write-protocol -> manag
                                     │
                                     ▼
                          deidentify -> clean-data -> analyze-stats -> make-figures -> write-paper
+                                                        │
+                                           replicate-study (paper → new DB)
+                                           cross-national (parallel survey comparison)
+                                           batch-cohort (N exposure × M outcome matrix)
                                                                           │
                                                                           ├── (case-report mode)
                                                                           │
@@ -220,6 +224,9 @@ search-lit -> fulltext-retrieval -> design-study ──> write-protocol -> manag
 | **deidentify** | De-identify clinical research data before LLM-assisted analysis. Standalone Python CLI (no LLM) with 10 country locale packs (kr, us, jp, cn, de, uk, fr, ca, au, in). Detects PHI via regex + heuristics. Interactive terminal review, pseudonymization, date shifting, mapping file generation. Custom locale support via `--locale-file`. |
 | **clean-data** | Interactive data profiling and cleaning assistant. Three-stage workflow: profile your CSV/Excel data, flag issues (missing values, outliers, duplicates, type mismatches), then generate cleaning code for approved actions only. PHI/PII safety warnings built-in. |
 | **write-protocol** | IRB/ethics protocol generator. Produces 4 core sections (Background, Study Design, Sample Size Justification, Statistical Plan) with full prose. 6 remaining sections provided as structured skeletons with TODO markers for institution-specific content. Korea/US/EU regulatory guidance. |
+| **replicate-study** | Replicate an existing cohort study on a different database. Extracts methodology from a source paper, maps variables via harmonization table, generates analysis code, and produces a replication difference report. Validated on KNHANES/NHANES cross-national replication. |
+| **cross-national** | End-to-end cross-national comparison study. Variable harmonization, parallel weighted survey analysis (no data pooling), and country-stratified comparison tables. Built-in KNHANES + NHANES coding references. |
+| **batch-cohort** | Generate N analysis scripts from one validated template × multiple exposure/outcome combinations. The "80-person team" pattern: same method, swap variables only. Self-adjustment prevention, EPV checks, Bonferroni correction, and summary heatmaps. Validated with 18 combinations on KNHANES 2018. |
 
 ## Installation
 
