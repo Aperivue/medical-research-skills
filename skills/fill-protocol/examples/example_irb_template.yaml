@@ -1,0 +1,53 @@
+# Example content file for fill-protocol
+# Adapt the labels to match your institution's IRB template exactly
+# (run `inspect_template.py` first to see the actual cell labels)
+
+protections:
+  korean_font: "맑은 고딕"   # Use "Noto Sans CJK KR" on Linux, "Apple SD Gothic Neo" on macOS Apple-default
+  cant_split: true
+
+# Mode 1: ABSTRACT-style key/value table (most institutional IRB forms)
+table_kv:
+  "Study Title": >
+    Multi-center prospective validation of [intervention] for [population]
+  "Principal Investigator": "Family-Name, Given-Name (Department, Institution)"
+  "Study Design": >
+    Prospective, multi-center, single-arm validation cohort with [comparator]
+    as historical control. Primary endpoint assessed at [timepoint].
+  "Study Period": "From IRB approval through [YYYY-MM-DD] (~ X years)"
+  "Target Enrollment": "N = X (this institution: n = Y)"
+  "Inclusion Criteria": |
+    All of the following:
+    1. Age ≥ 19 years
+    2. [Disease] confirmed by [reference standard] between [date] and [date]
+    3. [Imaging modality] with [protocol requirement]
+  "Exclusion Criteria": |
+    Any of the following:
+    1. [Image quality criterion fails]
+    2. [Co-existing disease that confounds]
+    3. Prior [intervention that alters baseline]
+  "Sample Size Justification": >
+    [Insert output of /calc-sample-size here, or describe pilot/feasibility framing]
+
+# Mode 2: Long-form numbered sections in body text
+section_replace:
+  "1. Study Title": >
+    English: ...
+    Korean (국문): ...
+
+  "4. Background and Rationale":
+    "..."  # Insert output of /write-protocol Background section
+
+  "5. Study Objectives":
+    "..."  # Insert output of /write-protocol Objectives section
+
+  "12. Statistical Analysis Plan":
+    "..."  # Insert output of /write-protocol + /analyze-stats Statistical Plan
+
+  "18. References":
+    "..."  # Insert verified references from /search-lit
+
+# Mode 3: Single-paragraph in-place text replacement (e.g., the title line)
+paragraph_replace:
+  "Title:":
+    "Title: Multi-center prospective validation of ..."
