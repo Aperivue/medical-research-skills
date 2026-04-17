@@ -50,6 +50,25 @@ def _apply_cant_split(row) -> None:
         trPr.append(OxmlElement("w:cantSplit"))
 
 
+def _make_blank_paragraph() -> "OxmlElement":
+    """Create an empty paragraph that renders as a single Enter press.
+
+    Forces single line height (line=240) and zero spacing-before/after,
+    so the blank line is exactly one body-text line tall — never inflates
+    the document's apparent line spacing.
+    """
+    p = OxmlElement("w:p")
+    pPr = OxmlElement("w:pPr")
+    spacing = OxmlElement("w:spacing")
+    spacing.set(qn("w:line"), "240")
+    spacing.set(qn("w:lineRule"), "auto")
+    spacing.set(qn("w:before"), "0")
+    spacing.set(qn("w:after"), "0")
+    pPr.append(spacing)
+    p.append(pPr)
+    return p
+
+
 def _replace_paragraph_text_keep_style(para: Paragraph, new_text: str,
                                         korean_font: str | None = None) -> None:
     """Replace the entire text content of a paragraph while keeping its style.
@@ -268,7 +287,7 @@ class FormFiller:
             chunks = new_content.split("\n\n")
             for ci, chunk in enumerate(chunks):
                 if ci > 0 and self.blank_between_paragraphs:
-                    blank_p = OxmlElement("w:p")
+                    blank_p = _make_blank_paragraph()
                     insert_after.addnext(blank_p)
                     insert_after = blank_p
                 new_p = OxmlElement("w:p")
@@ -308,7 +327,7 @@ class FormFiller:
         insert_after = first_target_elem
         for chunk in chunks[1:]:
             if self.blank_between_paragraphs:
-                blank_p = OxmlElement("w:p")
+                blank_p = _make_blank_paragraph()
                 insert_after.addnext(blank_p)
                 insert_after = blank_p
             new_p = OxmlElement("w:p")
