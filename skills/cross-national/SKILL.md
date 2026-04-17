@@ -65,8 +65,8 @@ using parallel nationally representative surveys (e.g., KNHANES for Korea, NHANE
    - Alcohol: ALQ121 (past 12 mo frequency → categories)
    - Obesity: BMXBMI ≥30 (WHO cutoff, NOT Asian)
    - PHQ-9: DPQ010~DPQ090, sum score, ≥10=depression
-   - Diabetes: LBXSGLU≥126 | LBXGH≥6.5 | DIQ010=1
-   - CVD: MCQ160B=1 (CHF) | MCQ160C=1 (CHD) | MCQ160D=1 (angina)
+   - Diabetes: LBXSGL≥126 | LBXGH≥6.5 | DIQ010=="Yes" (CRITICAL: LBXSGL not LBXSGLU)
+   - CVD: MCQ160B=="Yes" (CHF) | MCQ160C=="Yes" (CHD) | MCQ160D=="Yes" (angina) | MCQ160E=="Yes" (MI)
 3. Set survey design: svydesign(id=~SDMVPSU, strata=~SDMVSTRA, weights=~WTMECPRP, nest=TRUE)
 
 ### Phase 3: Parallel Analysis
