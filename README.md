@@ -2,16 +2,16 @@
 
 # MedSci Skills
 
-**26 skills that actually work.** Built by a physician-researcher, tested on real publications.
+**32 skills that actually work.** Built by a physician-researcher, tested on real publications.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Skills](https://img.shields.io/badge/Skills-26-brightgreen?style=flat-square)
+![Skills](https://img.shields.io/badge/Skills-32-brightgreen?style=flat-square)
 ![Platform](https://img.shields.io/badge/Platform-Claude_Code-blueviolet?style=flat-square)
 ![Built by](https://img.shields.io/badge/Built_by-Physician--Researcher-blue?style=flat-square)
 
 ![MedSci Skills](assets/social-preview.png)
 
-*Literature Search &rarr; Full-Text Retrieval &rarr; Study Design &rarr; Sample Size &rarr; Protocol &rarr; De-identification &rarr; Data Cleaning &rarr; Statistics &rarr; Figures &rarr; Writing &rarr; Compliance &rarr; Journal Selection &rarr; Revision &rarr; Presentation*
+*Topic Discovery &rarr; Literature Search &rarr; Full-Text Retrieval &rarr; Study Design &rarr; Sample Size &rarr; Protocol &rarr; De-identification &rarr; Data Cleaning &rarr; Statistics &rarr; Figures &rarr; Writing &rarr; Humanize &rarr; Compliance &rarr; Journal Selection &rarr; Peer Review &rarr; Revision &rarr; Presentation*
 
 </div>
 
@@ -165,25 +165,23 @@ The E2E pipeline (`orchestrate --e2e`) produces everything up to `qc/`. The `sub
                   ▼                           ▼
                                     ┌── calc-sample-size ──┐
                                     │                      ▼
-search-lit -> fulltext-retrieval -> design-study ──> write-protocol -> manage-project
-        │
-        └── find-cohort-gap (DB variables → literature gap → ranked topic proposals)
-                                    │
-                                    ▼
-                         deidentify -> clean-data -> analyze-stats -> make-figures -> write-paper
-                                                        │
-                                           replicate-study (paper → new DB)
-                                           cross-national (parallel survey comparison)
-                                           batch-cohort (N exposure × M outcome matrix)
-                                                                          │
-                                                                          ├── (case-report mode)
-                                                                          │
-                                                     find-journal <── self-review
-                                                          │
-                                                          ▼
-                                                   [cover-letter] -> check-reporting -> revise -> present-paper
-                                                                                                       │
-                                                                                                  meta-analysis
+ma-scout -> search-lit -> fulltext-retrieval -> design-study ──> write-protocol -> manage-project
+   │            │
+   │            └── find-cohort-gap (DB variables → literature gap → ranked topic proposals)
+   │                                    │
+   │                                    ▼
+   │                         deidentify -> clean-data -> analyze-stats -> make-figures -> write-paper
+   │                                                        │                                │
+   │                                           replicate-study (paper → new DB)         humanize
+   │                                           cross-national (parallel survey)              │
+   │                                           batch-cohort (N × M matrix)                   ▼
+   │                                                                          find-journal <── self-review
+   │                                                                               │
+   │                                                                               ▼
+   │                                                    [cover-letter] -> check-reporting -> revise -> present-paper
+   │                                                                                                       │
+   └── meta-analysis                                                                                  peer-review
+                         lit-sync (Zotero + Obsidian sync)     author-strategy (PubMed profile analysis)
 
                               ┌─────────────────────────────────────────────┐
                               │  publish-skill: package any skill above for │
@@ -227,6 +225,11 @@ search-lit -> fulltext-retrieval -> design-study ──> write-protocol -> manag
 | **replicate-study** | Replicate an existing cohort study on a different database. Extracts methodology from a source paper, maps variables via harmonization table, generates analysis code, and produces a replication difference report. Validated on KNHANES/NHANES cross-national replication. |
 | **cross-national** | End-to-end cross-national comparison study. Variable harmonization, parallel weighted survey analysis (no data pooling), and country-stratified comparison tables. Built-in KNHANES + NHANES coding references. |
 | **batch-cohort** | Generate N analysis scripts from one validated template × multiple exposure/outcome combinations. The "80-person team" pattern: same method, swap variables only. Self-adjustment prevention, EPV checks, Bonferroni correction, and summary heatmaps. Validated with 18 combinations on KNHANES 2018. |
+| **humanize** | Detect and remove AI writing patterns from academic manuscripts. Scans for 18 common patterns (significance inflation, AI vocabulary, copula avoidance, etc.) and rewrites flagged passages while preserving technical accuracy. Density target: <2.0 instances per 1000 words. |
+| **author-strategy** | PubMed author profile analysis. Fetches publication data via E-utilities, classifies study types (GBD, SR/MA, NHIS, AI/ML, etc.), generates 7 visualizations, and produces a strategy report with replication opportunities. |
+| **peer-review** | Structured peer review drafting for medical journals. Systematic manuscript analysis, journal-specific formatting (RYAI, INSI, EURE, AJR, KJR), conciseness targets (500-800 words), and pre-submission QC checklist. Constructive developmental tone. |
+| **ma-scout** | Meta-analysis topic discovery and feasibility assessment. Two modes: (A) Professor-first — profile → pillar analysis → MA gaps, (B) Topic-first — question → landscape scan → co-author matching. Multi-source validation (PubMed, PROSPERO, bioRxiv) with realistic k estimation (15-30% discount). |
+| **lit-sync** | Sync research references from .bib files to Zotero library + Obsidian literature notes. Concept extraction from 10+ literature notes with cross-cutting theme discovery. Works after `/search-lit` or standalone. |
 
 ## Installation
 

@@ -203,3 +203,9 @@ After intake:
 - It does not perform statistical analysis
 - It does not verify citations deeply
 - It does not replace study design review
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

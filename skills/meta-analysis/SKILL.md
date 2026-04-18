@@ -448,3 +448,10 @@ When the number of included studies is small (< 10):
 - If data extraction is incomplete (missing 2x2 cells), suggest contacting authors or sensitivity analysis with imputed values.
 - If PROSPERO ID is missing, flag as a limitation but continue.
 - Always remind user: this is a methodological support tool; final decisions rest with the research team and ideally include a biostatistician/methodologist.
+
+## Anti-Hallucination
+
+- **Never fabricate variable names, dataset column names, or variable codings.** If a variable mapping is uncertain, output `[VERIFY: variable_name]` and ask the user to confirm against the data dictionary.
+- **Never fabricate statistical results** — no invented p-values, effect sizes, confidence intervals, or sample sizes. All numbers must come from executed code output.
+- **Never generate references from memory.** Use `/search-lit` for all citations.
+- If a function, package, or API does not exist or you are unsure, say so explicitly rather than guessing.

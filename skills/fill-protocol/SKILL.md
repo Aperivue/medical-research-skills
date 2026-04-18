@@ -239,3 +239,10 @@ filler.save("filled.docx")
 - **Embedded form fields** (Word's content controls): not yet supported. Plain
   paragraph and table cell content only.
 - **Right-to-left scripts** (Arabic, Hebrew): untested.
+
+## Anti-Hallucination
+
+- **Never fabricate references.** All citations must be verified via `/search-lit` with confirmed DOI or PMID. Mark unverified references as `[UNVERIFIED - NEEDS MANUAL CHECK]`.
+- **Never invent clinical definitions, diagnostic criteria, or guideline recommendations.** If uncertain, flag with `[VERIFY]` and ask the user.
+- **Never fabricate numerical results** — compliance percentages, scores, effect sizes, or sample sizes must come from actual data or analysis output.
+- If a reporting guideline item, journal policy, or clinical standard is uncertain, state the uncertainty rather than guessing.

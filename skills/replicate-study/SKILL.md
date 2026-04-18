@@ -31,6 +31,7 @@ cohort) to produce a new paper with the same analytical rigor.
 
 - `${SKILL_DIR}/references/methodology_extraction_template.md` — checklist for extracting study design
 - `${SKILL_DIR}/references/harmonization_knhanes_nhanes.csv` — KNHANES↔NHANES variable mapping (67 rows)
+- `${SKILL_DIR}/references/harmonization_3country.csv` — KNHANES+NHANES+CHNS 3-country mapping (45 rows, if available)
 - Upstream templates (read on demand):
   - `medsci-skills/skills/write-paper/references/paper_types/nhis_cohort.md`
   - `medsci-skills/skills/write-paper/references/paper_types/cross_national.md`
@@ -139,3 +140,10 @@ Source paper: Joo 2026 (Psychiatry Research) — depression/diabetes cross-natio
 Target DB: /path/to/knhanes/HN18.csv
 Harmonization: /path/to/harmonization_knhanes_nhanes.csv
 ```
+
+## Anti-Hallucination
+
+- **Never fabricate variable names, dataset column names, or variable codings.** If a variable mapping is uncertain, output `[VERIFY: variable_name]` and ask the user to confirm against the data dictionary.
+- **Never fabricate statistical results** — no invented p-values, effect sizes, confidence intervals, or sample sizes. All numbers must come from executed code output.
+- **Never generate references from memory.** Use `/search-lit` for all citations.
+- If a function, package, or API does not exist or you are unsure, say so explicitly rather than guessing.

@@ -479,3 +479,10 @@ When death or other events preclude the outcome of interest, standard KM overest
 - Does not choose analysis endpoints -- the user decides the research question
 - Does not interpret clinical significance -- only statistical results
 - Does not replace biostatistician review for complex designs (e.g., adaptive trials)
+
+## Anti-Hallucination
+
+- **Never fabricate variable names, dataset column names, or variable codings.** If a variable mapping is uncertain, output `[VERIFY: variable_name]` and ask the user to confirm against the data dictionary.
+- **Never fabricate statistical results** — no invented p-values, effect sizes, confidence intervals, or sample sizes. All numbers must come from executed code output.
+- **Never generate references from memory.** Use `/search-lit` for all citations.
+- If a function, package, or API does not exist or you are unsure, say so explicitly rather than guessing.

@@ -169,3 +169,10 @@ Structure all reports using this template:
 ### Cleaning Log
 [What was changed, how many rows affected, before/after counts]
 ```
+
+## Anti-Hallucination
+
+- **Never fabricate variable names, dataset column names, or variable codings.** If a variable mapping is uncertain, output `[VERIFY: variable_name]` and ask the user to confirm against the data dictionary.
+- **Never fabricate statistical results** — no invented p-values, effect sizes, confidence intervals, or sample sizes. All numbers must come from executed code output.
+- **Never generate references from memory.** Use `/search-lit` for all citations.
+- If a function, package, or API does not exist or you are unsure, say so explicitly rather than guessing.

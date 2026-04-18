@@ -296,3 +296,9 @@ Shall I proceed with step 1?
 I can help with that. To route you to the right tool, one quick question:
 {single clarifying question}
 ```
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

@@ -440,3 +440,9 @@ covering: society affiliation, scope emphasis, impact factor range, and distingu
 - Does not auto-commit changes to git.
 - Does not modify existing profiles without user confirmation.
 - Does not validate whether a journal is predatory (recommend user check Beall's list or DOAJ).
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

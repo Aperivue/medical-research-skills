@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.2.0] - 2026-04-18
+
+### Added
+
+- **5 new skills** (32 total): `humanize`, `author-strategy`, `peer-review`, `ma-scout`, `lit-sync`
+  - **humanize**: 18-pattern AI writing detection and removal for academic manuscripts
+  - **author-strategy**: PubMed author profile analysis with study type classification and strategy report
+  - **peer-review**: Structured peer review drafting with journal-specific formatting (RYAI, INSI, EURE, AJR, KJR)
+  - **ma-scout**: Meta-analysis topic discovery — professor-first or topic-first modes with PubMed E-utilities, PROSPERO check, and PICO scaffolding (732 lines, largest new skill)
+  - **lit-sync**: Zotero + Obsidian reference sync pipeline with cross-cutting concept note extraction
+- **Anti-hallucination clauses** added to all 32 skills. Domain-specific rules prevent fabricated variables, effect sizes, citations, and clinical definitions.
+- **SKILL_TEMPLATE.md** (`docs/`) — canonical template for new skill creation with quality tier requirements
+- **validate_skills.sh** (`scripts/`) — automated skill linter checking frontmatter, anti-hallucination, gates, line count tier, and reference integrity
+- **3-country harmonization CSV** (`replicate-study/references/harmonization_3country.csv`) — KNHANES+NHANES+CHNS variable mapping (45 rows)
+
+### Changed
+
+- **cross-national**: Expanded from 2-country to 3-country support (KNHANES+NHANES+CHNS). Added ~100 lines of validated variable codings for KNHANES, NHANES, and CHNS with specific warnings (BMI cutoffs, hemoglobin units, survey weight handling). Added composite score replication warnings from LE8 validation.
+- **batch-cohort**: Added physician-diagnosis requirement for outcome definitions (rule 8) and full 8-covariate default (rule 9). Expanded self-adjustment removal for education/income/MetS.
+- **replicate-study**: Added 3-country harmonization reference.
+- **fulltext-retrieval**: Fixed frontmatter (added missing `tools` and `model` fields).
+
+### Infrastructure
+
+- All 32 skills now pass `validate_skills.sh` with 0 FAIL.
+- Quality tier distribution: 15 HIGH (300+ lines), 14 MID (150-300), 3 THIN (<150).
+
 ## [2.1.0] - 2026-04-15
 
 ### Added

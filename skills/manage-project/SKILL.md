@@ -317,3 +317,9 @@ After `/manage-project checklist`, recommend calling:
 - 7 = Polish complete (AI pattern removal + checklist + self-review >= 80)
 
 **Phase status values:** `pending | in_progress | complete | blocked`
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

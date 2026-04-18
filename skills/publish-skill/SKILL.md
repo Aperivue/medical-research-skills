@@ -293,3 +293,9 @@ Remind the user to:
 - Never bundles content with incompatible licenses -- converts to URL references
 - Never assumes a specific package license -- asks in Phase 0
 - Never skips the PII audit -- zero tolerance is enforced at Phase 2 and Phase 5
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

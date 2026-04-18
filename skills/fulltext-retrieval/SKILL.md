@@ -1,14 +1,9 @@
 ---
 name: fulltext-retrieval
 description: Batch download open-access PDFs by DOI using legitimate OA APIs (Unpaywall, PMC, OpenAlex, Crossref). Optional PDF→Markdown conversion for token-efficient LLM analysis.
-triggers:
-  - PDF download
-  - fulltext retrieval
-  - open access PDF
-  - batch download papers
-  - meta-analysis PDF
-  - PDF to markdown
-  - convert PDF
+triggers: PDF download, fulltext retrieval, open access PDF, batch download papers, meta-analysis PDF, PDF to markdown, convert PDF
+tools: Read, Write, Edit, Bash, Grep, Glob
+model: inherit
 ---
 
 # Fulltext Retrieval Skill
@@ -171,3 +166,9 @@ After conversion, `.md` files sit alongside `.pdf` files. Claude Code can then u
 - Landing page scraping may fail on publisher-specific JavaScript-heavy pages.
 - Some recent articles may not yet be indexed by OA sources.
 - PDF→Markdown quality depends on the PDF's text layer. Scanned-only PDFs may produce poor output.
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

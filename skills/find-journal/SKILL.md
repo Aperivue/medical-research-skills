@@ -220,3 +220,9 @@ so subsequent skills (`/write-paper` Phase 8+, `/peer-review`) know where to wri
 - If the write-paper profiles directory is not accessible for Pass 2 enrichment, output recommendations using compact profile data only
 - If no journals match after filtering, relax filters (remove OA constraint first, then tier) and re-score
 - Never fabricate journal information not present in the profiles
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

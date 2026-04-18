@@ -195,3 +195,9 @@ Customize based on the actual audit log statistics.
 - Clinical free-text NER (clinical notes, radiology reports)
 - Automated k-anonymity / l-diversity assessment
 - SPSS (.sav), SAS (.sas7bdat), or other statistical formats
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.

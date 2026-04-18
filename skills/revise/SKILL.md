@@ -340,3 +340,10 @@ For R2+, acknowledge whether R1 concerns were fully resolved. If a reviewer rais
 5. Do not begin a rebuttal aggressively; always open with acknowledgment.
 6. Do not promise changes that were not actually made.
 7. Do not forget to renumber figures and tables if new items were inserted.
+
+## Anti-Hallucination
+
+- **Never fabricate references.** All citations must be verified via `/search-lit` with confirmed DOI or PMID. Mark unverified references as `[UNVERIFIED - NEEDS MANUAL CHECK]`.
+- **Never invent clinical definitions, diagnostic criteria, or guideline recommendations.** If uncertain, flag with `[VERIFY]` and ask the user.
+- **Never fabricate numerical results** — compliance percentages, scores, effect sizes, or sample sizes must come from actual data or analysis output.
+- If a reporting guideline item, journal policy, or clinical standard is uncertain, state the uncertainty rather than guessing.

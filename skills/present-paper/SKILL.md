@@ -318,3 +318,10 @@ All outputs go in the user's presentation directory:
 - **Always ask audience first.** Do not start drafting until the target audience is defined.
 - **Extension sections are opt-in.** Do not add AI/clinical/policy sections unless explicitly requested.
 - **Respect presentation time.** Script length must match allocated time (roughly 130-150 words per minute for academic presentations).
+
+## Anti-Hallucination
+
+- **Never fabricate references.** All citations must be verified via `/search-lit` with confirmed DOI or PMID. Mark unverified references as `[UNVERIFIED - NEEDS MANUAL CHECK]`.
+- **Never invent clinical definitions, diagnostic criteria, or guideline recommendations.** If uncertain, flag with `[VERIFY]` and ask the user.
+- **Never fabricate numerical results** — compliance percentages, scores, effect sizes, or sample sizes must come from actual data or analysis output.
+- If a reporting guideline item, journal policy, or clinical standard is uncertain, state the uncertainty rather than guessing.

@@ -146,12 +146,14 @@ Aggregate all results into a single summary:
 ## Critical Rules
 
 1. **Never modify the core methodology** across combinations — only swap exposure/outcome/covariates.
-2. **Remove self-adjustment**: If exposure = BMI, remove obesity from covariates. Document this.
+2. **Remove self-adjustment**: If exposure = BMI, remove obesity from covariates. If exposure = education/income, remove the same variable from covariates. If outcome = MetS, consider removing obesity from covariates. Document all removals.
 3. **Weighted analysis mandatory** for KNHANES/NHANES/NHIS — inherited from template.
 4. **Event count check**: Before running, verify each outcome has ≥10 events per covariate (EPV rule). Flag underpowered combinations.
 5. **Multiple comparisons**: When generating >5 combinations, include a Bonferroni-corrected significance column in the summary matrix. Add a note about exploratory vs confirmatory framing.
 6. **Reproducibility**: Freeze the template version. Include a SHA256 hash of the data file in README.
 7. **No p-hacking framing**: The summary matrix is for **hypothesis generation**, not confirmation. State this explicitly in README and any manuscript output.
+8. **Outcome definitions MUST include physician diagnosis**: Diabetes = FPG≥126 OR HbA1c≥6.5 OR physician-diagnosed (KNHANES: DE1_dg=1, NHANES: DIQ010="Yes"). Hypertension = SBP≥140 OR DBP≥90 OR physician-diagnosed (KNHANES: DI1_dg=1, NHANES: BPQ020="Yes"). Lab-only definitions systematically overestimate exposure→outcome associations (validated: Joo 2026 replication showed US depression→DM wOR 1.92 without vs 1.54 with physician dx).
+9. **Full covariate set is default**: Always use 8 covariates (age, sex, education, income, smoking, alcohol, obesity, CVD) unless explicitly justified. Minimal models (age+sex+BMI only) overestimate effects due to residual confounding.
 
 ## Cross-National Batch Mode
 
@@ -211,3 +213,10 @@ Exposures: [atrial_fibrillation, heart_failure, COPD, CKD]
 Outcomes: [all_cause_mortality, cardiovascular_death, stroke]
 Mode: code_only
 ```
+
+## Anti-Hallucination
+
+- **Never fabricate variable names, dataset column names, or variable codings.** If a variable mapping is uncertain, output `[VERIFY: variable_name]` and ask the user to confirm against the data dictionary.
+- **Never fabricate statistical results** — no invented p-values, effect sizes, confidence intervals, or sample sizes. All numbers must come from executed code output.
+- **Never generate references from memory.** Use `/search-lit` for all citations.
+- If a function, package, or API does not exist or you are unsure, say so explicitly rather than guessing.

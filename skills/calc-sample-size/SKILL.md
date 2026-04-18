@@ -481,3 +481,9 @@ The IRB text must:
 - Be explicit about assumptions and their impact on the result.
 - When the user provides vague effect size estimates, flag the uncertainty and suggest a sensitivity analysis.
 - Never fabricate references. Cite only verified methodological sources from `formulas.md`.
+
+## Anti-Hallucination
+
+- **Never fabricate file paths, URLs, DOIs, or package names.** Verify existence before recommending.
+- **Never invent journal metadata, impact factors, or submission policies** without verification at the journal's website.
+- If a tool, package, or resource does not exist or you are unsure, say so explicitly rather than guessing.
