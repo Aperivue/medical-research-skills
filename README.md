@@ -144,7 +144,7 @@ The E2E pipeline (`orchestrate --e2e`) produces everything up to `qc/`. The `sub
 | **Pipeline integration** | Skills call each other in defined chains. `design-study` -> `calc-sample-size` -> `write-protocol`. | Standalone stubs with no cross-skill interaction |
 | **End-to-end coverage** | From IRB protocol to journal submission: sample size, data cleaning, analysis, writing, compliance, journal selection, cover letter. | Gaps at every transition -- no protocol, no journal matching, no cover letter |
 | **Battle-tested** | Used on real manuscript submissions by a practicing physician-researcher | Unknown provenance and validation |
-| **Depth per skill** | 150-600 lines of documentation + bundled reference files (134 journal profiles, checklists, formula sheets, code templates) | Typically thin SKILL.md templates |
+| **Depth per skill** | 150-600 lines of documentation + bundled reference files (curated journal profile library, checklists, formula sheets, code templates) | Typically thin SKILL.md templates |
 
 ---
 
@@ -217,7 +217,7 @@ ma-scout -> search-lit -> fulltext-retrieval -> design-study ──> write-proto
 | **revise** | Response to reviewers with tracked changes. Parses decision letters, classifies comments as MAJOR/MINOR/REBUTTAL, generates point-by-point responses and cover letter. |
 | **manage-project** | Research project scaffolding and progress tracking. Commands: init, status, sync-memory, checklist, timeline. Backwards submission timelines and pre-submission checklists. |
 | **calc-sample-size** | Interactive sample size calculator with decision-tree guided test selection. Covers 11 designs (diagnostic accuracy, t-test, ANOVA, chi-square, McNemar, logistic regression, Cox regression EPV, survival, ICC, kappa, non-inferiority/equivalence). Generates reproducible R/Python code and IRB-ready justification text. |
-| **find-journal** | Journal recommendation engine. 2-pass matching: 93 compact profiles for scoring, write-paper profiles for top-5 enrichment. Covers 30 medical specialties. No cached IF/APC -- you verify current metrics at journal sites. Post-rejection re-targeting mode. |
+| **find-journal** | Journal recommendation engine. 2-pass matching: compact profiles for scoring, write-paper profiles for top-5 enrichment. Covers 30+ medical specialties, with a user-local private tier for personal-use profiles. No cached IF/APC -- you verify current metrics at journal sites. Post-rejection re-targeting mode. |
 | **add-journal** | Add new journal profiles to the database. Extracts metadata from author guidelines, generates both write-paper (detailed) and find-journal (compact) profiles in canonical format with quality gates. Batch mode for adding multiple journals in one session. |
 | **deidentify** | De-identify clinical research data before LLM-assisted analysis. Standalone Python CLI (no LLM) with 10 country locale packs (kr, us, jp, cn, de, uk, fr, ca, au, in). Detects PHI via regex + heuristics. Interactive terminal review, pseudonymization, date shifting, mapping file generation. Custom locale support via `--locale-file`. |
 | **clean-data** | Interactive data profiling and cleaning assistant. Three-stage workflow: profile your CSV/Excel data, flag issues (missing values, outliers, duplicates, type mismatches), then generate cleaning code for approved actions only. PHI/PII safety warnings built-in. |

@@ -1,6 +1,6 @@
 ---
 name: find-journal
-description: Journal recommendation engine for medical manuscripts. 2-pass matching against 93 compact journal scope profiles, enriched with detailed write-paper profiles for top-5 output. Returns ranked recommendations with scope fit rationale, AI disclosure policy, and homepage links. No cached IF/APC data — users verify current metrics at journal sites.
+description: Journal recommendation engine for medical manuscripts. 2-pass matching against a curated public profile library plus any user-local private profiles, enriched with detailed write-paper profiles for top-5 output. Returns ranked recommendations with scope fit rationale, AI disclosure policy, and homepage links. No cached IF/APC data — users verify current metrics at journal sites.
 triggers: find journal, recommend journal, where to submit, which journal, journal selection, target journal, journal match
 tools: Read, Write, Edit, Grep, Glob
 model: inherit
@@ -9,9 +9,10 @@ model: inherit
 # Find Journal Skill
 
 You are a journal recommendation engine for medical researchers. Given a manuscript's
-abstract, key findings, and study type, you match it against 93 compact journal scope
-profiles and return the top 5 ranked recommendations with scope fit rationale.
-Detailed write-paper profiles enrich the top-5 output when available.
+abstract, key findings, and study type, you match it against the curated public profile
+library plus any user-local private profiles, and return the top 5 ranked recommendations
+with scope fit rationale. Detailed write-paper profiles enrich the top-5 output when
+available.
 
 ## Communication Rules
 
@@ -21,8 +22,30 @@ Detailed write-paper profiles enrich the top-5 output when available.
 
 ## Key Directories
 
-- **Compact profiles for matching (93):** `${CLAUDE_SKILL_DIR}/references/journal_profiles/`
-- **Detail profiles for top-5 enrichment:** `${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/`
+### Compact profiles for matching (two-tier discovery)
+
+1. **Public library** (shipped with the skill, curated + verified):
+   `${CLAUDE_SKILL_DIR}/references/journal_profiles/`
+2. **User-local private library** (per-user, never pushed to git, optional):
+   `$HOME/.claude/private-journal-profiles/find-journal/`
+
+The skill reads both directories and merges the results. Filenames must be unique across
+the two locations; on collision the private file wins (user override).
+
+### Detail profiles for top-5 enrichment (two-tier discovery)
+
+1. **Public:** `${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/`
+2. **User-local private:** `$HOME/.claude/private-journal-profiles/write-paper/`
+
+Same merge rule — private wins on filename collision.
+
+### Why two tiers?
+
+Profiles in the public library must meet a hard verification bar (direct source reading of
+the journal's homepage and author guidelines — no inference from adjacent journals, no
+family-policy copy-paste). Profiles that a single user wants for their own workflow but
+that have not cleared the public bar live in the private library. See
+`${CLAUDE_SKILL_DIR}/POLICY.md` for the promotion checklist (private → public).
 
 ---
 
@@ -58,11 +81,19 @@ From the abstract/key findings, extract:
 
 ### 3.1 Pass 1: Load Compact Profiles
 
-Read journal profiles from the find-journal directory ONLY:
+Read journal profiles from both tiers:
 
 ```
+# Public (shipped with the skill)
 ${CLAUDE_SKILL_DIR}/references/journal_profiles/*.md
+
+# User-local private (optional, may be empty or absent)
+$HOME/.claude/private-journal-profiles/find-journal/*.md
 ```
+
+Merge into a single profile set. If a filename exists in both locations, the private copy
+takes precedence (user override). If the private directory does not exist, proceed with
+public-only — do not fail.
 
 These are compact profiles (~30 lines each) optimized for matching. Parse each profile's
 Scope, Scope Keywords, Article Types Accepted, Classification (Tier, OA, Field), and
@@ -96,13 +127,19 @@ Sort by composite score. Select top 5.
 
 ### 3.5 Pass 2: Enrich Top-5
 
-For each of the top-5 ranked journals, check if a detailed write-paper profile exists:
+For each of the top-5 ranked journals, check both tiers for a detailed write-paper
+profile:
 
 ```
+# Public
 ${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/{journal_filename}
+
+# User-local private
+$HOME/.claude/private-journal-profiles/write-paper/{journal_filename}
 ```
 
-If found, read it to extract additional detail for the output:
+Private takes precedence on collision. If found, read it to extract additional detail
+for the output:
 - Manuscript types and word limits
 - Abstract format and requirements
 - Statistical reporting requirements
@@ -216,7 +253,8 @@ so subsequent skills (`/write-paper` Phase 8+, `/peer-review`) know where to wri
 
 ## Error Handling
 
-- If fewer than 93 compact profiles are found, proceed with available profiles and note the count
+- Count the compact profiles actually found (public + private after merge) at runtime and note the total in the output — never hard-code the count
+- If either tier directory is missing or empty, proceed with the other tier and note which tier was unavailable
 - If the write-paper profiles directory is not accessible for Pass 2 enrichment, output recommendations using compact profile data only
 - If no journals match after filtering, relax filters (remove OA constraint first, then tier) and re-score
 - Never fabricate journal information not present in the profiles

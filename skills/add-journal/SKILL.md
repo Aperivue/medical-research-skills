@@ -25,8 +25,19 @@ the primary data source.
 
 ## Key Directories
 
-- **Write-paper profiles:** `${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/`
-- **Find-journal profiles:** `${CLAUDE_SKILL_DIR}/../find-journal/references/journal_profiles/`
+Profiles live in one of two tiers — public (shipped with the skill) or user-local private
+(per-user, never pushed to git). Pick the correct target in Phase 0 before any extraction.
+
+### Public (shipped, must meet verification bar)
+- **Write-paper:** `${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/`
+- **Find-journal:** `${CLAUDE_SKILL_DIR}/../find-journal/references/journal_profiles/`
+
+### User-local private (per-user override, optional)
+- **Write-paper:** `$HOME/.claude/private-journal-profiles/write-paper/`
+- **Find-journal:** `$HOME/.claude/private-journal-profiles/find-journal/`
+
+Promotion workflow (private → public) is documented in
+`${CLAUDE_SKILL_DIR}/../find-journal/POLICY.md`.
 
 ---
 
@@ -34,18 +45,42 @@ the primary data source.
 
 ### Required
 1. **Journal name** -- full official name (e.g., "Journal of Clinical Oncology")
+2. **Target tier** -- `public` (shipped) or `private` (user-local only)
 
 ### Strongly Encouraged
-2. **Author Guidelines URL** -- primary data source for metadata extraction
+3. **Author Guidelines URL** -- primary data source for metadata extraction
 
 ### Optional
-3. **Field focus** -- e.g., cardiology, oncology, surgery, general medicine, medical education, methodology
-4. **Tier estimate** -- Q1 / Q2 / Q3 (user's best guess)
-5. **ISSN** -- if known
+4. **Field focus** -- e.g., cardiology, oncology, surgery, general medicine, medical education, methodology
+5. **Tier estimate** -- Q1 / Q2 / Q3 (user's best guess)
+6. **ISSN** -- if known
 
 If the user provides only a journal name without a URL, ask for the Author Guidelines URL
 before proceeding. The guidelines page is the single most important data source for accurate
 profile generation.
+
+### Public vs. Private target selection
+
+If the user does not state the target tier, ASK explicitly before proceeding. Use these
+defaults and criteria to guide the question:
+
+- **Default to `private`** for any journal outside the user's stated area of deep
+  expertise. Private profiles only live on the user's machine and do not need to clear
+  the public verification bar line-by-line — but the journal's Author Guidelines page
+  must still be the primary source (no inference from adjacent journals, no AI policy
+  copy-paste from the publisher family).
+- **`public` is appropriate only when all of the following hold:**
+  1. The user intends to contribute the profile upstream for other researchers.
+  2. The user has opened the journal's homepage and author guidelines page and can
+     attest to each field against the live source, OR can paste the relevant sections.
+  3. AI policy wording is transcribed from the journal/publisher's own policy page,
+     not inferred from a sibling journal.
+  4. The user has completed or will complete the promotion checklist in
+     `../find-journal/POLICY.md` before commit.
+
+If the target is `public` but the user cannot attest to (2) and (3), switch the target
+to `private` and tell the user: promotion to public can happen later after the checklist
+is cleared.
 
 ---
 
@@ -53,10 +88,12 @@ profile generation.
 
 Before any data extraction, check whether the journal already exists:
 
-1. **Glob both directories:**
+1. **Glob all four directories** (public + private across both skills):
    ```
    ${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/*.md
    ${CLAUDE_SKILL_DIR}/../find-journal/references/journal_profiles/*.md
+   $HOME/.claude/private-journal-profiles/write-paper/*.md
+   $HOME/.claude/private-journal-profiles/find-journal/*.md
    ```
 
 2. **Filename match:** Normalize the journal name (spaces to underscores, remove special characters)
@@ -330,47 +367,44 @@ Examples:
 
 ### 4.2 Write Profile Files
 
+Route to the directory pair chosen in Phase 0 (target = `public` or `private`).
+
+**If target = `public`:**
+
 1. Write the write-paper profile to:
    `${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/{filename}.md`
 
 2. Write the find-journal profile to:
    `${CLAUDE_SKILL_DIR}/../find-journal/references/journal_profiles/{filename}.md`
 
+**If target = `private`:**
+
+1. Ensure the private directories exist (create if missing):
+   - `$HOME/.claude/private-journal-profiles/write-paper/`
+   - `$HOME/.claude/private-journal-profiles/find-journal/`
+
+2. Write the write-paper profile to:
+   `$HOME/.claude/private-journal-profiles/write-paper/{filename}.md`
+
+3. Write the find-journal profile to:
+   `$HOME/.claude/private-journal-profiles/find-journal/{filename}.md`
+
+Do NOT write private profiles anywhere inside the medsci-skills git tree.
+
 ### 4.3 Update Profile Counts
 
-After writing, count the actual files in both directories using Glob:
+Skip this phase entirely when target = `private` — private profiles are not counted in
+public-facing descriptions.
 
-```
-Glob: ${CLAUDE_SKILL_DIR}/../write-paper/references/journal_profiles/*.md
-Glob: ${CLAUDE_SKILL_DIR}/../find-journal/references/journal_profiles/*.md
-```
-
-Compute total = find-journal count + write-paper count.
-
-Update **all** count references in these files:
-
-**`find-journal/SKILL.md`** -- update every occurrence of the old counts:
-- Frontmatter `description:` line (total count)
-- Body paragraph referencing total count
-- Key Directories section (local count, write-paper count)
-- Phase 3.1 "yields N profiles total (X + Y)"
-- Case Report Mode section (total count)
-- Error Handling section (total count)
-
-Use Grep to find all numeric count references before updating. Use `replace_all` when
-the same number appears multiple times.
-
-**`README.md`** -- update:
-- "Depth per skill" row: "(N journal profiles, ...)"
-- find-journal row in Available Now table: "against N journal scope profiles"
+When target = `public`: the profile library uses runtime counting via Glob (no hard-coded
+totals). Do not edit `SKILL.md` or `README.md` to update numeric counts.
 
 ### 4.4 Confirmation
 
 Report to user:
-- Files written (paths)
-- New counts: find-journal local, write-paper, total
-- Files updated with new counts
-- Reminder: "Run `git add -A && git commit` to commit changes"
+- Target tier (`public` or `private`) and paths written
+- Reminder for `public`: "Run `git add -A && git commit` in the medsci-skills repo"
+- Reminder for `private`: "Files are local-only at `~/.claude/private-journal-profiles/` — do not commit to the public repo"
 
 ---
 
