@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Added — `/make-figures` flow diagram pipeline (R + DiagrammeR + rsvg)
+
+New standardized flow-diagram generation for STROBE / CONSORT / PRISMA / STARD in a single R script, replacing the former D2 + matplotlib mix that caused repeated overlap, font, and DOCX-embed issues (root cause of the CK-5 Figure 1 rework, 2026-04-20).
+
+- `skills/make-figures/scripts/generate_flow_diagram.R` — CLI dispatcher: `--type {strobe|consort|prisma|stard} --config <yaml> --out <prefix>`. Reads a YAML node/edge spec, emits true vector PDF + 300 dpi PNG + 600 dpi PNG. Monochrome black outline on white fill, Arial, auto-overlap via Graphviz `dot` engine.
+- `skills/make-figures/references/exemplar_diagrams/{strobe,consort,prisma,stard}/` — each directory now contains `template_input.yaml` + rendered `template_output.{pdf,png,_600.png}` so users can fork a concrete example.
+- `skills/make-figures/references/exemplar_diagrams/strobe/` — new directory (previously missing alongside consort/prisma/stard).
+- `skills/make-figures/references/exemplar_diagrams/README.md` — layout description extended to cover both "review anchors" (existing curator-curated PDFs) and "generation templates" (new).
+- `skills/make-figures/SKILL.md` — "Flow diagram generation rule" rewritten to mandate the R pipeline as the single canonical tool. D2 recipe demoted to a legacy-fallback block. Tool Selection Guide table updated to route all four reporting-guideline flow diagrams through `generate_flow_diagram.R`.
+- `skills/make-figures/references/figure_specs.md` — new "Flow Diagram Tool Selection" section documenting the stack choice, PRISMA 2020 compliance note, and rejection rationale for matplotlib / D2 / `consort` / `PRISMA2020` / Mermaid.
+
+**System dependency:** `brew install librsvg` (macOS) or `apt-get install librsvg2-bin` (Linux). R packages: `DiagrammeR`, `DiagrammeRsvg`, `rsvg`, `yaml`.
+
+**Validated end-to-end:** CK-5 Emphysema-COPD-Mortality Figure 1 (STROBE cohort) rebuilt with the new pipeline — single-color outline, no overlap, Arial rendered correctly for en-dash / bullet / `≤` / minus sign. Counts derived from `emphysema_analysis_cohort.csv` (N = 41,291; Emph+ 3,774 / Emph− 37,517; deaths 57 + 227). Legacy `create_figure1.py` and `figure1_flow.d2` preserved with `_legacy` suffix.
+
 ### Added — New skill `/academic-aio` + pipeline integration across README, write-paper, orchestrate, PLAN_E2E_PIPELINE
 
 Medical AI paper optimization for AI search engines (Perplexity, ChatGPT web, Elicit,
