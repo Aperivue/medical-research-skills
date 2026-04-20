@@ -379,7 +379,20 @@ Rscript ${CLAUDE_SKILL_DIR}/scripts/generate_flow_diagram.R \
 - Monochrome: all boxes `color=black, fillcolor=white, fontname="Arial"`.
 - Penwidth 1.2 default, 1.8 for highlighted cohort box.
 - Arrow style: black solid, arrowsize 0.75. Dashed without arrowhead for exclusion side-links.
+- Bullet alignment in multi-item labels: Graphviz `\l` (left-align), never `\n` (center). Each `\l` applies to text preceding it.
+- **No HTML-like labels** (`label=<...>` with `<B>`, `<I>`, `&#8226;`). Rejected 2026-04-20 in MA-01 RFA retrofit — "오히려 구조가 깨저버렸어. 그냥 이전버전으로 하자." Plain quoted labels with `\l` bullets produce tighter, more readable structure than HTML ragged wrapping. Do not reintroduce without explicit approval.
 - To add one emphasis color (e.g., Wong blue `#0072B2` for a single highlighted box), edit `scripts/generate_flow_diagram.R` — do not inline hex colors in YAML.
+
+**Per-project `create_figure1.R` pattern (preferred for complex flows):**
+
+When the flow has derived counts, `stopifnot()` reconciliation, multi-rank `{rank=same; ... }` constraints, or exclusion side-cars that the generic YAML dispatcher cannot express cleanly, write a per-project `create_figure1.R` directly (same DiagrammeR + DiagrammeRsvg + rsvg stack, sprintf'd `dot` string). This is the dominant pattern across 9 retrofitted manuscripts (2026-04-20~21):
+
+- STROBE cohort: `1_Samsung_Changwon/11_CheckUP_DB/{05_Emphysema_COPD_Mortality,01_CAC_Warranty_Period}/manuscript/figures/create_figure1.R`
+- STARD: `0_MI2RL/10_CXRscoliosis/Analysis/figures/create_figure1.R`, `0_MI2RL/0_SkullFx/Paper2_Clinical/figures/create_figure1.R`, `5_Personal_Research/MeducAI/7_Manuscript/Paper1/figures/v2_monochrome/create_figure1.R`
+- PRISMA / PRISMA-DTA: `10_Meta_Analysis/{01_RFA_Adjunct/5_Figures/v3,02_CBCT_Biopsy/5_Figures,21_Aneurysm_AI_Validation_SR_Paper1_FD/analysis}/create_figure1.R`
+- CONSORT-edu (naturalistic allocation): `5_Personal_Research/MeducAI/7_Manuscript/Paper3/figures/v2_monochrome/create_figure1.R`
+
+Copy the `STYLE_HEADER` (graph/node/edge attrs) verbatim from any exemplar; then customise nodes, edges, and `{rank=same}` blocks. Use `read.csv()` for cohort counts when possible; if hardcoded, every number must have a source comment referencing manuscript line / CSV cell / screening log row.
 
 **Legacy D2 fallback (only when R unavailable):**
 

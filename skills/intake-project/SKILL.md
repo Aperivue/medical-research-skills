@@ -79,6 +79,59 @@ Produce the next 3-5 actions in dependency order.
 
 ---
 
+## Canonical Manuscript Folder Structure
+
+For any manuscript project (cohort, MA, RCT, case series), enforce this structure when scaffolding or reorganizing. Map every new artifact into one of these slots — do not invent ad-hoc folders.
+
+```
+{project_root}/
+├── HANDOFF.md                         # session handoff entry point
+├── README.md                          # project overview
+├── data/                              # raw data (NEVER edit; read-only)
+├── analysis/                          # reproducible scripts (00_* → 04_*)
+├── output/                            # analysis outputs: CSVs, PNGs, intermediates
+├── irb/                               # IRB/ethics docs
+├── proposal/                          # original protocol / approved proposal
+├── reviews/                           # external correspondence
+├── manuscript/                        # SOURCE manuscript + drafting
+│   ├── manuscript_v{N}.{md,docx,pdf}  # current canonical working version (top level)
+│   ├── build_unified_docx.py          # or pandoc wrapper
+│   ├── archive/                       # ALL prior versions v1 .. v{N-1}
+│   ├── reviews/                       # QC: self_review, peer_review, STROBE/PRISMA, critic
+│   ├── figures/                       # figure scripts + rendered PNG/PDF
+│   └── tables/                        # table scripts + rendered docx
+└── submission/                        # per-journal packages
+    └── {journal-slug}/                # e.g., chest/, kjr/
+        ├── CHECKLIST.md
+        ├── cover_letter.{md,docx,pdf}
+        ├── title_page.docx            # separated for double-anonymized
+        ├── manuscript_anonymized.{docx,pdf}
+        ├── supplement.{docx,pdf}
+        ├── strobe_checklist.md        # or PRISMA / CONSORT
+        ├── circulation_email.md
+        └── figures/                   # submission-ready DPI copies
+```
+
+### Rules
+
+- **`manuscript/` = source; `submission/{journal}/` = derived artifacts.** Regenerate submission files from `manuscript/manuscript_v{N}.md`; never edit anonymized/title-page directly.
+- **One canonical working version** at `manuscript/manuscript_v{N}.{md,docx,pdf}`. Older versions move to `manuscript/archive/` immediately on version bump.
+- **No loose files at project root.** Only `HANDOFF.md`, `README.md`, folder entries.
+- **QC artifacts** (self_review, peer_review, STROBE, critic reports) live in `manuscript/reviews/`, not at manuscript top level.
+- **On rejection/retarget:** `cp -r submission/{old} submission/{new}`, then rewrite cover letter and reformat.
+- **Double-anonymized journals** (Chest, AJRCCM): title page and anonymized manuscript MUST be separate files under `submission/{journal}/`.
+
+### When to apply
+
+- At project intake: scaffold empty structure.
+- At first submission prep: create `submission/{journal}/` and populate.
+- Mid-project cleanup: when `manuscript/` has >3 versioned files or QC docs at top level, reorganize.
+- Before session handoff: reorganize if structure is drifting.
+
+**Precedent:** CK-5 Emphysema → Mortality (2026-04-20) reorganized v1–v6 + QC docs from manuscript/ top level so reject-retarget path to KJR requires only `cp -r submission/chest submission/kjr`.
+
+---
+
 ## Workflow
 
 ### Phase 1: Discover context

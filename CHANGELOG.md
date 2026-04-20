@@ -17,6 +17,11 @@ New standardized flow-diagram generation for STROBE / CONSORT / PRISMA / STARD i
 
 **Validated end-to-end:** CK-5 Emphysema-COPD-Mortality Figure 1 (STROBE cohort) rebuilt with the new pipeline — single-color outline, no overlap, Arial rendered correctly for en-dash / bullet / `≤` / minus sign. Counts derived from `emphysema_analysis_cohort.csv` (N = 41,291; Emph+ 3,774 / Emph− 37,517; deaths 57 + 227). Legacy `create_figure1.py` and `figure1_flow.d2` preserved with `_legacy` suffix.
 
+**Rollout (2026-04-20 ~ 21, 9/10 projects retrofitted):** STROBE — CK-5 Emphysema, CAC_Warranty. STARD — CXRscoliosis, SkullFx Paper2, MeducAI Paper1 (v2_monochrome parallel). PRISMA — MA-01 RFA_Adjunct, MA-21 Aneurysm_FD. PRISMA-DTA — MA-02 CBCT_Biopsy. CONSORT-edu — MeducAI Paper3 (v2_monochrome parallel). Blocked: MA-03 CBCT_Ablation — P0 HALT on 3-way numeric conflict (screening log / Methods / Results) requiring prose reconciliation before retrofit; handoff at `10_Meta_Analysis/03_CBCT_Ablation/HANDOFF_prisma_flow_reconciliation.md`.
+
+- SKILL.md Flow-diagram section now documents the **per-project `create_figure1.R` pattern** (sprintf'd `dot` string + `stopifnot()` count reconciliation + multi-rank `{rank=same}` blocks) as the preferred route when the generic YAML dispatcher cannot express complex layouts. Nine exemplar `create_figure1.R` paths listed inline as copy-paste references.
+- SKILL.md style rules hardened: **no HTML-like labels** (`label=<...>` with `<B>`/`<I>`/`&#8226;`) — rejected 2026-04-20 in MA-01 RFA after bullets/bold emphasis attempt broke structure ("오히려 구조가 깨저버렸어. 그냥 이전버전으로 하자").
+
 ### Added — New skill `/academic-aio` + pipeline integration across README, write-paper, orchestrate, PLAN_E2E_PIPELINE
 
 Medical AI paper optimization for AI search engines (Perplexity, ChatGPT web, Elicit,
