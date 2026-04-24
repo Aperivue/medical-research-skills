@@ -1,4 +1,4 @@
-# RESUME — medsci-skills Phase 1A Reference Safety MVP (2026-04-24)
+# RESUME — medsci-skills Phase 1C 진입 (2026-04-24)
 
 **⚠️ 이어서 작업 지시. "마무리할까요?" 금지. `## 즉시 실행` 첫 항목부터.**
 **작업 디렉토리**: `/Users/eugene/workspace/medsci-skills`
@@ -7,50 +7,62 @@
 
 ## 즉시 실행
 
-### Phase 0.5 산출물 커밋 (먼저)
+직전 세션에서 Phase 1B-a 회귀 + 1B-b dry-run + 1C scope lock 모두 완료. 미커밋 변경 다수.
 
-변경 범위가 커서 선별 커밋 권장. 제안 분할:
-1. `docs/{ssot_schema_v1,skill_yml_schema_v2,zotero_policy,artifact_contract}.md` + `capabilities.yml` — 계약 문서
-2. `scripts/{validate_project_contract,validate_skill_contracts,migrate_project_to_ssot}.py` — validator 구현
-3. `tests/fixtures/{legacy_project,ssot_project}/` — 회귀 fixture
-4. `_retros/medsci-skills_phase0_decisions_2026-04-24.md` (별도 repo)
+1. **commit 묶음** (3개 커밋 분리 권장):
+   - `feat(verify-refs): Phase 1B-a strict gate regression + P6 PubMed stub-error fix`
+     → `skills/verify-refs/scripts/verify_refs.py`, `tests/test_phase1a_gates.sh`, `tests/fixtures/ssot_project/manuscript/_src/refs_seed_phase1b.bib`, `tests/fixtures/ssot_project/manuscript/index.qmd`
+   - `docs(phase1c): scope lock — Hooks Warning Mode (4 subtasks, 2.5h)`
+     → `docs/phase1c_scope.md`
+   - `chore(followups): P6 done, P7/P8 added from Phase 1B-b dry-run`
+     → `FOLLOWUPS.md`, `HANDOFF.md`
+   - **제외**: `tests/fixtures/ssot_project/qc/reference_audit.json`(런타임 산출물, .gitignore 추가 필요), `README.md`/`README_FIRST.md`/`installers/`/`scripts/build_classroom_release.py`/`docs/classroom_*.md`(직전 작업과 무관, 별도 세션에서)
 
-### Phase 1A Reference Safety MVP (2 세션, 5~6h)
+2. **Phase 1C 진입** (`docs/phase1c_scope.md` §8 진입점):
+   - 순서: 1C.1 (feature flag) → 1C.2 (PreSave hook) → 1C.4 (bypass+audit) → 1C.3 (rule→hook 승격)
+   - 1C.2 enforce 트리거는 `SSOT.yaml + qc/migration_complete` 둘 다 (오발화 방지)
+   - settings.json 변경은 반드시 `update-config` 스킬 경유
+   - 진입 직전 `tests/test_phase1a_gates.sh` 재실행으로 baseline 확인
 
-v1.1.1 §8 Phase 1A 순서:
-1. **1A.1** `/lit-sync` Zotero Better BibTeX auto-export path 확정 + `refs.bib` snapshot 갱신 플로우 문서화 — 1.5h
-2. **1A.2** `/verify-refs` 방향 전환: write 로직 제거, `qc/reference_audit.json` 고정 output, PubMed/CrossRef audit — 2h
-3. **1A.3** `/search-lit` BibTeX에 `verified: true/false` flag (FOLLOWUPS P2) — 1h
-4. **1A.4** `/write-paper` citekey-only 진입 gate + `[@NEW:topic]` placeholder 규약 — 1h
-5. **1A.5** Manual CLI 체크포인트 가이드 (`verify-refs --strict` 제출 전 수동 실행) — 0.5h
+3. **Phase 1B-b 실 BBT 검증 (deferred)**: 첫 SSOT-conformant 신규 프로젝트 생성 시점까지 defer. SkullFx/CK-1/MA-1 모두 legacy docx — §9 freeze 정책 정합.
 
-**Payoff**: SkullFx Ref 6 / CK-1 Ref 6 / MA-1 PRISMA citation hallucination manual gate 수준 차단.
+**중단 조건**: 1C.2 hook이 verify-refs CLI invoke 시 PreSave latency >3s 발생 → cache 모드(P-신규) FOLLOWUPS 추가 후 1C.4로 우회.
 
-**중단 조건**: `/verify-refs` write 제거가 기존 프로젝트 파이프라인 깨뜨림 (legacy flag 필요), Zotero Better BibTeX auto-export 경로 블로커.
+---
+
+## 직전 세션 산출물
+
+- **1B-a**: 4/4 gate PASS. P6 (PubMed stub-error → FABRICATED) 버그 수정.
+- **1B-b dry-run**: Polling 로직 4/4 isolation PASS. SkullFx P2가 legacy docx 프로젝트라 실 BBT 검증 불가 발견. 결과 `~/.local/cache/phase1b_b_dryrun/findings.md`. SkullFx 파일 0건 변경.
+- **1C scope**: `docs/phase1c_scope.md` (67줄, v1.1.1 §8 정합 + HANDOFF 추정 정정).
+- **FOLLOWUPS**: P6 done, P7 (lit-sync precondition assertion) + P8 (polling 회귀 스크립트 추출) 추가.
 
 ---
 
 ## 블로커 / 대기
 
-- 진행 프로젝트(SkullFx P2 RYAI 직전 / MA-1 academic_radiology 대기 / CK-1 Chest) — Phase 1A는 신규 프로젝트만 enforce, 기존 프로젝트는 manual opt-in
-- FOLLOWUPS P2 (search-lit verified flag) → 1A.3에서 흡수
+- 진행 프로젝트(SkullFx P2 / MA-1 / CK-1) freeze 유지.
+- Phase 1B.1 (`SSOT.yaml` template) 미착수 — 1C.2 트리거 활성화의 부분 의존. 1C는 flag만 두고 진입 가능.
+- FOLLOWUPS P2/P3/P4/P7/P8 잔존.
 
 ---
 
 ## 주의사항
 
-- **D-결정 (2026-04-24)**: D-1 Pandoc markdown / D-2 Zotero owner-only / D-3 agent 3종 유지 / D-4 프로젝트 특화 스킬 deprecate / D-5 3-file 메모리 유지 / D-6 pragmatic submission / D-7 soft cap 150k / D-8 session-end 1줄
-- **`/verify-refs` 방향 전환 (1A.2)**: `qc/reference_audit.json`만 write, 나머지 write 로직(references/verified_references.tsv 등) 제거. `artifact_contract.md` v1.1.1 roster 기준.
-- **Sole writer 원칙**: `manuscript/_src/refs.bib` 는 `/lit-sync`만 write. `/search-lit`은 `references/library.bib` 후보군만.
-- **Legacy skill.yml 보존**: 12개 v1 skill.yml은 2026-07-24까지 WARN만. 강제 마이그레이션 금지.
-- **진행 프로젝트 보호**: SkullFx/MA-1/CK-1 freeze 유지. Phase 1A 도구는 신규 프로젝트 자동 enforce + 기존은 manual.
+- **Phase 1A 계약 (건들지 말 것)**:
+  - `/verify-refs`는 `qc/reference_audit.json`만 write. `references/*` 복귀 금지.
+  - `/search-lit` → `references/library.bib`, `/lit-sync` → `manuscript/_src/refs.bib`. sole-writer 분리 유지.
+  - `[@NEW:topic]`은 유일한 citation placeholder.
+- **Legacy skill.yml WARN-only (2026-07-24 sunset)** — 1C에서 강제 마이그레이션 금지.
+- **1C.2 hook은 진행 프로젝트 enforce 금지** — `SSOT.yaml + qc/migration_complete` 둘 다 있는 신규만.
 
 ---
 
 ## 참조
 
-- v1.1.1 계획서: `/Users/eugene/workspace/_retros/medsci-skills_master-plan_2026-04-24_v1.1.1.md`
-- D-결정 기록: `/Users/eugene/workspace/_retros/medsci-skills_phase0_decisions_2026-04-24.md`
-- Contract 문서: `docs/{ssot_schema_v1,skill_yml_schema_v2,zotero_policy,artifact_contract}.md`
-- Validator: `scripts/{validate_project_contract,validate_skill_contracts,migrate_project_to_ssot}.py`
-- Fixtures: `tests/fixtures/{legacy_project,ssot_project}/`
+- v1.1.1 계획서: `/Users/eugene/workspace/_retros/medsci-skills_master-plan_2026-04-24_v1.1.1.md` §8 / §9 / §10.4
+- 1C scope: `docs/phase1c_scope.md`
+- 1B-b findings: `~/.local/cache/phase1b_b_dryrun/findings.md`
+- 1B-a 회귀: `tests/test_phase1a_gates.sh`
+- Contract: `docs/{ssot_schema_v1,skill_yml_schema_v2,zotero_policy,artifact_contract}.md`
+- FOLLOWUPS: `FOLLOWUPS.md`
