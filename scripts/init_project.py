@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import datetime as _dt
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -124,6 +125,35 @@ def render_project_state(name: str, paper_type: str, journal: str, today: str) -
     return json.dumps(state, indent=2) + "\n"
 
 
+def create_zotero_collection(name: str) -> tuple[str | None, str | None, str | None]:
+    """Create a Zotero collection via pyzotero; return (library_id, collection_key, reason).
+
+    Reads env vars: ZOTERO_API_KEY, ZOTERO_LIBRARY_ID, ZOTERO_LIBRARY_TYPE
+    (user|group, default: user). Degrades gracefully — returns (None, None, reason)
+    if pyzotero is missing or credentials are absent.
+    """
+    api_key = os.environ.get("ZOTERO_API_KEY")
+    library_id = os.environ.get("ZOTERO_LIBRARY_ID")
+    library_type = os.environ.get("ZOTERO_LIBRARY_TYPE", "user")
+    if not api_key or not library_id:
+        return None, None, "env ZOTERO_API_KEY / ZOTERO_LIBRARY_ID not set"
+    try:
+        from pyzotero import zotero  # type: ignore
+    except ImportError:
+        return None, None, "pyzotero not installed (pip install pyzotero)"
+    try:
+        zot = zotero.Zotero(library_id, library_type, api_key)
+        result = zot.create_collections([{"name": name}])
+        successful = result.get("successful") or result.get("success") or {}
+        if not successful:
+            return None, None, f"Zotero API returned no successful collection: {result}"
+        first = next(iter(successful.values()))
+        key = first.get("key") if isinstance(first, dict) else first
+        return library_id, key, None
+    except Exception as exc:
+        return None, None, f"Zotero API error: {exc}"
+
+
 def write_file(path: Path, content: str, force: bool) -> None:
     if path.exists() and not force:
         sys.exit(f"ERROR: {path} already exists (use --force to overwrite). Code=3")
@@ -139,6 +169,16 @@ def main() -> int:
     ap.add_argument("--ssot", action="store_true", help="Emit SSOT.yaml (schema v1) instead of legacy project.yaml.")
     ap.add_argument("--project-root", default=".", help="Target directory (default: CWD).")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument(
+        "--zotero-collection",
+        default=None,
+        metavar="NAME",
+        help="Create a Zotero collection with NAME via pyzotero and populate "
+             "library_id / collection_key in the contract. Requires env "
+             "ZOTERO_API_KEY + ZOTERO_LIBRARY_ID (ZOTERO_LIBRARY_TYPE "
+             "optional, default 'user'). Degrades with a warning if "
+             "pyzotero or credentials are unavailable.",
+    )
     args = ap.parse_args()
 
     root = Path(args.project_root).resolve()
@@ -160,18 +200,42 @@ def main() -> int:
         tgt.parent.mkdir(parents=True, exist_ok=True)
         tgt.write_text(content, encoding="utf-8")
 
-    # 3. Contract file (SSOT.yaml or project.yaml)
+    # 3. Zotero collection (optional)
+    zot_library_id: str | None = None
+    zot_collection_key: str | None = None
+    if args.zotero_collection:
+        zot_library_id, zot_collection_key, zot_err = create_zotero_collection(args.zotero_collection)
+        if zot_err:
+            print(f"WARN: Zotero collection not created — {zot_err}. "
+                  f"Contract fields will stay null.", file=sys.stderr)
+        else:
+            print(f"OK: Zotero collection '{args.zotero_collection}' "
+                  f"(library={zot_library_id}, key={zot_collection_key})")
+
+    # 4. Contract file (SSOT.yaml or project.yaml)
     if args.ssot:
         ssot_type = map_project_type_to_ssot(args.type)
-        write_file(root / "SSOT.yaml", render_ssot(args.name, ssot_type), args.force)
+        ssot_text = render_ssot(args.name, ssot_type)
+        if zot_library_id and zot_collection_key:
+            ssot_text = ssot_text.replace(
+                "  library_id: null", f"  library_id: \"{zot_library_id}\""
+            ).replace(
+                "  collection_key: null", f"  collection_key: \"{zot_collection_key}\""
+            )
+        write_file(root / "SSOT.yaml", ssot_text, args.force)
         contract = "SSOT.yaml"
     else:
-        write_file(root / "project.yaml",
-                   render_legacy_project_yaml(args.name, args.type, args.journal, today),
-                   args.force)
+        legacy_text = render_legacy_project_yaml(args.name, args.type, args.journal, today)
+        if zot_library_id and zot_collection_key:
+            legacy_text = legacy_text.replace(
+                "zotero_collection: null\n",
+                f"zotero_collection:\n  library_id: \"{zot_library_id}\"\n  "
+                f"collection_key: \"{zot_collection_key}\"\n",
+            )
+        write_file(root / "project.yaml", legacy_text, args.force)
         contract = "project.yaml"
 
-    # 4. project_state.json
+    # 5. project_state.json
     write_file(root / "project_state.json",
                render_project_state(args.name, args.type, args.journal, today),
                args.force)
