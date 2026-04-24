@@ -35,6 +35,10 @@ with specialized support for diagnostic test accuracy (DTA) meta-analyses.
   - `JBI_Case_Series.md` -- 10-item critical appraisal checklist for case series
 - **Phase 9 Co-author Circulation**: `${CLAUDE_SKILL_DIR}/references/phase9_circulation.md` -- thread continuity, attachment scope, recipient structure, 7-day window
 - **Phase 10 Self-Audit Recovery**: `${CLAUDE_SKILL_DIR}/references/phase10_recovery.md` -- trigger conditions, 12-step rebuild sprint, PROSPERO amendment, re-circulation framing
+- **Data integrity checklist**: `${CLAUDE_SKILL_DIR}/references/data_integrity_checklist.md` -- DI-1~DI-9 extraction/synthesis guardrails (MA01~03 empirical)
+- **Review orchestration**: `${CLAUDE_SKILL_DIR}/references/review_orchestration.md` -- RO-1~RO-5 circulation discipline (extends phase9_circulation.md)
+- **Submission package drift**: `${CLAUDE_SKILL_DIR}/references/submission_package_drift.md` -- multi-journal folder hygiene, `DO_NOT_EDIT_HERE` gate, `_build.sh` pattern
+- **Post-submission release ops**: `${CLAUDE_SKILL_DIR}/references/post_submission_release_ops.md` -- Zenodo DOI gating, tag-cleanup gates, reject-retarget versioning
 
 ---
 
@@ -211,6 +215,8 @@ ID sets. The Markdown consensus document remains the human explanation.
 
 **Goal**: Create standardized extraction forms and extract 2x2 or effect size data.
 
+> **Failure-mode cross-ref** → `references/data_integrity_checklist.md` DI-1~DI-5 are mandatory during extraction (2x2 arm-swap, KM audit trail, methodology mismatch, PRISMA 5-way drift, single-source k).
+
 #### DTA Meta-Analysis:
 Generate a data extraction form with:
 - Study ID (first author, year)
@@ -284,6 +290,8 @@ For AI/ML prediction models, also apply PROBAST+AI extensions.
 ### Phase 6: Statistical Synthesis
 
 **Goal**: Execute meta-analysis and generate publication-ready outputs.
+
+> **Failure-mode cross-ref** → `references/data_integrity_checklist.md` DI-6/DI-7/DI-9 are the consistency gate (CSV ↔ script ↔ prose; single-source k; 3-way numeric reconciliation before Stage 4).
 
 **IMPORTANT**: Always use R for meta-analysis (packages: `meta`, `metafor`, `mada`).
 See `${CLAUDE_SKILL_DIR}/references/r_templates.md` for full code templates.
@@ -371,6 +379,8 @@ Output: Summary of Findings table.
 
 **Goal**: Generate PRISMA-compliant manuscript sections.
 
+> **Failure-mode cross-ref** → `references/submission_package_drift.md` — apply the `_build.sh` pattern + `DO_NOT_EDIT_HERE` gate when staging multi-journal submission folders.
+
 1. **Check reporting compliance**: Use `/check-reporting` with PRISMA-DTA or PRISMA 2020
 2. **Write manuscript**: Use `/write-paper` with meta-analysis type selected
 3. **Figures**: Use `/make-figures` for:
@@ -407,6 +417,8 @@ and cover-letter framing.
 **Load-on-demand procedural detail** (thread continuity, attachment scope rationale,
 size-to-method table, journal-undetermined framing, response-tracking log):
 `${CLAUDE_SKILL_DIR}/references/phase9_circulation.md`.
+
+> **Failure-mode cross-ref** → `references/review_orchestration.md` RO-1~RO-5 (dual-rating completeness, defensive-tone bias audit, response-matrix numeric tracking, 2nd-reviewer availability blocking).
 
 ---
 
@@ -445,6 +457,23 @@ submission escalation path → (10.12) post-recovery loop (Phase 9 restart; tigh
 **Load-on-demand procedural detail** (exact audit-log fields, delta-table template,
 amendment language template, re-circulation paragraph template, anti-pattern rationale):
 `${CLAUDE_SKILL_DIR}/references/phase10_recovery.md`.
+
+> **Failure-mode cross-ref** → `references/post_submission_release_ops.md` Gate 4 covers reject/revise Zenodo versioning, tag-cleanup gate, and re-target workflow (avoid "new version" misuse on re-target).
+
+---
+
+## Failure Modes (MA01~03 empirical)
+
+Failure patterns observed across MA01 RFA Adjunct / MA02 CBCT Biopsy / MA03 CBCT Ablation. Each topical reference extends the phase it cross-references above — consult alongside phase procedural docs, not in isolation.
+
+| Domain | Phase span | Load-on-demand reference |
+|---|---|---|
+| Data integrity (2x2 arm-swap, KM audit, methodology mismatch, PRISMA 5-way drift, single-source k) | Phase 3 → 6 | `references/data_integrity_checklist.md` (DI-1~DI-9) |
+| Review orchestration (2nd-reviewer blocking, dual-rating completeness, defensive-tone audit, response-matrix tracking) | Phase 9 circulation (extends `phase9_circulation.md`) | `references/review_orchestration.md` (RO-1~RO-5) |
+| Submission package drift (multi-journal folder hygiene, `DO_NOT_EDIT_HERE` gate, build artifact vs master) | Phase 8 → submission | `references/submission_package_drift.md` |
+| Post-submission release ops (Zenodo DOI timing, tag-cleanup gate, reject-retarget versioning) | Submission → Phase 10 | `references/post_submission_release_ops.md` |
+
+Planned scripts (out of current scope, tracked in FOLLOWUPS): `scripts/prisma_5way_consistency.py` (DI-6), `scripts/extraction_consensus_log_init.py` (DI-1), `scripts/tag_cleanup_gate.sh` (DI-8), `scripts/verify_package_integrity.py`.
 
 ---
 
