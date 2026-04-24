@@ -1,0 +1,116 @@
+schema_version: 2
+# v1 had only `domains:`. v2 adds `umbrellas:` (alias view) and `deprecation:` (sunset timeline).
+# See docs/skill_yml_schema_v2.md for the skill-level contract schema.
+
+domains:
+  manuscript_drafting:
+    owner: write-paper
+    overlaps:
+      - self-review
+      - revise
+    rule: Drafts the user's manuscript; does not act as external reviewer.
+  own_manuscript_critique:
+    owner: self-review
+    overlaps:
+      - peer-review
+      - revise
+    rule: Reviews the user's own manuscript before submission.
+  external_peer_review:
+    owner: peer-review
+    overlaps:
+      - self-review
+    rule: Reviews manuscripts assigned by journals; does not edit the user's manuscript.
+  reviewer_response:
+    owner: revise
+    overlaps:
+      - self-review
+      - write-paper
+    rule: Parses actual reviewer/editor comments and coordinates response artifacts.
+  reference_integrity:
+    owner: verify-refs
+    overlaps:
+      - search-lit
+      - lit-sync
+    rule: Verifies citations in an existing manuscript or bibliography.
+  literature_discovery:
+    owner: search-lit
+    overlaps:
+      - verify-refs
+      - ma-scout
+    rule: Finds literature and generates verified candidate citations.
+  zotero_sync:
+    owner: lit-sync
+    overlaps:
+      - verify-refs
+    rule: Synchronizes verified bibliographic records into Zotero and notes.
+  submission_packaging:
+    owner: sync-submission
+    overlaps:
+      - write-paper
+      - find-journal
+    rule: Audits or builds derived journal packages from canonical manuscript sources.
+  meta_analysis_integrity:
+    owner: meta-analysis
+    overlaps:
+      - self-review
+      - check-reporting
+    rule: Owns screening, extraction, synthesis, and ID-set reconciliation.
+  reporting_compliance:
+    owner: check-reporting
+    overlaps:
+      - self-review
+      - write-paper
+    rule: Performs item-level reporting guideline audits.
+  figure_generation:
+    owner: make-figures
+    overlaps:
+      - write-paper
+    rule: Generates figure files and figure manifests; manuscript text consumes them.
+
+# umbrellas group related domains under a single routing name for /orchestrate.
+# An umbrella is a read-only view; edits and ownership still live in `domains:`.
+umbrellas:
+  write:
+    members: [manuscript_drafting, own_manuscript_critique, reviewer_response]
+    rule: End-to-end authoring pipeline (draft -> self-review -> revise).
+  references:
+    members: [reference_integrity, literature_discovery, zotero_sync]
+    rule: Discover, verify, sync. Single pipeline for citation correctness.
+  reporting_and_packaging:
+    members: [reporting_compliance, submission_packaging, figure_generation]
+    rule: Pre-submission QC + build artifacts.
+
+# Deprecation: skills and agents scheduled for removal.
+# Follows D-3 (agent archive), D-4 (project-specific skill deprecation).
+deprecation:
+  agents_archived:
+    sunset_date: "2026-10-24"
+    keep:
+      - citation-checker
+      - codex-rescue
+      - adversarial-review
+    archive:
+      # Replaced by skills (agent-skill-routing.md)
+      - writer            # -> /write-paper
+      - lit-scout         # -> /search-lit
+      - statistician      # -> /analyze-stats
+      - meta-analyst      # -> /meta-analysis
+      - humanizer         # -> /humanize
+      - reporting-auditor # -> /check-reporting
+      - critic            # -> /self-review
+      - stat-reviewer     # -> /analyze-stats
+      - research-fellow   # -> /orchestrate
+  project_specific_skills:
+    sunset_date: "2026-10-24"
+    # D-4: project-specific skills (e.g., /skullfx-paper2) replaced by
+    # /manage-project + per-project SSOT.yaml config.
+    pattern: "^skills/[a-z0-9]+_[a-z0-9_]+$"  # project-id prefixed skills
+    replacement: "/manage-project + SSOT.yaml"
+    examples:
+      - skullfx-paper2
+      - ck1-submission-build
+  skills_superseded:
+    # Skills replaced during Phase 1~2. Listed here as they are planned;
+    # move to `archive` once sunset confirmed.
+    pending_review:
+      - verify-refs (write-side)   # Phase 1A: write logic removed; audit-only remains

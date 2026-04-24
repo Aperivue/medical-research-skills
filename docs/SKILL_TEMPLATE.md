@@ -25,6 +25,32 @@ model: inherit
 
 ---
 
+## Optional `skill.yml` Contract
+
+Core skills and any skill that participates in multi-skill workflows should add
+`skill.yml` beside `SKILL.md`. Missing contracts are currently migration warnings;
+malformed contracts fail `scripts/validate_skills.sh`.
+
+```yaml
+schema_version: 1
+name: skill-name
+owner_domain: domain_from_capabilities_yml
+inputs:
+  - input_artifact
+outputs:
+  - output_artifact
+deterministic_scripts:
+  - scripts/example.py
+side_effects:
+  - writes_project_artifacts
+downstream_consumers:
+  - downstream-skill
+forbidden_actions:
+  - unsafe_action_this_skill_must_not_do
+```
+
+---
+
 ## Template Structure
 
 ```markdown
@@ -152,6 +178,7 @@ New skills should target **Mid** tier minimum. Core pipeline skills (write-paper
 - [ ] Output Contract section lists all files the skill produces
 - [ ] Reference files mentioned in SKILL.md actually exist in `references/`
 - [ ] Skill Interactions section documents upstream/downstream dependencies
+- [ ] `skill.yml` exists for pipeline/core skills and matches `capabilities.yml`
 - [ ] "What This Skill Does NOT Do" section defines scope boundaries
 - [ ] No hardcoded personal paths (use `${SKILL_DIR}` or `${CLAUDE_SKILL_DIR}`)
 - [ ] No PII or institution-specific content in examples
