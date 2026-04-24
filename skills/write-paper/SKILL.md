@@ -334,7 +334,12 @@ Call `/check-reporting` on `manuscript/manuscript.md`. Parse the output:
 
 #### Step 7.3: Citation Verification
 
-Call `/search-lit --verify-only` to verify all citations in the manuscript are real and correctly formatted. Flag any unverified references with `[UNVERIFIED]` markers.
+Call `/verify-refs` on the current manuscript to verify all citations in the
+manuscript are real and correctly formatted. This writes
+`references/verified_references.tsv`, `references/library.bib`, and
+`qc/reference_audit.json`. If `/verify-refs` is unavailable, fall back to
+`/search-lit --verify-only` and flag any unverified references with
+`[UNVERIFIED]` markers.
 
 #### Step 7.3a: Numerical Claim Audit (MANDATORY for MA / pooled estimates / comparative arms)
 
@@ -710,7 +715,7 @@ This skill orchestrates other skills at specific phases:
 | 2 | `/make-figures --study-type` | Figure generation with study-type auto-detection |
 | 7.1 | (built-in) | AI pattern removal |
 | 7.2 | `/check-reporting` | Reporting guideline compliance + auto-fix MISSING items |
-| 7.3 | `/search-lit --verify-only` | Citation verification |
+| 7.3 | `/verify-refs` | Citation verification and reference artifact audit |
 | 7.4 | `/self-review --json` | Self-review with auto-fix loop (max 2 iterations) |
 | 7.4a | `/meta-analysis` Phase 10 (MA manuscripts) | Audit recovery branch — rebuild extraction/analysis/figures/body when self-review surfaces structural data or protocol issues |
 | 7.5 | `/humanize` | AI-pattern density sweep (<2.0 / 1000 words) |

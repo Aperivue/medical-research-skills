@@ -1,0 +1,20 @@
+schema_version: 1
+name: search-lit
+owner_domain: literature_discovery
+inputs:
+  - literature_query
+outputs:
+  - references/library.bib
+  - references/search_results.tsv
+deterministic_scripts:
+  - references/pubmed_eutils.sh
+  - references/parse_pubmed.py
+side_effects:
+  - may_call_external_literature_apis
+downstream_consumers:
+  - verify-refs
+  - lit-sync
+  - write-paper
+forbidden_actions:
+  - generate_references_from_memory
+  - silently_include_unverified_references

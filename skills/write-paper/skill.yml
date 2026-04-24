@@ -1,0 +1,22 @@
+schema_version: 1
+name: write-paper
+owner_domain: manuscript_drafting
+inputs:
+  - project.yaml
+  - analysis/_analysis_outputs.md
+  - analysis/figures/_figure_manifest.md
+outputs:
+  - manuscript/manuscript.md
+  - manuscript/title_page.md
+  - qc/_pipeline_log.md
+deterministic_scripts:
+  - none_required
+side_effects:
+  - writes_project_artifacts
+downstream_consumers:
+  - self-review
+  - verify-refs
+  - sync-submission
+forbidden_actions:
+  - generate_references_from_memory
+  - silently_edit_frozen_submission

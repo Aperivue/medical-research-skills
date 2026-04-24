@@ -1,0 +1,18 @@
+schema_version: 1
+name: self-review
+owner_domain: own_manuscript_critique
+inputs:
+  - manuscript/manuscript.md
+outputs:
+  - qc/self_review.md
+  - qc/self_review.json
+deterministic_scripts:
+  - none_required
+side_effects:
+  - may_edit_manuscript_when_fix_flag_set
+downstream_consumers:
+  - revise
+  - sync-submission
+forbidden_actions:
+  - review_external_manuscripts_as_peer_reviewer
+  - silently_fix_non_ai_fixable_issues

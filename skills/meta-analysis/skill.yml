@@ -1,0 +1,22 @@
+schema_version: 1
+name: meta-analysis
+owner_domain: meta_analysis_integrity
+inputs:
+  - protocol/search_strategies.md
+  - screening/*.tsv
+  - extraction/*.csv
+outputs:
+  - 2_Screening/screening_consensus_final.json
+  - analysis/meta_analysis_outputs.json
+  - manuscript/manuscript.md
+deterministic_scripts:
+  - scripts/screening_reconcile.py
+side_effects:
+  - writes_project_artifacts
+downstream_consumers:
+  - write-paper
+  - self-review
+  - make-figures
+forbidden_actions:
+  - report_counts_without_id_receipts
+  - continue_after_p0_reconciliation_mismatch

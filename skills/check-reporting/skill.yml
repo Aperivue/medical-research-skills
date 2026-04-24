@@ -1,0 +1,18 @@
+schema_version: 1
+name: check-reporting
+owner_domain: reporting_compliance
+inputs:
+  - manuscript/manuscript.md
+outputs:
+  - qc/reporting_checklist.md
+  - qc/reporting_checklist.json
+deterministic_scripts:
+  - none_required
+side_effects:
+  - writes_qc_artifacts
+downstream_consumers:
+  - write-paper
+  - self-review
+forbidden_actions:
+  - invent_reporting_guideline_items
+  - silently_mark_missing_items_present

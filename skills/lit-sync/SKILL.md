@@ -110,6 +110,23 @@ Zotero Sync:
 
 If the Zotero MCP is not connected, skip this entire phase and proceed to Phase 3.
 
+Always write `references/zotero_collection.json` in the project workspace:
+
+```json
+{
+  "schema_version": 1,
+  "status": "synced",
+  "collection": "RFA-Meta",
+  "collection_key": "TZQEP4NH",
+  "added": 8,
+  "skipped": 3,
+  "failed": 1
+}
+```
+
+If Zotero is unavailable, write the same file with `status: "skipped"` and a
+human-readable `reason`.
+
 ---
 
 ## Phase 3: Obsidian Literature Notes

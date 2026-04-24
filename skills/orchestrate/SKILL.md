@@ -96,6 +96,8 @@ When the user's request arrives, classify it into one of these intents:
 | "Write an IRB protocol" / "Draft ethics submission" / "Research protocol" | `/write-protocol` |
 | "Write a case report" / "I have an interesting case" | `/write-paper` (case-report mode) |
 | "Generate a cover letter" / "Write cover letter for submission" | `/write-paper` (Phase 8+, requires completed manuscript) |
+| "Verify references" / "Check citation hallucinations" / "Reference audit" | `/verify-refs` |
+| "Sync submission" / "Retarget journal" / "Check SSOT drift" | `/sync-submission` |
 
 ### Multi-skill workflows (plan then execute sequentially)
 
@@ -213,7 +215,8 @@ built-in gates (outline approval, discussion planning).
 3. `/write-paper --autonomous` (if --e2e) → reads analysis/ → `manuscript/manuscript.md`, `manuscript/manuscript_final.docx`
    - Phase 7.4 internally calls `/self-review --json --fix` → `qc/self_review.md`
 4. `/check-reporting` → reads `manuscript/manuscript.md` → `qc/reporting_checklist.md` (called within write-paper Phase 7, but orchestrator verifies output)
-5. `/self-review --json --fix` → reads `manuscript/manuscript.md` → `qc/self_review.md` + auto-fix (called within write-paper Phase 7.4, but orchestrator verifies final output)
+5. `/verify-refs` → reads `manuscript/manuscript.md` → `references/verified_references.tsv`, `references/library.bib`, `qc/reference_audit.json`
+6. `/self-review --json --fix` → reads `manuscript/manuscript.md` → `qc/self_review.md` + auto-fix (called within write-paper Phase 7.4, but orchestrator verifies final output)
 
 ### Post-Skill Validation
 
@@ -225,6 +228,7 @@ After each skill completes, verify that expected output files exist. If validati
 | `/make-figures` | `analysis/figures/_figure_manifest.md` with at least 1 entry | Parse manifest, verify listed files exist |
 | `/write-paper` | `manuscript/manuscript.md` (required), `manuscript/manuscript_final.docx` (required in --e2e) | Check file existence and non-empty |
 | `/check-reporting` | `qc/reporting_checklist.md` or inline report | Check file existence |
+| `/verify-refs` | `qc/reference_audit.json` and `references/verified_references.tsv` | Parse JSON; halt if `FABRICATED` or `MISMATCH` count > 0 |
 | `/self-review` | Review report with JSON block (when --json) | Check JSON block is parseable |
 
 **On validation failure:**
@@ -242,6 +246,7 @@ After each skill completes, verify that expected output files exist. If validati
 | make-figures | `analysis/_analysis_outputs.md`, data files | analysis/figures/*.pdf, analysis/figures/*.png, `analysis/figures/_figure_manifest.md` |
 | write-paper | analysis/figures/, analysis/tables/, manifests, journal profile | manuscript/manuscript.md, manuscript/manuscript_final.docx, manuscript/title_page.md |
 | check-reporting | manuscript/manuscript.md | qc/reporting_checklist.md |
+| verify-refs | manuscript/manuscript.md or references/library.bib | references/verified_references.tsv, references/library.bib, qc/reference_audit.json |
 | self-review | manuscript/manuscript.md | qc/self_review.md (with JSON block) |
 
 ### Rules
@@ -257,12 +262,14 @@ After the E2E pipeline completes (or when the user requests journal targeting), 
 manual-trigger workflow is available:
 
 1. `/find-journal` → top 5 recommendations based on `manuscript/manuscript.md` abstract
-2. User selects a journal → create `submission/{journal_short}/` directory
-3. Generate inside `submission/{journal_short}/`:
+2. `/verify-refs` → block fabricated or mismatched references before packaging
+3. User selects a journal → create `submission/{journal_short}/` directory
+4. `/sync-submission build --journal {journal_short}` → create or refresh the derived manuscript package from the canonical manuscript
+5. Generate inside `submission/{journal_short}/`:
    - `cover_letter.md`: via `/write-paper` Phase 8+
    - `checklist.md`: journal-specific submission checklist
    - `manuscript_final.docx`: reformatted for target journal (if format differs)
-4. `/peer-review` (journal scope-aware) → `submission/{journal_short}/peer_review.md`
+6. `/peer-review` (journal scope-aware) → `submission/{journal_short}/peer_review.md`
 
 This workflow is NOT part of `--e2e`. It requires user interaction (journal selection).
 

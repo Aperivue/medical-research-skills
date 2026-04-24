@@ -1,0 +1,17 @@
+schema_version: 1
+name: peer-review
+owner_domain: external_peer_review
+inputs:
+  - external_manuscript.pdf
+outputs:
+  - review/{manuscript_id}/{manuscript_id}_review_draft.md
+  - review/{manuscript_id}/{manuscript_id}_submission.md
+deterministic_scripts:
+  - none_required
+side_effects:
+  - writes_review_artifacts
+downstream_consumers:
+  - none
+forbidden_actions:
+  - edit_users_own_manuscript
+  - generate_references_from_memory

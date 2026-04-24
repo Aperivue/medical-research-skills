@@ -210,8 +210,13 @@ If a Zotero MCP server is available, integrate search results with the user's li
 2. **Organize into collections**: Use `zotero_manage_collections` to file into the relevant project collection.
 3. **Check for duplicates**: Use `zotero_search_items` to avoid adding papers already in the library.
 4. **Leverage annotations**: Use `zotero_get_annotations` to reference the user's prior reading notes.
+5. **Write sync audit**: Record collection key, added/skipped/failed counts, and
+   unsynced entries in `references/zotero_collection.json` so Zotero status is
+   auditable rather than a hidden optional side effect.
 
 > Requires Zotero Desktop running with MCP server. Skip this phase if unavailable.
+> If skipped, still write `references/zotero_collection.json` with
+> `status: "skipped"` and the reason.
 
 ### Phase 5: Full-Text Retrieval
 

@@ -1,0 +1,21 @@
+schema_version: 1
+name: orchestrate
+owner_domain: orchestration
+inputs:
+  - project.yaml
+  - artifact_manifest.json
+  - qc/status.json
+outputs:
+  - qc/_pipeline_log.md
+deterministic_scripts:
+  - scripts/validate_skill_contracts.py
+  - scripts/validate_project_contract.py
+side_effects:
+  - routes_to_worker_skills
+downstream_consumers:
+  - write-paper
+  - verify-refs
+  - sync-submission
+forbidden_actions:
+  - generate_worker_outputs_directly
+  - bypass_artifact_validation

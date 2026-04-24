@@ -1,0 +1,21 @@
+schema_version: 1
+name: make-figures
+owner_domain: figure_generation
+inputs:
+  - analysis/_analysis_outputs.md
+  - analysis/tables/*.csv
+outputs:
+  - analysis/figures/_figure_manifest.md
+  - analysis/figures/*.png
+  - analysis/figures/*.pdf
+deterministic_scripts:
+  - scripts/generate_flow_diagram.R
+  - scripts/critic_figure.py
+side_effects:
+  - writes_figure_artifacts
+downstream_consumers:
+  - write-paper
+  - sync-submission
+forbidden_actions:
+  - fabricate_figure_numbers
+  - create_flow_diagrams_without_source_counts

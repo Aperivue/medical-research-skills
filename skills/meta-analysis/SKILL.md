@@ -166,6 +166,19 @@ Use `/make-figures` to generate PRISMA flow diagram when numbers are finalized.
 
 Before handing the screening artifacts to Phase 5 (statistical synthesis) or to `/write-paper` / `/self-review`, run an explicit ID-set reconciliation and record the canonical totals in a single source-of-truth file (typically `2_Screening/screening_consensus_final.md` §Net Impact or equivalent):
 
+Use the deterministic helper when TSV/CSV artifacts are available:
+
+```bash
+python "${CLAUDE_SKILL_DIR}/scripts/screening_reconcile.py" \
+  --screening 2_Screening/fulltext_screening_final.tsv \
+  --consensus 2_Screening/consensus_decisions.tsv \
+  --table1 6_Tables/table1_studies.csv \
+  --output 2_Screening/screening_consensus_final.json
+```
+
+Downstream stages should consume `screening_consensus_final.json` for counts and
+ID sets. The Markdown consensus document remains the human explanation.
+
 1. **Enumerate ID sets from raw artifacts (not from prose summaries):**
    - A = screening TSV INCLUDE IDs
    - B = consensus spreadsheet Exclude IDs

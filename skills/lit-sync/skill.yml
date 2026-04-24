@@ -1,0 +1,19 @@
+schema_version: 1
+name: lit-sync
+owner_domain: zotero_sync
+inputs:
+  - references/library.bib
+outputs:
+  - references/zotero_collection.json
+  - obsidian_literature_notes
+deterministic_scripts:
+  - none_required
+side_effects:
+  - may_update_zotero
+  - may_write_obsidian_notes
+downstream_consumers:
+  - write-paper
+  - verify-refs
+forbidden_actions:
+  - fabricate_bibliographic_metadata
+  - overwrite_existing_literature_notes

@@ -1,0 +1,19 @@
+schema_version: 1
+name: revise
+owner_domain: reviewer_response
+inputs:
+  - reviewer_comments
+  - manuscript/manuscript.md
+outputs:
+  - revision/response_to_reviewers.md
+  - revision/change_log.md
+deterministic_scripts:
+  - none_required
+side_effects:
+  - may_edit_manuscript_with_user_approved_changes
+downstream_consumers:
+  - sync-submission
+  - verify-refs
+forbidden_actions:
+  - argue_valid_reviewer_points_as_rebuttal_without_approval
+  - reference_original_page_lines_after_revision
