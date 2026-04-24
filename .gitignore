@@ -11,6 +11,9 @@ skills/check-reporting/references/checklists/SPIRIT.md
 *.XPT
 *.xpt
 
+# Runtime artifacts from verify-refs (fixtures)
+tests/fixtures/**/qc/reference_audit.json
+
 # Python
 __pycache__/
 

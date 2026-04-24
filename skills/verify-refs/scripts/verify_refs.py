@@ -206,6 +206,8 @@ def verify_pubmed_pmid(pmid: str, timeout: int) -> tuple[str, str]:
     item = result.get(pmid)
     if not item:
         return "FABRICATED", "PMID not found in PubMed"
+    if item.get("error"):
+        return "FABRICATED", f"PubMed PMID error: {item['error']}"
     title = html.unescape(item.get("title", ""))
     return "OK", f"PubMed PMID OK; title={title[:120]}"
 

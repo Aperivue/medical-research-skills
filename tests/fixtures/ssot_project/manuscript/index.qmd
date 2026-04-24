@@ -5,3 +5,5 @@ title: "SSOT fixture manuscript"
 # Introduction
 
 Stub body for SSOT.yaml validator regression testing. Cites [@sample2026].
+
+Phase 1B-a regression placeholder for the `[@NEW:topic]` convention: see [@NEW:phase1b_topic].
