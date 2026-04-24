@@ -16,7 +16,7 @@ Scaffold new research projects, track manuscript writing progress, maintain ligh
 
 ## Commands
 
-### `/manage-project init {name} --type {type} --journal {journal}`
+### `/manage-project init {name} --type {type} --journal {journal} [--ssot]`
 
 Create a complete project scaffold for a new research paper.
 
@@ -24,6 +24,9 @@ Create a complete project scaffold for a new research paper.
 - `{name}` -- Project identifier (e.g., `nnunet-skull-fracture`, `rfa-meta-analysis`)
 - `--type` -- Paper type: `original | meta | case | animal | technical | ai_validation | letter`
 - `--journal` -- Target journal: `RYAI | AJR | Radiology | European_Radiology | KJR | INSI | AJNR | generic`
+- `--ssot` -- Emit `SSOT.yaml` (schema v1) from `templates/SSOT.yaml.template` instead of legacy `project.yaml`. Required for Phase 1C auto-enforce (PostToolUse verify-refs hook blocks instead of warns). New projects on or after 2026-04-24 should pass `--ssot`. Legacy in-flight projects stay on `project.yaml` until `/manage-project migrate-ssot` is run.
+
+**SSOT template substitutions:** `{{PROJECT_ID}}` → `{name}`, `{{PROJECT_TYPE}}` → SSOT `project_type` enum mapped from `--type` (`original → original_research`, `meta → meta_analysis`, `case → case_report`, `ai_validation → ai_validation`, else `other`). `library_id` / `collection_key` stay `null` — populated manually when the owner links a Zotero collection.
 
 **What it creates:**
 

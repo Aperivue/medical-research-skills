@@ -14,6 +14,8 @@ Mapping: see docs/ssot_schema_v1.md "project.yaml -> SSOT.yaml field mapping".
 from __future__ import annotations
 
 import argparse
+import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -111,6 +113,12 @@ def main() -> int:
     parser.add_argument("--project-root", default=".")
     parser.add_argument("--write", action="store_true", help="Write SSOT.yaml (default: dry-run to stdout)")
     parser.add_argument("--verbose", action="store_true", help="Warn on dropped fields")
+    parser.add_argument(
+        "--mark-complete",
+        action="store_true",
+        help="After --write, validate via scripts/validate_project_contract.py and "
+        "touch qc/migration_complete on PASS. Required to activate Phase 1C auto-enforce.",
+    )
     args = parser.parse_args()
 
     root = Path(args.project_root).resolve()
@@ -142,9 +150,59 @@ def main() -> int:
         target.write_text(output, encoding="utf-8")
         print(f"Wrote {target}")
         print(f"Legacy project.yaml preserved (sunset {SUNSET_DATE}). Remove after migration verified.")
+        if args.mark_complete:
+            rc = _validate_and_mark(root)
+            return rc
     else:
         print(output)
 
+    return 0
+
+
+def _validate_and_mark(root: Path) -> int:
+    """Run validator against the freshly-written SSOT.yaml. On PASS, touch
+    qc/migration_complete so the Phase 1C hook switches from warn to enforce.
+
+    Returns the process exit code (0 on success, non-zero on validator failure).
+    """
+    validator = Path(__file__).resolve().parent / "validate_project_contract.py"
+    if not validator.exists():
+        print(f"ERROR: validator not found at {validator}", file=sys.stderr)
+        return 4
+
+    proc = subprocess.run(
+        [sys.executable, str(validator), "--project-root", str(root)],
+        capture_output=True,
+        text=True,
+    )
+    sys.stdout.write(proc.stdout)
+    sys.stderr.write(proc.stderr)
+
+    if proc.returncode != 0:
+        print(
+            "MIGRATION INCOMPLETE: validator failed — qc/migration_complete not written. "
+            "Fix failures above and re-run with --mark-complete.",
+            file=sys.stderr,
+        )
+        return proc.returncode
+
+    try:
+        payload = json.loads(proc.stdout)
+        if payload.get("contract_mode") != "ssot":
+            print(
+                f"MIGRATION INCOMPLETE: expected contract_mode=ssot, got {payload.get('contract_mode')!r}",
+                file=sys.stderr,
+            )
+            return 5
+    except json.JSONDecodeError:
+        # validator printed non-JSON; treat as PASS on rc=0 but warn.
+        print("WARN: validator stdout not JSON; proceeding based on exit code.", file=sys.stderr)
+
+    marker_dir = root / "qc"
+    marker_dir.mkdir(parents=True, exist_ok=True)
+    marker = marker_dir / "migration_complete"
+    marker.touch()
+    print(f"Wrote marker {marker} — Phase 1C auto-enforce is now active for this project.")
     return 0
 
 
