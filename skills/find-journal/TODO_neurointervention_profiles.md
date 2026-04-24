@@ -82,9 +82,9 @@ Priority order:
 
 ## 추가 후 필요 작업
 
-- `/Users/eugene/workspace/medsci-skills/CHANGELOG.md`에 프로파일 추가 항목 기록
+- `CHANGELOG.md` (repo root)에 프로파일 추가 항목 기록
 - 개수 업데이트: `SKILL.md`의 "93 compact journal scope profiles" 수치 조정
-- 선택사항: `/Users/eugene/.claude/skills/write-paper/references/journal_profiles/`에도 detail profile 추가 (top-5 enrichment용, 필요시)
+- 선택사항: `~/.claude/skills/write-paper/references/journal_profiles/`에도 detail profile 추가 (top-5 enrichment용, 필요시)
 
 ---
 

@@ -8,7 +8,7 @@ into references/exemplar_diagrams/{type}/.
 
 Example:
     python extract_exemplar_from_pdf.py \
-        --pdf /Users/eugene/Zotero/storage/ABCD/Yan2017.pdf \
+        --pdf ~/Zotero/storage/ABCD/Yan2017.pdf \
         --page 3 \
         --type stard \
         --label Yan2017_STARD \

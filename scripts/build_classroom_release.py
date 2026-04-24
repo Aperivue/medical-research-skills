@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import shutil
+import subprocess
 import zipfile
 from pathlib import Path
 
@@ -18,14 +19,53 @@ INCLUDE_PATHS = [
     "skills",
 ]
 
+EXCLUDE_DIR_NAMES = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", "node_modules", ".git"}
+EXCLUDE_FILE_NAMES = {".DS_Store", "Thumbs.db", "HANDOFF.md"}
+EXCLUDE_NAME_PREFIXES = ("TODO_",)
+EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".swp"}
+
+
+def _is_excluded(path: Path) -> bool:
+    if path.name in EXCLUDE_FILE_NAMES:
+        return True
+    if path.name.startswith(EXCLUDE_NAME_PREFIXES):
+        return True
+    if path.suffix in EXCLUDE_SUFFIXES:
+        return True
+    if any(part in EXCLUDE_DIR_NAMES for part in path.parts):
+        return True
+    return False
+
+
+def _git_tracked_files() -> set[Path]:
+    """Return the set of repo-relative paths tracked by git (no untracked or ignored)."""
+    try:
+        out = subprocess.check_output(
+            ["git", "-C", str(REPO_ROOT), "ls-files"],
+            text=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return set()
+    return {REPO_ROOT / line.strip() for line in out.splitlines() if line.strip()}
+
+
+TRACKED_FILES: set[Path] = _git_tracked_files()
+
 
 def add_path(zipf: zipfile.ZipFile, path: Path, root_name: str) -> None:
     if path.is_file():
+        if _is_excluded(path) or (TRACKED_FILES and path not in TRACKED_FILES):
+            return
         zipf.write(path, Path(root_name) / path.relative_to(REPO_ROOT))
         return
     for item in sorted(path.rglob("*")):
-        if item.is_file():
-            zipf.write(item, Path(root_name) / item.relative_to(REPO_ROOT))
+        if not item.is_file():
+            continue
+        if _is_excluded(item):
+            continue
+        if TRACKED_FILES and item not in TRACKED_FILES:
+            continue
+        zipf.write(item, Path(root_name) / item.relative_to(REPO_ROOT))
 
 
 def build_zip(platform: str, version: str) -> Path:

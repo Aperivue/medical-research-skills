@@ -169,7 +169,7 @@ find-cohort-gap/
 
 1. **리서치** (웹 + YouTube + 논문) — 위 리서치 과제 3개 카테고리 병렬 실행
 2. **프레임워크 정리** — 리서치 결과 + 건진DB 실전 경험 종합
-3. **SKILL.md 작성** — `/Users/eugene/workspace/medsci-skills/skills/find-cohort-gap/SKILL.md`
+3. **SKILL.md 작성** — `skills/find-cohort-gap/SKILL.md` (repo-relative)
 4. **references/ 작성** — 채점 rubric, 템플릿 등
 5. **테스트** — 건진DB로 CK-14 후보 발굴 시뮬레이션, NHIS로 가상 시나리오
 6. **README/CHANGELOG 업데이트** — medsci-skills repo에 새 스킬 등록

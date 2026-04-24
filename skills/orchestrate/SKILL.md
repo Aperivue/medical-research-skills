@@ -215,7 +215,7 @@ built-in gates (outline approval, discussion planning).
 3. `/write-paper --autonomous` (if --e2e) → reads analysis/ → `manuscript/manuscript.md`, `manuscript/manuscript_final.docx`
    - Phase 7.4 internally calls `/self-review --json --fix` → `qc/self_review.md`
 4. `/check-reporting` → reads `manuscript/manuscript.md` → `qc/reporting_checklist.md` (called within write-paper Phase 7, but orchestrator verifies output)
-5. `/verify-refs` → reads `manuscript/manuscript.md` → `references/verified_references.tsv`, `references/library.bib`, `qc/reference_audit.json`
+5. `/verify-refs` → reads `manuscript/manuscript.md` → `qc/reference_audit.json` (sole output; row-level status in `records[]`)
 6. `/self-review --json --fix` → reads `manuscript/manuscript.md` → `qc/self_review.md` + auto-fix (called within write-paper Phase 7.4, but orchestrator verifies final output)
 
 ### Post-Skill Validation
@@ -228,7 +228,7 @@ After each skill completes, verify that expected output files exist. If validati
 | `/make-figures` | `analysis/figures/_figure_manifest.md` with at least 1 entry | Parse manifest, verify listed files exist |
 | `/write-paper` | `manuscript/manuscript.md` (required), `manuscript/manuscript_final.docx` (required in --e2e) | Check file existence and non-empty |
 | `/check-reporting` | `qc/reporting_checklist.md` or inline report | Check file existence |
-| `/verify-refs` | `qc/reference_audit.json` and `references/verified_references.tsv` | Parse JSON; halt if `FABRICATED` or `MISMATCH` count > 0 |
+| `/verify-refs` | `qc/reference_audit.json` (sole output) | Parse JSON; halt if `FABRICATED` or `MISMATCH` count > 0 (from `records[]`) |
 | `/self-review` | Review report with JSON block (when --json) | Check JSON block is parseable |
 
 **On validation failure:**
@@ -246,7 +246,7 @@ After each skill completes, verify that expected output files exist. If validati
 | make-figures | `analysis/_analysis_outputs.md`, data files | analysis/figures/*.pdf, analysis/figures/*.png, `analysis/figures/_figure_manifest.md` |
 | write-paper | analysis/figures/, analysis/tables/, manifests, journal profile | manuscript/manuscript.md, manuscript/manuscript_final.docx, manuscript/title_page.md |
 | check-reporting | manuscript/manuscript.md | qc/reporting_checklist.md |
-| verify-refs | manuscript/manuscript.md or references/library.bib | references/verified_references.tsv, references/library.bib, qc/reference_audit.json |
+| verify-refs | manuscript/manuscript.md or a bib input | qc/reference_audit.json (sole writer; see skills/verify-refs/SKILL.md §Output Contract) |
 | self-review | manuscript/manuscript.md | qc/self_review.md (with JSON block) |
 
 ### Rules

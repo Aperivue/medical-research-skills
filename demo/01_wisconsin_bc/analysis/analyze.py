@@ -6,6 +6,7 @@ Python: 3.x
 Key packages: scikit-learn, scipy, pandas, matplotlib
 """
 import os
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -24,10 +25,19 @@ from sklearn.metrics import (
 
 np.random.seed(42)
 
-WORK = "/Users/eugene/workspace/medsci-skills/demo/01_wisconsin_bc"
-STYLE = "/Users/eugene/.claude/skills/analyze-stats/references/style/figure_style.mplstyle"
-if os.path.exists(STYLE):
-    plt.style.use(STYLE)
+# Resolve paths relative to this script so the demo runs anywhere.
+WORK = str(Path(__file__).resolve().parents[1])
+_HERE = Path(__file__).resolve()
+_STYLE_CANDIDATES = [
+    # Repo-local (preferred when running from a git checkout)
+    _HERE.parents[3] / "skills" / "analyze-stats" / "references" / "style" / "figure_style.mplstyle",
+    # User-installed skill
+    Path.home() / ".claude" / "skills" / "analyze-stats" / "references" / "style" / "figure_style.mplstyle",
+]
+for _style in _STYLE_CANDIDATES:
+    if _style.exists():
+        plt.style.use(str(_style))
+        break
 
 # ── Load data ──────────────────────────────────────────────
 df = pd.read_csv(os.path.join(WORK, "data/breast_cancer_clinical.csv"))
