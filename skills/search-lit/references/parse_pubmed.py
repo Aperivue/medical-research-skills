@@ -19,6 +19,7 @@ Usage:
 import sys
 import json
 import xml.etree.ElementTree as ET
+from datetime import date
 from textwrap import shorten
 
 
@@ -204,6 +205,17 @@ def generate_bibtex(data: str) -> None:
         if doi:
             print(f"  doi       = {{{doi}}},")
         print(f"  pmid      = {{{pmid}}},")
+
+        # Anti-hallucination verification flag. Entries emitted by this script
+        # originate from PubMed efetch XML, so a non-empty PMID is proof of
+        # API provenance (verified=true). Missing PMID → verified=false and
+        # downstream tooling (/verify-refs) will flag for manual check.
+        verified = bool(pmid)
+        verified_by = "pubmed+crossref" if (pmid and doi) else ("pubmed" if pmid else "")
+        print(f"  verified  = {{{'true' if verified else 'false'}}},")
+        if verified_by:
+            print(f"  verified_by = {{{verified_by}}},")
+            print(f"  verified_on = {{{date.today().isoformat()}}},")
         print("}")
         print()
 

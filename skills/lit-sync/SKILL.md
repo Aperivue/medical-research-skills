@@ -154,6 +154,32 @@ Better BibTeX "Keep updated" auto-export normally refreshes `manuscript/_src/ref
 
 Read `SSOT.yaml` → `truth.refs_bib`. Default: `manuscript/_src/refs.bib`. If absent (legacy project), fall back to `manuscript/_src/refs.bib` and emit a WARN recommending SSOT migration.
 
+### Step 2.5.1b: Precondition assertion (early-exit, do NOT poll)
+
+Before entering the 10s polling loop in Step 2.5.2, verify both preconditions. If **either** fails, abort Phase 2.5 with setup instructions instead of waiting for a timeout that will never resolve.
+
+1. **BBT auto-export registered.** `~/Zotero/better-bibtex/read-only.json` must be a non-empty JSON list. Check with:
+
+   ```bash
+   python3 -c 'import json,sys,pathlib; p=pathlib.Path.home()/".zotero"/"zotero"/"Profiles"; \
+     f=pathlib.Path.home()/"Zotero"/"better-bibtex"/"read-only.json"; \
+     sys.exit(0 if f.exists() and json.loads(f.read_text() or "[]") else 1)'
+   ```
+
+   Or equivalent shell: `[ -s ~/Zotero/better-bibtex/read-only.json ] && [ "$(jq 'length' ~/Zotero/better-bibtex/read-only.json)" -gt 0 ]`.
+
+   On failure print:
+
+   > Phase 2.5 skipped: BBT auto-export not configured (`~/Zotero/better-bibtex/read-only.json` is empty or missing). Set up "Keep updated" auto-export per `docs/zotero_policy.md` §Setup, then re-run `/lit-sync`.
+
+2. **Target refs.bib exists.** The resolved `truth.refs_bib` path from Step 2.5.1 must exist on disk (even empty is OK — BBT will overwrite). On failure print:
+
+   > Phase 2.5 skipped: target snapshot `<path>` not found. Configure BBT auto-export with "On Change" to the SSOT path, then re-run.
+
+In either early-exit, set `refs_bib_refreshed: false` + `reason: "precondition:<which>"` in the Step 2.5.3 JSON and return control to the caller. `/verify-refs` treats `refs_bib_refreshed: false` as an unverified snapshot — downstream skills (`/write-paper`, `/render`) block until the precondition is resolved.
+
+Rationale (2026-04-24 Phase 1B-b dry-run): on a machine with BBT installed but no auto-export registered, the original Step 2.5.2 polled for 10s then emitted a generic "mtime unchanged" WARN that did not point at the actual cause. Findings: `~/.local/cache/phase1b_b_dryrun/findings.md`.
+
 ### Step 2.5.2: Verify refresh
 
 After Phase 2 adds items:

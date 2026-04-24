@@ -28,6 +28,18 @@ Create a complete project scaffold for a new research paper.
 
 **SSOT template substitutions:** `{{PROJECT_ID}}` → `{name}`, `{{PROJECT_TYPE}}` → SSOT `project_type` enum mapped from `--type` (`original → original_research`, `meta → meta_analysis`, `case → case_report`, `ai_validation → ai_validation`, else `other`). `library_id` / `collection_key` stay `null` — populated manually when the owner links a Zotero collection.
 
+**Implementation:** `/manage-project init` is backed by `scripts/init_project.py`. Invoke directly when running outside the skill harness:
+
+```bash
+python3 scripts/init_project.py \
+    --name {name} --type {type} --journal {journal} [--ssot] \
+    --project-root {target_dir}
+```
+
+(Run from the `medsci-skills` repo root.)
+
+The helper writes the contract file (`SSOT.yaml` with `--ssot`, otherwise legacy `project.yaml`), the directory scaffold, minimal stubs required by `scripts/validate_project_contract.py` (`manuscript/index.qmd`, `artifact_manifest.json`, `qc/status.json`), the memory-file templates, and `project_state.json`. `qc/migration_complete` is **not** written by init — the migrate pipeline is responsible for that marker.
+
 **What it creates:**
 
 ```
@@ -110,6 +122,23 @@ Create a complete project scaffold for a new research paper.
   }
 }
 ```
+
+---
+
+### `/manage-project migrate-ssot [--no-mark-complete]`
+
+Thin wrapper over `scripts/migrate_project_to_ssot.py` that converts a legacy `project.yaml` project into SSOT.yaml form and, by default, touches `qc/migration_complete` so Phase 1C `auto` mode switches from `warn` to `enforce`.
+
+```bash
+python3 scripts/migrate_project_to_ssot.py \
+    --project-root . --write --mark-complete
+```
+
+- Default: `--write --mark-complete` (enforce-ready).
+- `--no-mark-complete` flag form: run with `--write` only. Use when the project still has open QC failures — enforcement is deferred until the migration is validated.
+- The migrate script refuses to touch `qc/migration_complete` unless the generated SSOT.yaml passes `validate_project_contract.py` AND `contract_mode=ssot`. Do not `touch qc/migration_complete` manually.
+
+Re-run after resolving failures; the script is idempotent.
 
 ---
 

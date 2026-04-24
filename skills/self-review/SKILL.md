@@ -329,6 +329,44 @@ consensus") that is not backed by an enumerable ID addition/subtraction set is i
 Major Comment**, because the transition is unverifiable by downstream audit. Require
 conversion of every such claim to explicit ID lists before closing the report.
 
+### Phase 2.5c: Reference Hallucination Scan
+
+Numerical audits (2.5/2.5a/2.5b) cover in-text numbers; they do **not** cover reference-list integrity. LLM-drafted or co-author-handed-in bibliographies frequently contain fabricated DOIs, wrong author/year combinations for a real DOI, or plausible-looking references that never existed. These slip past human proofreading because the surface form looks canonical.
+
+**When to run:** every manuscript at self-review, regardless of stage. Mandatory before submission and before any revision circulation to co-authors or the editor.
+
+**Procedure:**
+
+1. **Locate the bibliography.** From `SSOT.yaml` → `truth.refs_bib` (fallback `manuscript/_src/refs.bib` for legacy projects). If `SSOT.yaml` is absent, scan `references/library.bib` as a last resort.
+
+2. **Invoke `/verify-refs`** on the resolved bib. The skill writes `qc/reference_audit.json` with a per-entry verdict (`VERIFIED` / `FABRICATED` / `UNVERIFIED`) and a top-level `submission_safe` boolean.
+
+   ```bash
+   # equivalent CLI form (same result as invoking the skill)
+   python3 skills/verify-refs/scripts/verify_refs.py \
+       --bib "$(python3 -c "import yaml,sys; print(yaml.safe_load(open('SSOT.yaml'))['truth']['refs_bib'])")" \
+       --out qc/reference_audit.json --strict
+   ```
+
+3. **Read `qc/reference_audit.json`.** For each entry not marked `VERIFIED`, add a row to the reconciliation block below. `FABRICATED` entries are P0 Major Comments (block submission). `UNVERIFIED` entries are Minor Comments unless the manuscript is at a circulation/submission gate, in which case they escalate to Major.
+
+4. **Cross-check placeholder drift.** `grep -n '\[@NEW:' manuscript/` — any remaining `[@NEW:topic]` placeholder at self-review stage is a P0: the citation was queued but never resolved. Include in the reconciliation block.
+
+5. **Record results in a short reconciliation block** and append to the Phase 3 report:
+
+   ```
+   | Citekey | Verdict | Source check | Status |
+   |---|---|---|---|
+   | Kim_2024_Validation | VERIFIED | DOI + PubMed match | ✓ |
+   | Park_2023_Radiomics | FABRICATED | DOI resolves to unrelated paper | ✗ P0 |
+   | Lee_2022_DeepLearning | UNVERIFIED | No DOI/PMID, title not found | △ Major before submission |
+   | [@NEW:segmentation_review] | PLACEHOLDER | unresolved citation queue | ✗ P0 |
+   ```
+
+**Short-circuit rule:** if `qc/reference_audit.json` already exists with a bib-hash match within 60s (P9 cache TTL, pending), the scan MAY reuse it; otherwise re-run. Never consume a stale audit from a prior manuscript revision.
+
+**Do NOT fabricate replacement references** if any entry fails. Fix-forward belongs to `/search-lit` and `/lit-sync`, not to this skill. Self-review only reports the failure and blocks submission.
+
 ### Phase 3: Report
 
 Generate a concise report with this structure:
@@ -489,7 +527,7 @@ Here is how to address it with your existing data."
 
 ## Anti-Hallucination
 
-- **Never fabricate references.** All citations must be verified via `/search-lit` with confirmed DOI or PMID. Mark unverified references as `[UNVERIFIED - NEEDS MANUAL CHECK]`.
+- **Never fabricate references.** All citations must be verified via `/search-lit` with confirmed DOI or PMID. Mark unverified references as `[UNVERIFIED - NEEDS MANUAL CHECK]`. Self-review enforces this through **Phase 2.5c: Reference Hallucination Scan** (runs `/verify-refs` against the SSOT bib); any `FABRICATED` verdict blocks submission as a P0 Major Comment.
 - **Never invent clinical definitions, diagnostic criteria, or guideline recommendations.** If uncertain, flag with `[VERIFY]` and ask the user.
 - **Never fabricate numerical results** — compliance percentages, scores, effect sizes, or sample sizes must come from actual data or analysis output.
 - If a reporting guideline item, journal policy, or clinical standard is uncertain, state the uncertainty rather than guessing.
