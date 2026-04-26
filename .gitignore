@@ -22,3 +22,6 @@ __pycache__/
 
 # Release build artifacts
 dist/
+
+# Installer logs (timestamped, per-machine)
+*-medsci-skills-install-log.txt
