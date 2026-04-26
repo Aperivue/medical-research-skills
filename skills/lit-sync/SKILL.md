@@ -393,6 +393,26 @@ workspace and run Phase 1–3.
 On a "sync Zotero" request, diff the Zotero collection against the `.bib` file
 and add whatever is missing.
 
+### PMID-list ingestion (no .bib)
+When the user supplies a list of PMIDs (e.g., from a HANDOFF or a colleague), resolve
+PMIDs to DOIs via PubMed esummary first, then enter Phase 2 with the DOIs:
+
+```bash
+PMIDS="12345,67890,..."
+curl -s "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${PMIDS}&retmode=json" \
+  | jq -r '.result | to_entries[] | select(.key != "uids") | "\(.value.uid)\t\(.value.elocationid)\t\(.value.title)"'
+```
+
+For each resolved DOI call `zotero_add_by_doi` (auto-dedup by DOI). For items
+already in the library (returned as "skipped" or detected via `zotero_search_items`
+by DOI), use `zotero_manage_collections` to attach them to the project collection
+**without re-adding** — re-adding by URL/PubMed-URL would bypass DOI dedup and
+create duplicates. Record both `added` and `existing` items in
+`references/zotero_collection.json`.
+
+If a PMID has no DOI in PubMed (rare; older papers, non-indexed), fall back to
+`zotero_add_by_url` with the PubMed URL and mark the entry as `no_doi: true`.
+
 ---
 
 ## Safety Rules
