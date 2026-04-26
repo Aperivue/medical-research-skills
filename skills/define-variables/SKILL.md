@@ -42,7 +42,26 @@ Call after `/design-study`, before `/write-protocol`.
 
 Missing inputs → ask once, then proceed.
 
-## 3-Tier Pipeline (token-efficient + scientifically rigorous)
+## 4-Tier Pipeline (DB codebook + token-efficient literature)
+
+### Tier 0 — DB codebook lookup (mandatory for DB-backed observational studies)
+
+**Trigger**: project has a `project.yaml::db.dictionary_path` field pointing to a machine-readable codebook (xlsx/csv/markdown), OR user supplied a dictionary path in inputs. If neither, skip to Tier 1.
+
+For every candidate DB variable — **before** touching literature — open the dictionary and record, verbatim, the sheet name, row number, and code→meaning mapping. This prevents the single most common observational-study error: assuming a column code (`status == 0`, `grade == 4`) means what it intuitively reads like, when the codebook says otherwise.
+
+Concrete procedure per variable:
+
+1. Locate the variable in the dictionary by exact column name.
+2. Copy verbatim: the sheet title, row number, and full code→meaning mapping (or unit/range statement for continuous vars).
+3. Paste into the `Dict. sheet & row` + `Dict. verbatim` columns of the operationalization table.
+4. If the variable is not found, OR the codebook is silent on a specific code value, file a question to the DB owner / data steward. Do NOT infer from cross-tabs, do NOT guess, do NOT proceed with that variable until a verbatim answer exists.
+
+Empirical checks (value distributions, cross-tabs with related columns) are useful for sanity testing **after** the verbatim codebook meaning is recorded — never as a substitute for it.
+
+Project-level binding (recommended): commit a `DICTIONARY_FIRST_POLICY.md` at the project root (or shared-config path) capturing the canonical dictionary path + escalation contact. Cross-project rule template: `~/.claude/rules/dictionary-first.md`.
+
+**Exit gate**: `check_dictionary_citations.py` (or equivalent) PASS on the operationalization table before running Tier 1.
 
 ### Tier 1 — Canonical index lookup (no API calls)
 
@@ -80,9 +99,11 @@ Write to `{project_root}/variable_operationalization.md` using `templates/variab
 1. **Header**: research question, cohort type, date, author
 2. **Operationalization table** — one row per variable:
 
-   | Variable | Role | Canonical source | Definition | Cutoff | DB vars | Implementation | Ad-hoc? |
+   | Variable | Role | Dict. sheet & row | Dict. verbatim | Canonical source | Definition | Cutoff | DB vars | Implementation | Ad-hoc? |
 
    - `Role`: exposure / outcome / covariate / eligibility
+   - `Dict. sheet & row`: e.g. `5-1.복부초음파 r12` — mandatory if a DB dictionary exists
+   - `Dict. verbatim`: full code→meaning string copied from the dictionary — mandatory same condition
    - `Canonical source`: BibTeX key (e.g., `@rinella2023_aasld_masld`)
    - `Definition`: one line, verbatim from guideline where possible
    - `Cutoff`: numeric + units
@@ -116,6 +137,7 @@ Every variable definition, cutoff, and era anchor must be grounded in a verified
 
 ## Failure Modes to Avoid
 
+0. **Ad-hoc DB code interpretation** (the single most costly observational-study error). Interpreting a column value (`status == 0`, `grade == 4`) by its surface reading without consulting the codebook. Tier 0 exists specifically to prevent this. Distinguish from Failure #1: Tier 0 says "once you've picked the DB column, quote the codebook verbatim before using its values." Failure #1 says "don't pick DB columns before picking definitions from literature." Both rules co-exist.
 1. **Dictionary-first framing** — starting from what columns exist, then picking a definition that matches. Always flip: definition first, then map.
 2. **Cutoff drift** — using a different cutoff than the cited guideline without justification (e.g., BMI≥23 cited as WHO Asian while text says ≥25).
 3. **Mixing eras** — 2020 MAFLD criteria with 2023 MASLD criteria in the same analysis. Pick one and note why.
