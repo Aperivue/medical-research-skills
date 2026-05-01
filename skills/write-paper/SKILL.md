@@ -347,6 +347,14 @@ Final quality pass before submission.
 
 Scan for and remove AI writing patterns (see AI Pattern Avoidance below). Edit `manuscript/manuscript.md` in place.
 
+**Classical-style QC (senior MA reviewer 대비) — load on demand:**
+
+| Trigger | Action |
+|---------|--------|
+| Manuscript 유형 = MA, systematic review, 또는 senior co-author review가 예정됨 | `references/section_guides/step7_1_classical_qc.md` 로드 → 7개 grep 점검 (§ 기호, AI Disclosure 단락, heading style, eligibility numbered list, Funding placeholder, PROSPERO chronology, em-dash 남용) 일괄 실행 |
+| 글로벌 룰 cross-reference | `~/.claude/rules/manuscript-style-classical.md` (11항목 motivation) |
+| Pattern 19–21 본문 rewrite | `/humanize` (§, self-reference, AI Disclosure boilerplate) |
+
 #### Step 7.2: Reporting Guideline Check
 
 Call `/check-reporting` on `manuscript/manuscript.md`. Parse the output:
