@@ -2,10 +2,10 @@
 
 # MedSci Skills
 
-**36 skills that actually work.** Built by a physician-researcher, tested on real publications.
+**39 skills that actually work.** Built by a physician-researcher, tested on real publications.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Skills](https://img.shields.io/badge/Skills-36-brightgreen?style=flat-square)
+![Skills](https://img.shields.io/badge/Skills-39-brightgreen?style=flat-square)
 ![Platform](https://img.shields.io/badge/Platform-Claude_Code-blueviolet?style=flat-square)
 ![Built by](https://img.shields.io/badge/Built_by-Physician--Researcher-blue?style=flat-square)
 
@@ -235,6 +235,11 @@ ma-scout -> search-lit -> fulltext-retrieval -> design-study ──> write-proto
 | **ma-scout** | Meta-analysis topic discovery and feasibility assessment. Two modes: (A) Professor-first — profile → pillar analysis → MA gaps, (B) Topic-first — question → landscape scan → co-author matching. Multi-source validation (PubMed, PROSPERO, bioRxiv) with realistic k estimation (15-30% discount). |
 | **lit-sync** | Sync research references from .bib files to Zotero library + Obsidian literature notes. Concept extraction from 10+ literature notes with cross-cutting theme discovery. Works after `/search-lit` or standalone. |
 | **academic-aio** | AI search engine (Perplexity / ChatGPT web / Elicit / Consensus / SciSpace) and RAG visibility checklist for medical AI papers. Integrates TRIPOD+AI, CLAIM, STARD-AI, TRIPOD-LLM, DECIDE-AI reporting anchors with generative-engine-optimization (GEO) principles. Covers title, abstract, structured summary boxes (Key Points / Research in Context / Plain-Language Summary), preprints, GitHub README, `CITATION.cff`, Zenodo, and Hugging Face model/dataset cards. Explicit defense against LLM citation fabrication (Agarwal 2025, Nat Commun). Produces a visible PASS/PARTIAL/FAIL checklist; never applies edits silently. Pairs with `write-paper` Phase 4/6/7, runs after `self-review` + `humanize`. |
+| **manage-refs** | Reference lifecycle as a single skill: citekey ↔ `.bib` validation, journal-CSL pandoc rendering (`render_pandoc.sh`), manuscript ↔ rendered DOCX cross-reference QC (`check_xref.py --strict` is the submission gate), `[N]` ↔ `[@key]` marker conversion, and native Zotero CWYW field-code injection for co-author Word workflows. Hybrid 3-phase strategy (pandoc draft → CWYW transition → Zotero CWYW for circulation/revision/submission). Sole writer of `manuscript_final.docx` and `qc/xref_audit.json`. **New:** split out of `write-paper` Phase 7.6 in 2026-05-01 release so `revise`, `peer-review`, `sync-submission`, and `find-journal` can render directly without depending on a sibling skill. |
+| **render-pdf-doc** | Render non-bibliography academic markdown (proposal, briefing handout, anchor doc, IRB cover, reference table) to publication-quality PDF via `pandoc + xelatex` with CJK font fallback (Apple SD Gothic Neo on macOS, Noto Sans CJK KR on Linux) and content-proportional pipe-table column widths. Boundary opposite of `manage-refs` (bibliography-driven). **New:** spun off from `write-paper` Phase 7.6 in 2026-05-01. |
+| **define-variables** | Literature-grounded variable operationalization for observational research. Turns a data dictionary plus research question into a citation-backed table of exposure / outcome / covariate definitions, cutoffs, and DB-variable mappings. Tier 0 dictionary-first rule prevents ad-hoc phenotype definitions that invite reviewer rejection. Bridges `/search-lit` output into `/write-protocol` Methods. |
+| **fill-protocol** | Fill institutional Word form templates (`.doc` / `.docx`) for IRB protocols, ethics applications, grant proposals, and other structured research documents while preserving the original styles, table layouts, fonts, and page geometry. Korean-aware (CJK eastAsia font enforcement, table cantSplit) but works for any-language template. Pairs with `write-protocol` (content) — fill-protocol renders the content into the institutional template. |
+| **fill-icmje-coi** | Batch-generate per-author ICMJE Conflict of Interest Disclosure Forms (`coi_disclosure.docx`) for manuscript submission. Pre-fills all 13 disclosure items as "☒ None" plus the final certification using a synthetic seed template, then clones the seed per author with Date / Name / Manuscript Title replaced. Designed for the common case of hospital-based observational research where no author has real financial conflicts; circulated forms become "reply 변경 없음 + sign" for most authors and only flag those who need to amend. |
 
 ## Installation
 
