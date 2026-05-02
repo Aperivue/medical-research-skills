@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig09 (evaluation-metrics comparison)
+# Why this exemplar is good — pipeline_09 (evaluation-metrics comparison)
 
 Hierarchy / structure: A 3×2 grid where all six evaluation methods share identical sub-layout — method title (bar header), candidate excerpt (middle), and two-bullet summary (O = what is captured, △ = what is missed). One shared reference sentence sits above the grid, establishing the common ground-truth all six metrics are being compared against.
 

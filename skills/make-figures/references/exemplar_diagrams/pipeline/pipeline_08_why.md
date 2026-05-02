@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig08 (pipeline / CLIMB foundation model)
+# Why this exemplar is good — pipeline_08 (pipeline / CLIMB foundation model)
 
 Hierarchy / structure: Three-stage landscape layout separated by vertical rules: Training (left) | Specialized Encoder (center) | Testing + Downstream (right). Inside the Training panel, three modality lanes (Graphs, 1D signals, 2D&3D images) each carry three exemplar thumbnails, creating a grid-of-grids that communicates breadth without listing every dataset.
 

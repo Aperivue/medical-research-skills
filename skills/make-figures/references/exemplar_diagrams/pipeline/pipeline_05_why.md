@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig05 (pipeline / tasks illustration)
+# Why this exemplar is good — pipeline_05 (pipeline / tasks illustration)
 
 Hierarchy / structure: Two stacked panels (A and B), each a four-column table-like layout. A shows report generation for two cases (pelvic radiograph and abdominal CT) side-by-side: input → reference report → generated report. B shows VQA with closed-ended vs. open-ended question variants for each case. The uniform column structure makes the cross-row comparison immediate.
 

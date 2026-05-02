@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig04 (pipeline)
+# Why this exemplar is good — pipeline_04 (pipeline)
 
 Hierarchy / structure: Top row is the macro view (modality inputs → encoder → connector → LLM → generator → outputs), bottom row zooms into the "connector" block with four named variants (A MLP, B Q-Former, C MH-Attn, D Expert Captioning). A light-blue downward arrow visually tethers the macro block to its expansion — the classic "zoom-in detail" device applied cleanly.
 

@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig06 (pipeline / M3D architecture)
+# Why this exemplar is good — pipeline_06 (pipeline / M3D architecture)
 
 Hierarchy / structure: Strict top-to-bottom flow. Volumetric CT input (single modality box with three anatomical sub-panels) feeds a 3D image encoder; parallel text-side question templates feed the text tokenizer. Both streams converge on a single LLM-with-LoRA block, then split into two downstream heads (report generation, VQA). The shape (funnel in → funnel out) mirrors the dual-task architecture.
 

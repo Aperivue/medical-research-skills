@@ -128,18 +128,23 @@ for skill_dir in "$SKILLS_DIR"/*/; do
     fi
   }
 
+  # Text-bearing extensions to scan. Binary types (.png/.pdf/.docx) are out
+  # of scope — separate FAIL rule below catches their FILENAMES (rule 7c)
+  # but their content needs a different tool (e.g. exiftool for EXIF).
+  TEXT_EXTS='-name *.md -o -name *.yml -o -name *.yaml -o -name *.json -o -name *.txt -o -name *.csv -o -name *.tsv'
+
   integrity_files=()
   [ -f "$skill_file" ] && _add_if_tracked "$skill_file"
   if [ -d "${skill_dir}references" ]; then
     while IFS= read -r -d '' f; do
       _add_if_tracked "$f"
-    done < <(find "${skill_dir}references" -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) -print0 2>/dev/null)
+    done < <(find "${skill_dir}references" -type f \( $TEXT_EXTS \) -print0 2>/dev/null)
   fi
   # Also catch top-level skill scratchpads (skills/<name>/TODO_*.md, HANDOFF.md)
   # and skill.yml / capabilities.yml that some skills keep alongside SKILL.md.
   while IFS= read -r -d '' f; do
     _add_if_tracked "$f"
-  done < <(find "${skill_dir}" -maxdepth 1 -type f \( -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) \
+  done < <(find "${skill_dir}" -maxdepth 1 -type f \( $TEXT_EXTS \) \
             ! -name "SKILL.md" -print0 2>/dev/null)
 
   # 6. Personal precedent leak (blocklist of project-specific identifiers)
@@ -192,6 +197,28 @@ for skill_dir in "$SKILLS_DIR"/*/; do
     fi
   done
   [ "$email_hits" -eq 0 ] && pass "Email whitelist (no personal addresses)"
+
+  # 7c. Filename PII (Author{Year}_Journal_FigNN, Surname{Year}_Conf_..., etc.)
+  #     Catches the case where the file CONTENT is fine but the filename itself
+  #     reveals authorship — e.g. `Nam2025_KJR_Fig01.png` from the 2026-05-02
+  #     audit. Pattern: a capitalised word (≥3 chars) directly followed by a
+  #     4-digit year, then `_`. Common exemplar / precedent file shape.
+  #     Allow-list: the precedent filename has to actually be a real file inside
+  #     the skill, so this only fires when shipping such a file. Common
+  #     non-author tokens are excluded (Issue, Year, Vol, Table, Figure, Sample,
+  #     Example, Sample, Demo, Test, Type, Class).
+  filename_hits=0
+  filename_pattern='^[A-Z][a-zA-Z]{2,}[0-9]{4}_'
+  filename_allow='^(Issue|Year|Vol|Table|Figure|Sample|Example|Demo|Test|Type|Class|Group|Cohort|Study|Trial|Phase|Run|Batch|Round|Stage|Step|Item|Mode)[0-9]{4}_'
+  while IFS= read -r -d '' f; do
+    base=$(basename "$f")
+    if echo "$base" | grep -qE "$filename_pattern" && ! echo "$base" | grep -qE "$filename_allow"; then
+      rel="${f#$REPO_ROOT/}"
+      fail "Author-style filename in $rel: $base"
+      ((filename_hits++))
+    fi
+  done < <(find "${skill_dir}" -type f -print0 2>/dev/null)
+  [ "$filename_hits" -eq 0 ] && pass "Filenames (no Author{Year}_ patterns)"
 
   # 8. Dated precedent blockquote (lines starting with '> ' containing YYYY-MM-DD)
   # Allow-list: meta headers like "Last updated:", "Created:", "Updated:".

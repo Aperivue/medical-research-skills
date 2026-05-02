@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig03 (pipeline)
+# Why this exemplar is good — pipeline_03 (pipeline)
 
 Hierarchy / structure: Two-panel layout (A and B) separated by a thin vertical rule, with each panel self-contained. A shows contrastive pre-training: text encoder (top) and image encoder (bottom) converge on a similarity matrix. B shows a VQA inference pipeline flowing left → right. Panel labels sit in the top-left corner of each panel at a consistent position.
 

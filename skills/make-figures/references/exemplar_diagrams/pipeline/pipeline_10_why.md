@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig10 (clinical integration overview)
+# Why this exemplar is good — pipeline_10 (clinical integration overview)
 
 Hierarchy / structure: Three horizontal strips. Top = clinical workflow (Patient → Triage → Consultation → Diagnosis → Treatment → Monitoring) rendered as a linear process diagram. Middle = radial diagram with a radiologist at center surrounded by MLLM support tasks. Bottom = radial diagram with an AI icon at center surrounded by clinical-integration challenges. Two radial compositions mirror each other visually — a deliberate parallel that frames "capabilities vs. challenges".
 

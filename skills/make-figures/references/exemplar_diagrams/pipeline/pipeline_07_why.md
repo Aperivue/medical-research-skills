@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig07 (pipeline / MAIRA-Seg)
+# Why this exemplar is good — pipeline_07 (pipeline / MAIRA-Seg)
 
 Hierarchy / structure: A horizontal pipeline with input row (CXRs, pseudo-masks, task instruction, textual context) on top, processing row (image encoder, segmentation model, tokenizer/embedding) in the middle, and convergence on a single LLM block at the bottom. The vertical progression communicates "modalities in → unified tokens → one model out" without ambiguity.
 

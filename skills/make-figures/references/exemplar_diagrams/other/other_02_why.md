@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig02 (bubble chart landscape)
+# Why this exemplar is good — other_02 (bubble chart landscape)
 
 Hierarchy / structure: A landscape scatter/bubble chart with time on the X-axis (pre-2022 → 2025) and MMLU score on the Y-axis. A dashed logistic-like trajectory connects the frontier models across years, implicitly communicating the field-wide progression without a separate annotation layer.
 

@@ -1,4 +1,4 @@
-# Why this exemplar is good — Nam2025_KJR_Fig01 (pipeline)
+# Why this exemplar is good — pipeline_01 (pipeline)
 
 Hierarchy / structure: A clean left-to-right pipeline — paired inputs (CXR image on top, clinical text on bottom) merge into a single downstream processor (MLLM) and terminate in a single output box. The two parallel encoder boxes are aligned horizontally, which communicates multimodal symmetry at a glance.
 
