@@ -1,6 +1,17 @@
-schema_version: 1
+schema_version: 2
 name: render-pdf-doc
+layer: A
 owner_domain: document_layout
+when_to_use:
+  - Render a non-bibliography Korean/English academic markdown to publication-quality PDF
+  - Research proposals, IRB cover letters, briefing handouts, anchor docs, reference tables
+  - Auto-infer pipe-table column widths for content-proportional layout
+  - CJK-font-aware PDF on macOS (Apple SD Gothic Neo) or Linux (Noto Sans CJK KR)
+when_NOT_to_use:
+  - Manuscripts with bibliography (use /manage-refs scripts/render_pandoc.sh — owns CSL pipeline)
+  - Filling institutional Word form templates (use /fill-protocol)
+  - Figures, plots, or PPTX (use /make-figures or /present-paper)
+  - Hand-typing CSV data into tables (forbidden — see numerical-safety rule)
 inputs:
   - markdown_file (non-bibliography academic doc — proposal, briefing, anchor doc, IRB cover, reference table)
   - frontmatter (optional; mainfont, CJKmainfont, geometry, fontsize, linestretch)
