@@ -68,23 +68,26 @@ from pptx.util import Inches, Pt
 
 
 # ── Defaults ────────────────────────────────────────────────────────────────
-DEFAULT_SLIDE = (13.33, 10.0)
+DEFAULT_SLIDE_W = 10.5    # default width when slide_size unset; height auto-computed
+FALLBACK_SLIDE_H = 11.0   # only used if auto-compute can't fit
+ABSOLUTE_MAX_SLIDE_H = 14.0  # PowerPoint hard upper bound for legible single-slide layouts
 
-# Column geometry (inches)
+# Column geometry (inches) — tighter than widescreen; better for vertical flow
 PHASE_X = 0.4
-PHASE_W = 1.5
-SPINE_X = 2.4
-SPINE_W = 4.4
-EXCL_X  = 7.4
-EXCL_W  = 4.6
+PHASE_W = 1.4
+SPINE_X = 2.2
+SPINE_W = 3.6
+EXCL_X  = 6.4
+EXCL_W  = 3.7
 
 # Vertical spacing
 TITLE_Y = 0.25
 TITLE_H = 0.5
 TOP_PAD = 0.35           # below title before first row
-ROW_GAP = 0.3            # vertical gap between adjacent rows
-DEFAULT_ROW_H = 1.05
-DEFAULT_EXCL_H = 0.95
+ROW_GAP = 0.35           # vertical gap between adjacent rows
+DEFAULT_ROW_H = 1.20     # slightly taller boxes for better text breathing room
+DEFAULT_EXCL_H = 1.05
+BOTTOM_PAD = 0.4         # margin below last row
 
 # Colors
 NAVY   = RGBColor(0x1F, 0x3A, 0x68)
@@ -185,7 +188,34 @@ def load_config(path: Path) -> dict:
 
 # ── Builder ────────────────────────────────────────────────────────────────
 def build(cfg: dict, out_path: Path) -> None:
-    slide_w, slide_h = cfg.get("slide_size", DEFAULT_SLIDE)
+    # Layout dimensions decided BEFORE slide creation so we can right-size the
+    # canvas to the content (no large empty bottom strip).
+    spine = cfg["spine"]
+    n_spine = len(spine)
+    spine_h = float(cfg.get("spine_box_height", DEFAULT_ROW_H))
+    excl_h  = float(cfg.get("exclusion_box_height", DEFAULT_EXCL_H))
+    title_text = cfg.get("title")
+
+    avail_top = TITLE_Y + TITLE_H + TOP_PAD if title_text else TITLE_Y
+    row_pitch = spine_h + ROW_GAP
+    content_h = avail_top + n_spine * row_pitch - ROW_GAP + spine_h * 0  # last row has no trailing gap
+    # The last spine box ends at avail_top + (n-1)*row_pitch + spine_h
+    last_row_end = avail_top + (n_spine - 1) * row_pitch + spine_h
+    auto_h = last_row_end + BOTTOM_PAD
+
+    if "slide_size" in cfg:
+        slide_w, slide_h = cfg["slide_size"]
+    else:
+        slide_w = DEFAULT_SLIDE_W
+        slide_h = min(max(auto_h, 4.0), ABSOLUTE_MAX_SLIDE_H)
+
+    # If the user gave a slide_size that's too short for the content, scale boxes down
+    needed = last_row_end + BOTTOM_PAD
+    if needed > slide_h:
+        scale = (slide_h - avail_top - BOTTOM_PAD) / (n_spine * row_pitch - ROW_GAP)
+        spine_h = max(0.7, spine_h * scale)
+        excl_h  = max(0.6, excl_h * scale)
+        row_pitch = spine_h + ROW_GAP
 
     prs = Presentation()
     prs.slide_width = Inches(slide_w)
@@ -194,7 +224,6 @@ def build(cfg: dict, out_path: Path) -> None:
     slide = prs.slides.add_slide(blank_layout)
 
     # Title
-    title_text = cfg.get("title")
     if title_text:
         title_box = slide.shapes.add_textbox(
             Inches(PHASE_X), Inches(TITLE_Y),
@@ -207,23 +236,6 @@ def build(cfg: dict, out_path: Path) -> None:
         run.font.size = Pt(13)
         run.font.bold = True
         run.font.color.rgb = NAVY
-
-    # Layout: compute y-coordinates for each spine row
-    spine = cfg["spine"]
-    n_spine = len(spine)
-    spine_h = float(cfg.get("spine_box_height", DEFAULT_ROW_H))
-    excl_h  = float(cfg.get("exclusion_box_height", DEFAULT_EXCL_H))
-
-    # Available vertical space below title
-    avail_top = TITLE_Y + TITLE_H + TOP_PAD if title_text else TITLE_Y
-    row_pitch = spine_h + ROW_GAP
-    # If too tall, scale down spine_h
-    needed = avail_top + n_spine * row_pitch + 0.4
-    if needed > slide_h:
-        scale = (slide_h - avail_top - 0.4) / (n_spine * row_pitch)
-        spine_h = max(0.7, spine_h * scale)
-        excl_h  = max(0.6, excl_h * scale)
-        row_pitch = spine_h + ROW_GAP
 
     spine_y = {}
     for i, b in enumerate(spine):
@@ -272,25 +284,26 @@ def build(cfg: dict, out_path: Path) -> None:
             )
 
     # Exclusion boxes + connector arrows
-    spine_id_to_idx = {b["id"]: i for i, b in enumerate(spine)}
+    # Vertically center each exclusion on its spine row's mid-height so the
+    # connector arrow can be strictly horizontal (no diagonal segments).
     for excl in cfg.get("exclusions", []):
         after_id = excl["after"]
-        idx = spine_id_to_idx[after_id]
         y_after = spine_y[after_id]
-        # Place exclusion at the same y as the "after" spine box (right-side branch)
+        y_mid = y_after + spine_h / 2
+        y_excl_top = y_mid - excl_h / 2
         add_box(
-            slide, EXCL_X, y_after, EXCL_W, excl_h,
+            slide, EXCL_X, y_excl_top, EXCL_W, excl_h,
             excl["text"],
             fill=WHITE, border=BLACK, font_color=BLACK,
             font_size=10, bold_first=False,
             align_center=False,  # left-align text in exclusions
             dash=True,           # dashed border to visually distinguish exclusion side-branches
         )
-        # Connector: spine right edge → excl left edge (same y, mid-row)
+        # Strictly horizontal connector: both endpoints at y_mid
         add_arrow(
             slide,
-            SPINE_X + SPINE_W, y_after + spine_h / 2,
-            EXCL_X,             y_after + excl_h / 2,
+            SPINE_X + SPINE_W, y_mid,
+            EXCL_X,            y_mid,
         )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)

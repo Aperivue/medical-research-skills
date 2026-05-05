@@ -38,6 +38,6 @@ spine:
 
 exclusions:
   - after: unique
-    text: "Excluded (n = 5,000):\n♦ missing age/sex (n = 1,200)\n♦ outside age range (n = 3,800)"
+    text: "Excluded (n = 5,000):\n- missing age/sex (n = 1,200)\n- outside age range (n = 3,800)"
   - after: eligible
-    text: "Excluded (n = 2,500):\n♦ prior event at baseline (n = 1,500)\n♦ follow-up ≤ 0 days (n = 1,000)"
+    text: "Excluded (n = 2,500):\n- prior event at baseline (n = 1,500)\n- follow-up ≤ 0 days (n = 1,000)"
