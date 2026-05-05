@@ -58,10 +58,12 @@ try:
 except ImportError:
     HAS_YAML = False
 
+from lxml import etree
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import MSO_ANCHOR
+from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+from pptx.oxml.ns import qn
 from pptx.util import Inches, Pt
 
 
@@ -110,7 +112,7 @@ def _readable_text_color(bg: RGBColor) -> RGBColor:
 def add_box(slide, x, y, w, h, text, *,
             fill=WHITE, border=BLACK, font_color=BLACK,
             font_size=11, bold_first=True, anchor_middle=True,
-            align_center=True, line_pt=1.0):
+            align_center=True, line_pt=1.0, dash=False):
     shape = slide.shapes.add_shape(
         MSO_SHAPE.ROUNDED_RECTANGLE,
         Inches(x), Inches(y), Inches(w), Inches(h),
@@ -119,6 +121,13 @@ def add_box(slide, x, y, w, h, text, *,
     shape.fill.fore_color.rgb = fill
     shape.line.color.rgb = border
     shape.line.width = Pt(line_pt)
+    if dash:
+        ln = shape.line._get_or_add_ln()
+        # Remove any existing prstDash to keep idempotent
+        for existing in ln.findall(qn("a:prstDash")):
+            ln.remove(existing)
+        prst = etree.SubElement(ln, qn("a:prstDash"))
+        prst.set("val", "dash")
 
     tf = shape.text_frame
     tf.word_wrap = True
@@ -130,8 +139,7 @@ def add_box(slide, x, y, w, h, text, *,
     lines = str(text).split("\n")
     for i, line in enumerate(lines):
         para = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-        if align_center:
-            para.alignment = 2  # center
+        para.alignment = PP_ALIGN.CENTER if align_center else PP_ALIGN.LEFT
         run = para.add_run()
         run.text = line
         run.font.size = Pt(font_size)
@@ -146,8 +154,6 @@ def add_arrow(slide, x1, y1, x2, y2, *, color=BLACK, width_pt=1.25):
     line.line.width = Pt(width_pt)
     # Arrow head on the destination end
     line_xml = line.line._get_or_add_ln()
-    from pptx.oxml.ns import qn
-    from lxml import etree
     tail = etree.SubElement(line_xml, qn("a:tailEnd"))
     tail.set("type", "triangle")
     tail.set("w", "med")
@@ -278,6 +284,7 @@ def build(cfg: dict, out_path: Path) -> None:
             fill=WHITE, border=BLACK, font_color=BLACK,
             font_size=10, bold_first=False,
             align_center=False,  # left-align text in exclusions
+            dash=True,           # dashed border to visually distinguish exclusion side-branches
         )
         # Connector: spine right edge → excl left edge (same y, mid-row)
         add_arrow(
