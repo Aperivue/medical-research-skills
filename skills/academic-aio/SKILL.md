@@ -69,6 +69,8 @@ Every abstract must contain at least one numeric primary outcome with confidence
 ### 1.6 Reporting-guideline anchor
 Place the guideline name in the abstract or the opening sentence of Methods: "Reported following TRIPOD+AI (Collins 2024) and CLAIM 2024 (Tejani 2024)". When applicable add STARD-AI 2025, DECIDE-AI, TRIPOD-LLM. This signals structure to LLMs and satisfies reviewer checklists.
 
+AIO-rule ↔ guideline-item mapping: `references/reporting_guideline_mapping.md`.
+
 ### 1.7 Keyword, MeSH, and RadLex coverage
 Title, abstract, and keywords together should cover ≥ 3× the surface area of the concept — no redundancy. Include:
 - Core MeSH terms (verify against the NLM MeSH browser).
@@ -88,6 +90,8 @@ Include the journal-specific summary box verbatim when supported:
 - Nature Medicine: editor's summary (supplied by editorial, but draft one proactively).
 
 These boxes are the fragments Perplexity and ChatGPT web most often copy or paraphrase verbatim; treat them as the paper's canonical citation surface.
+
+Journal-specific templates (USER MUST VERIFY against current IFA): `references/journal_summarybox_templates.yaml`.
 
 ### 2.2 Declarative section headings
 Section and subsection headings should state a claim, not a generic label. "Model underperforms on rare-finding subset" beats "Subgroup analysis".
@@ -129,6 +133,8 @@ Plan launch activities around these windows.
 
 ### 3.4 Open-access choice
 Prefer gold OA with CC-BY when budget allows. If not, green OA via preprint plus author-accepted manuscript is acceptable. Closed-access papers without preprint lose roughly 30–50 % of AI-tool citations because Elicit, Consensus, and Perplexity Academic cannot extract from paywalled PDFs.
+
+Funder OA-policy decision tree (Plan S, NIH, UKRI, Gates, Wellcome, NRF, MoHW): `references/oac_funding_checklist.yaml`.
 
 ### 3.5 Post-acceptance channel checklist
 - Deposit AAM to PMC or Europe PMC.
@@ -183,6 +189,7 @@ Required prose: license, PHI and re-identification risk, task, language, splits,
 - Images have descriptive alt text (vision-LLMs read alt text when image retrieval fails).
 - Each README section is under about 300 words to survive fixed-size chunking.
 - Use question-style subheadings when natural ("Why another benchmark?", "How fast is inference?").
+- Embed JSON-LD `ScholarlyArticle` / `SoftwareSourceCode` / `Dataset` / `Person` markup in repository pages and author landing pages — templates in `references/schema_markup_templates/`, validated with `python scripts/validate_schema.py path/to/file.jsonld`.
 
 ## Section 6 — Authority and E-E-A-T Signals
 
@@ -217,10 +224,10 @@ Given Agarwal et al. Nat Commun 2025 (doi:10.1038/s41467-025-58551-6) findings t
 When invoked, run in this order:
 
 1. Read the target artifact (title, abstract, manuscript section, README, or card).
-2. Apply Sections 1–5 relevant to that artifact; produce a PASS / PARTIAL / FAIL table.
-3. Cross-check reporting-guideline anchor (Section 1.6) by invoking `check-reporting` if the user has not already done so.
-4. Apply Section 6 author-authority audit once per submission cycle.
-5. Surface Section 7 citation-defense recommendations at post-acceptance time.
+2. Apply Sections 1–5 and 10 relevant to that artifact; produce a PASS / PARTIAL / FAIL table. Use `references/checklists/AIO_GENERAL.md` as the canonical checklist source; render via `templates/aio_audit_checklist.md.j2` when programmatic.
+3. **Always cross-check reporting-guideline anchor (Section 1.6)** by invoking `/check-reporting` first when the manuscript has not been audited. The mapping between AIO rules and reporting-guideline items (TRIPOD+AI, CLAIM 2024, STARD-AI, TRIPOD-LLM, DECIDE-AI) is in `references/reporting_guideline_mapping.md` — fix once, both audits update.
+4. Apply Section 6 author-authority audit once per submission cycle. Apply Section 11 (timing / citation-graph) at submission planning and Section 12 (launch sequencing) post-acceptance.
+5. Surface Section 7 citation-defense recommendations at post-acceptance time. For multi-repo or Hugging-Face-card team audits, run `scripts/batch_metadata_audit.py`.
 6. Output: the checklist (visible), then at most 5 concrete edits ranked by expected visibility impact.
 
 ### Integration with `write-paper`

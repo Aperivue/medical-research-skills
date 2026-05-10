@@ -1,0 +1,62 @@
+{# Jinja2 template — render with `aio_audit_checklist.md.j2` + variables.
+
+Variables expected:
+  artifact_path : str           absolute path of the artifact under audit
+  artifact_type : str           manuscript | preprint | readme | citation_cff | hf_card | dataset_card
+  journal_target : str | None   optional journal id from journal_summarybox_templates.yaml
+  audit_date : str              YYYY-MM-DD
+  reviewer : str                short name of the auditor
+  items : list[dict]            loaded from references/checklists/AIO_GENERAL.md "items" list
+  reporting_guideline_pending : bool
+  numerical_audit_pending : bool
+  humanize_pending : bool
+
+Render hint (Python):
+    from jinja2 import Environment, FileSystemLoader
+    env = Environment(loader=FileSystemLoader("templates"))
+    tpl = env.get_template("aio_audit_checklist.md.j2")
+    rendered = tpl.render(artifact_path="...", artifact_type="manuscript", ...)
+#}
+# AIO Audit — {{ artifact_path }}
+
+**Artifact type**: {{ artifact_type }}
+{% if journal_target -%}
+**Journal target**: {{ journal_target }}
+{% endif -%}
+**Audit date**: {{ audit_date }}
+**Reviewer**: {{ reviewer }}
+
+## Checklist
+
+| ID | Rule | Priority | Status | Reason | Suggested edit |
+|----|------|----------|--------|--------|----------------|
+{% set applicable = items | selectattr('applies_to', 'contains', artifact_type) | list -%}
+{% for item in applicable -%}
+| {{ item.id }} | {{ item.rule }} | {{ item.priority }} |  |  |  |
+{% endfor %}
+
+## Summary
+
+- PASS: __ / {{ applicable | length }} applicable items
+- FAIL items requiring action:
+  -
+
+## Top 5 fixes ranked by expected visibility impact
+
+1.
+2.
+3.
+4.
+5.
+
+## Cross-skill follow-up
+
+{% if reporting_guideline_pending -%}
+- [ ] Run `/check-reporting` (Section 1.6 anchor not yet verified). See `references/reporting_guideline_mapping.md` for the AIO ↔ guideline crosswalk.
+{% endif -%}
+{% if numerical_audit_pending -%}
+- [ ] Run numerical-claim audit (data-integrity rule).
+{% endif -%}
+{% if humanize_pending -%}
+- [ ] Run `/humanize` before submission (AI-pattern check).
+{% endif %}
