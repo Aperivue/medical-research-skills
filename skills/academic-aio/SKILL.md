@@ -244,6 +244,136 @@ When invoked, run in this order:
 2. …
 ```
 
+## Section 10 — Q&A and Entity-Extraction Optimization
+
+Modern RAG indexes parse Q&A blocks more reliably than free-form prose; LLM citation engines preferentially extract claim-restatement pairs. Section 10 augments retrievability by structuring how claims are restated and how entities are linked.
+
+### 10.1 Four-question Q&A block (Discussion or Appendix)
+
+Add a labeled Q&A block — either as the closing subsection of Discussion, or as a Supplementary Box. Pattern:
+
+- **What was known before this study?** — two-sentence restatement of the prior state.
+- **What does this study add?** — two-sentence statement of the contribution.
+- **How might this change clinical practice or research?** — one-sentence interpretation; avoid overclaim.
+- **Why does this matter?** — one-sentence "so what" framing for non-specialists.
+
+This block is the canonical fragment that AI-overview systems extract and cite. Lancet Digital Health "Research in context" already encodes the first two questions; the Q&A block extends them and is parseable by LLM web-search agents.
+
+### 10.2 Glossary block with entity IDs
+
+Define each domain-specific acronym inline on first use AND list them in a Glossary subsection at end of Methods or Supplementary. Attach the canonical entity ID where possible:
+
+- MeSH term ID for clinical concepts.
+- RadLex ID for radiology-specific terms.
+- UMLS CUI for cross-vocabulary mapping.
+- Hugging Face model ID for named models.
+- arXiv ID for cited methods.
+
+Entity linkers in Elicit, Consensus, and SciSpace use this metadata to connect a paper to knowledge graphs.
+
+### 10.3 Inline citation anchor text
+
+Avoid bare reference numbers. Use semantic anchor patterns so LLM extractors bind the citation to the specific claim:
+
+- WEAK: "Prior work [12] showed efficacy."
+- STRONG: "Smith et al. (DOI: 10.xxxx/yyyy) reported a 12 % accuracy gain on the MIMIC-CXR test set [12]."
+
+When citing one's own prior work, name the cohort or dataset explicitly to enable cross-paper retrieval.
+
+### 10.4 Explicit challenge statement
+
+Beyond Section 2.5 (limitations enumeration), include a single-paragraph "Why this is hard" challenge statement near the start of Discussion. Pattern:
+
+"Building accurate [task] for [modality/anatomy] is constrained by [data scarcity / label noise / dataset shift / regulatory uncertainty / interpretability]. Each of these has been documented [refs], and our results address [subset]."
+
+LLM web-search systems quote challenge statements as authoritative summaries of field state. The 2025 KJR multimodal-LLM review used this pattern (e.g., "lack of large-scale high-quality multimodal datasets") and was preferentially extracted by Perplexity and ChatGPT web (see `references/case_studies/kjr_mllm_2025.md`).
+
+## Section 11 — First-Mover Timing and Citation-Graph Density
+
+Topic timing is the most under-discussed AIO lever. Reviews and original research published at the peak of a topic's hype curve accrue citations disproportionately; reviews that lag the peak by 6–12 months under-perform regardless of quality.
+
+### 11.1 Topic peak detection
+
+Signals that a topic is approaching peak (write now, publish in ~6 months):
+
+- arXiv/medRxiv monthly deposit rate growing > 20 % month-over-month for 3+ consecutive months.
+- Major model release (GPT-4o, Claude 3.5 multimodal, MedGemini) introducing a capability not previously available.
+- Funding agency Request-for-Applications (RFA) addressing the topic.
+- Society guidelines (RSNA, ACR, ESR) calling for evaluation studies.
+- Sustained > 1,000 weekly impressions on Twitter/X/LinkedIn for related papers.
+
+Plan submission so publication lands at peak, not after.
+
+### 11.2 Editorial-board leverage
+
+If a corresponding author serves on the target journal's editorial board, review-process median time often drops noticeably (KJR: ~4–6 weeks faster; varies by journal). Editor's-pick or issue-highlight selection can also drive Google News indexing within 24 hours of publication.
+
+When recruiting senior co-authors for a review paper, prefer those who hold an editorial role at the target venue. This is a legitimate editorial signal, not a conflict-of-interest issue, provided board members recuse themselves from review of their own submissions per ICMJE guidance.
+
+### 11.3 PMC-auto-deposit journal preference
+
+Open-access journals that automatically deposit to PubMed Central (PMC) reach LLM crawlers within 4–6 weeks of publication; non-PMC OA journals can take 3–6 months. PMC-auto-deposit journals in radiology/medical-AI (verify per submission, policies change):
+
+- Korean Journal of Radiology (KJR) — auto-deposit confirmed.
+- Lancet Digital Health — author-funded green OA, PMC-eligible after embargo.
+- Radiology and Radiology: AI — selected articles auto-deposit.
+- npj Digital Medicine — auto-deposit (Nature OA).
+- JAMIA — author-funded OA route.
+- JMIR — auto-deposit (PMC-indexed).
+
+When all else is equal, prefer PMC-auto-deposit journals to compress the LLM-discoverability window.
+
+### 11.4 Citation-graph anchor strategy
+
+Discussion sections should anchor the paper in 5–10 high-visibility prior works that LLM training corpora already index well. This raises co-citation probability and makes the paper retrievable when users query the seminal works.
+
+- Identify seminal references via Semantic Scholar's "Highly Influential Citations" filter for the topic.
+- Cite them with semantic predicates (Section 10.3), not as bare lists.
+- Mix recent preprints (currency signal) with 2018–2022 seminal papers (graph anchoring) — corpora-cutoff means 2024–2025-only citation profiles have low LLM retrieval weight.
+
+### 11.5 Multi-disciplinary author roster
+
+Author-affiliation diversity multiplies indexing entry points. A 10–15 author team spanning 3+ institutions and 2+ disciplines (clinical + computational) creates more author-entity nodes in Google Scholar and Semantic Scholar, each acting as a discovery surface. The 2025 KJR MLLM review used a 15-author team spanning resident + engineer + medical student + faculty across 5 institutions and accrued 64 citations within 7 months (see case study).
+
+## Section 12 — Cross-Platform Launch Sequencing
+
+Section 3.5 (post-acceptance channel checklist) is unordered; Section 12 prescribes the timing. The first 30 days after publication are the primary discoverability window for AI-search engines and LLM training-data harvesters.
+
+### 12.1 Day 0 — publication day (execute simultaneously)
+
+- GitHub release (tag a stable version; let Zenodo mint a version-specific DOI).
+- Hugging Face model card + dataset card (if applicable); link arXiv ID and DOI.
+- Twitter/X + Threads + Bluesky: 1-sentence claim + key figure + DOI in copy-friendly format.
+- LinkedIn announcement (long-form): hook line + structured claim block + DOI.
+- Author landing-page update with PDF link (OA) or AAM.
+
+### 12.2 Day 1 — propagation
+
+- Update ORCID with DOI, abstract, and authorship role.
+- Update Google Scholar (verify auto-detection within 24h; manual add if delayed).
+- Update preprint server with "Accepted" version note + link to published version.
+- Update institutional profile / department news page.
+
+### 12.3 Week 1 — depth posts
+
+- LinkedIn second post: long-form interpretation or methods spotlight.
+- Papers with Code submission (if benchmark or model with public weights).
+- ResearchGate upload of AAM (per journal policy).
+- Reddit/Hacker News post if the work has broad appeal (assess fit honestly).
+
+### 12.4 Weeks 2–4 — refresh signals
+
+- README and HF card minor update (new badges, new FAQ entries).
+- Follow-up blog or Substack post expanding on one figure or limitation.
+- Respond to reader questions on social platforms — those answers themselves become indexed content.
+
+### 12.5 Month 1 — monitoring
+
+- Google Scholar alert for the paper title.
+- Semantic Scholar / Scite citation alerts.
+- Quarterly probe: query Perplexity, ChatGPT web, Elicit, Consensus, SciSpace with 3–5 expected discovery queries; record retrieval position and any hallucinated bibliographic errors.
+- If a fabricated citation appears, update the README "How to cite" block (Section 7) to maximize copy-friendliness of the correct identifier.
+
 ## External References
 
 - GEO: Generative Engine Optimization — Aggarwal et al., KDD 2024, arXiv:2311.09735.
