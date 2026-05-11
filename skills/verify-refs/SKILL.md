@@ -1,6 +1,7 @@
 ---
 name: verify-refs
-description: Audit-only verification of manuscript references against PubMed and CrossRef. Detects fabricated or mismatched citations and writes qc/reference_audit.json. Does not modify references/ or refs.bib.
+version: "1.2.0"
+description: Audit-only verification of manuscript references against PubMed and CrossRef. Detects fabricated or mismatched citations — including #2..#N family-name hallucinations and author-count mismatches (v1.2.0) — and writes qc/reference_audit.json. Does not modify references/ or refs.bib.
 triggers: verify refs, verify references, citation audit, reference hallucination, fabricated references, bibliography check, PMID check, DOI check
 tools: Read, Write, Edit, Bash, Grep, Glob
 model: inherit
@@ -12,6 +13,15 @@ You help a medical researcher prevent reference hallucinations before submission
 This skill audits an existing manuscript or bibliography. It **does not write**
 to `references/` or `manuscript/_src/refs.bib`. It does not discover new
 literature; use `/search-lit` for discovery and `/lit-sync` for bib management.
+
+## v1.2.0 changes (2026-05-11)
+
+- **Full-author cross-check (was first-author only).** Compares every `cited_authors[i]` (parsed from BibTeX `author` field via balanced-brace LaTeX-accent-aware splitter) against `actual_authors[i]` from the authoritative source. Reports per-index family mismatches and total author-count mismatches.
+- **PubMed efetch as authoritative source (new).** `verify_pubmed_efetch()` reads the full XML record and returns family + given names. Used in preference to CrossRef when PMID is available. Motivation: Paper 1 npj DM Aydin 2024 incident — CrossRef returned given name `Vasileios` but PubMed/Zotero authoritative = `Victoria`.
+- **Unicode NFKD accent normalization.** Turkish (ş ğ ı), Polish/Czech (ł đ ż ć ń ś ź), Nordic (ø æ œ), German (ß) handled via `unicodedata.normalize("NFKD")` + multi-char fallback. Eliminates Paper 1 gunes2025textual `Çolakoğlu` vs PubMed `Colakoglu` false-positive MISMATCH.
+- **`RefRecord` schema extended**: `cited_authors[]`, `actual_authors[]`, `cited_author_count`, `actual_author_count` now appear in `qc/reference_audit.json`. Backward-compatible with v1.1.x consumers (existing `first_author_guess` retained, populated from `cited_authors[0]` when available).
+- **Status `note` classification refined**: distinguishes `first-author hallucination suspected` (high reviewer salience — Paper 3 ref 8 Ebrahimi→Ballard pattern) vs `non-first-author hallucination or count mismatch` (Paper 1 liu2026benchmarking pattern — 10 names registered but 7/10 first names hallucinated). Both render as `MISMATCH` status.
+- **Known false positives**: arXiv DOIs are not in CrossRef → `UNVERIFIED` (not FABRICATED); intentionally-truncated author lists (e.g., bib has 6 of 57 authors for an entry where Nature CSL renders first 1 + et al.) flag count mismatch. Both require manual triage of the audit JSON.
 
 ## When to Use
 

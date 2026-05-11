@@ -413,6 +413,44 @@ create duplicates. Record both `added` and `existing` items in
 If a PMID has no DOI in PubMed (rare; older papers, non-indexed), fall back to
 `zotero_add_by_url` with the PubMed URL and mark the entry as `no_doi: true`.
 
+### Post-export regression audit (v1.2.0 verify-refs gate, added 2026-05-11)
+
+After Phase 2.5 sets `refs_bib_refreshed: true`, immediately run a regression
+audit on the refreshed .bib so AI-introduced or BBT-introduced hallucinations
+are caught before downstream skills consume the file. Motivation: Paper 1 npj DM
+2026-05-11 incident — paper1.bib `liu2026benchmarking` was registered with 10
+author names but 7/10 first names were hallucinated; v1.1.x `/verify-refs`
+checked only the first author, so the entry passed audit but would have shipped
+to reviewers with fabricated co-authors.
+
+```bash
+MR="${MEDSCI_SKILLS_ROOT:-$HOME/workspace/medsci-skills}"
+python3 "$MR/skills/verify-refs/scripts/verify_refs.py" \
+  manuscript/_src/refs.bib --project-root .
+python3 -c "
+import json, sys
+d = json.load(open('qc/reference_audit.json'))
+mm = [r for r in d['records'] if r['status']=='MISMATCH']
+if mm:
+    sys.stderr.write(f'BLOCK: {len(mm)} MISMATCH entries — fix Zotero records or .bib before continuing\n')
+    for r in mm:
+        sys.stderr.write(f'  - {r[\"ref_id\"]}: {r[\"note\"]}\n')
+    sys.exit(1)
+print(f'OK: {d[\"counts\"].get(\"OK\",0)} verified, {d[\"counts\"].get(\"UNVERIFIED\",0)} arxiv/UNVERIFIED known-FP')
+"
+```
+
+If MISMATCH is reported, update the Zotero record (not the .bib — BBT will
+overwrite manual edits on the next export). After Zotero correction, trigger
+BBT export by adding/removing a tag on any collection item and rerun the audit
+loop until `submission_safe: true` is reported.
+
+For entries where the CSL renders first-1 or first-5 + et al. and the trailing
+authors are intentionally omitted from the .bib, set the BibTeX field
+`_audit_truncated = true` on that entry. v1.2.0 verify-refs treats the count
+mismatch as a `NOTE: intentional truncate` and does not raise MISMATCH for
+that record alone.
+
 ---
 
 ## Safety Rules
