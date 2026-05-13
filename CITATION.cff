@@ -19,8 +19,16 @@ authors:
 repository-code: "https://github.com/Aperivue/medsci-skills"
 url: "https://github.com/Aperivue/medsci-skills"
 license: MIT
-version: "3.0.0"
+version: "3.0.1"
 date-released: "2026-05-13"
+doi: "10.5281/zenodo.20155321"
+identifiers:
+  - description: "Concept DOI (always points to the latest version)"
+    type: doi
+    value: "10.5281/zenodo.20155321"
+  - description: "Versioned DOI for v3.0.1"
+    type: doi
+    value: "10.5281/zenodo.20155322"
 keywords:
   - claude-code
   - claude-skills
@@ -37,5 +45,3 @@ keywords:
   - pubmed
   - irb-protocol
   - physician-researcher
-# Note: Add `doi:` field after first Zenodo archive of v3.0.0 release.
-# Format: doi: "10.5281/zenodo.XXXXXXX"

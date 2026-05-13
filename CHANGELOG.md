@@ -1,6 +1,16 @@
 # Changelog
 
-## [Unreleased]
+## [3.0.1] - 2026-05-13
+
+### Added — first Zenodo-archived release with DOI
+
+- First release archived on Zenodo. **Concept DOI**: [`10.5281/zenodo.20155321`](https://doi.org/10.5281/zenodo.20155321) (always-latest); **versioned DOI for this release**: [`10.5281/zenodo.20155322`](https://doi.org/10.5281/zenodo.20155322).
+- README DOI badge populated; `CITATION.cff` `doi:` field + `identifiers:` block added.
+- Bumps `version: 3.0.1` in `CITATION.cff`.
+
+This release archives the v3.0.0 Tier 0 polish bundle (see entry below) so it becomes academically citable. No code changes vs v3.0.0 except the DOI back-fill commit.
+
+## [3.0.0] - 2026-05-13
 
 ### Added — Tier 0 polish: CITATION.cff, Zenodo integration, setup onboarding, peer-review tone audit (2026-05-13)
 
