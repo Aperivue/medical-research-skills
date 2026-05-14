@@ -18,7 +18,7 @@ CSL_DIR="${SCRIPT_DIR}/../citation_styles"
 
 usage() {
   cat >&2 <<EOF
-Usage: $(basename "$0") -j <journal> -i <input.md> -b <refs.bib> [-o <out>] [-t <reference.docx>] [-f <format>]
+Usage: $(basename "$0") -j <journal> -i <input.md> -b <refs.bib> [-o <out>] [-t <reference.docx>] [-f <format>] [-S]
 
 Options:
   -j  Journal CSL name (without .csl). Examples: european-radiology, radiology,
@@ -29,9 +29,14 @@ Options:
   -o  Output path (default: <input>.docx). Format inferred from extension.
   -t  Optional Word reference .docx for styles/fonts
   -f  Force output format (docx|pdf|html). Default: from -o extension or docx.
+  -S  Skip pre-render verify-refs v1.2.0 audit gate (NOT recommended).
   -h  Help
 
 Pass-through: any args after '--' go directly to pandoc.
+
+Pre-render gate (v1.2.0, 2026-05-11): runs verify-refs against the .bib and
+blocks render on any MISMATCH status, including #2..#N family hallucinations
+and author-count mismatches missed by v1.1.x first-author-only checks.
 EOF
   exit 1
 }
@@ -42,8 +47,9 @@ BIB=""
 OUTPUT=""
 REFDOC=""
 FORMAT=""
+SKIP_AUDIT=0
 
-while getopts ":j:i:b:o:t:f:h" opt; do
+while getopts ":j:i:b:o:t:f:hS" opt; do
   case "$opt" in
     j) JOURNAL="$OPTARG" ;;
     i) INPUT="$OPTARG" ;;
@@ -51,6 +57,7 @@ while getopts ":j:i:b:o:t:f:h" opt; do
     o) OUTPUT="$OPTARG" ;;
     t) REFDOC="$OPTARG" ;;
     f) FORMAT="$OPTARG" ;;
+    S) SKIP_AUDIT=1 ;;
     h|*) usage ;;
   esac
 done
@@ -78,6 +85,34 @@ if [[ -z "$FORMAT" ]]; then
     html) FORMAT="html" ;;
     *)    FORMAT="docx" ;;
   esac
+fi
+
+# Pre-render verify-refs v1.2.0 audit gate (Paper 1 npj DM 2026-05-11 motivation:
+# blocks hallucinated #2..#N family names and author-count mismatches that v1.1.x
+# first-author-only checks let pass).
+if [[ "$SKIP_AUDIT" -eq 0 ]]; then
+  VERIFY_REFS="${SCRIPT_DIR}/../../verify-refs/scripts/verify_refs.py"
+  if [[ -f "$VERIFY_REFS" ]]; then
+    AUDIT_DIR="$(mktemp -d -t render-audit-XXXXXX)"
+    echo "[render] pre-render audit: verify-refs v1.2.0 → $AUDIT_DIR" >&2
+    if python3 "$VERIFY_REFS" "$BIB" --project-root "$AUDIT_DIR" >&2; then
+      MISMATCH_N=$(python3 -c "
+import json
+d = json.load(open('$AUDIT_DIR/qc/reference_audit.json'))
+print(d.get('counts', {}).get('MISMATCH', 0))
+")
+      if [[ "$MISMATCH_N" -gt 0 ]]; then
+        echo "[render] BLOCK: verify-refs reported $MISMATCH_N MISMATCH entries (Paper 1 npj DM-style author hallucinations)" >&2
+        echo "[render] Review $AUDIT_DIR/qc/reference_audit.json, fix Zotero records, or pass -S to bypass (NOT recommended)" >&2
+        exit 3
+      fi
+      echo "[render] audit OK; proceeding to pandoc" >&2
+    else
+      echo "[render] WARNING: verify-refs script error (network?); proceeding without gate" >&2
+    fi
+  else
+    echo "[render] WARNING: verify-refs script not found at $VERIFY_REFS; skipping pre-render audit" >&2
+  fi
 fi
 
 ARGS=(--citeproc --csl="$CSL_FILE" --bibliography="$BIB" -t "$FORMAT" -o "$OUTPUT")

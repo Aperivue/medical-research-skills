@@ -163,13 +163,19 @@ This is the most critical part of the skill. Follow these rules without exceptio
 1. **NEVER generate a reference from memory alone.** Every reference must come from an API search result.
 2. **NEVER fabricate DOIs or PMIDs.** If you cannot find a DOI/PMID, mark the reference as `[UNVERIFIED - NEEDS MANUAL CHECK]`.
 3. **Cross-check every reference** against the API result:
-   - Author names (at least first author and last author)
+   - **Author names — full list, not just first/last** (Paper 1 npj DM 2026-05-11 incident motivation: `liu2026benchmarking` was registered with 10 names but 7/10 first names were AI-fabricated and bypassed first-author-only verification). Compare `cited_authors[i].family` to authoritative `actual_authors[i].family` for **every i** from 1 to `min(cited_count, actual_count)`, AND compare total author counts.
    - Publication year
    - Journal name
    - Article title (exact match, not paraphrased)
    - Volume and pages (if available)
 4. **If any field does not match**, flag the specific mismatch.
 5. **For DOI verification**, use WebFetch with `https://api.crossref.org/works/{DOI}` to confirm the DOI resolves correctly.
+6. **Authoritative source priority for the author list** (v1.2.0 alignment):
+   - PMID present → PubMed `efetch.fcgi?db=pubmed&id=<PMID>&retmode=xml` (full `<LastName>` + `<ForeName>` per `<Author ValidYN="Y">` element). This is the **only** source that returns authoritative full given names.
+   - PMID present without efetch access → PubMed esummary (family-name approximation; given names lost).
+   - DOI present, no PMID → CrossRef `works/<DOI>` (publisher metadata; **not authoritative for given names** — Paper 1 Aydin 2024 Vlachos incident: CrossRef returned `Vasileios`, PubMed/Zotero authoritative `Victoria`).
+   - Title only → PubMed esearch → resolve PMID → efetch.
+   In conflict between CrossRef and PubMed given names, PubMed efetch wins.
 
 #### BibTeX Generation
 
