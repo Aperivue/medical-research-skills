@@ -377,6 +377,12 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=Path("qc/xref_audit.json"))
     parser.add_argument("--strict", action="store_true", help="exit 1 on any non-OK finding")
     parser.add_argument("--quiet", action="store_true")
+    parser.add_argument(
+        "--allow-separate-attachments", action="store_true",
+        help="Downgrade MISSING_DOCX from FAIL to WARN for figures/tables that are "
+             "submitted as separate attachment files (common in radiology and many "
+             "medical journals). MISSING_BODY and MISMATCH remain FAIL regardless.",
+    )
     args = parser.parse_args()
 
     if not args.md.exists():
@@ -398,14 +404,27 @@ def main() -> int:
     findings = reconcile(citations, body_captions, docx_captions)
 
     # Submission safety: any cited label whose status is not OK or UNCITED is a blocker.
-    blocking_statuses = {"MISSING_DOCX", "MISSING_BODY", "MISMATCH"}
+    # With --allow-separate-attachments, MISSING_DOCX is downgraded to a warning;
+    # MISSING_BODY and MISMATCH remain FAIL regardless because they indicate SSOT
+    # drift rather than journal-policy attachment style.
+    if args.allow_separate_attachments:
+        blocking_statuses = {"MISSING_BODY", "MISMATCH"}
+    else:
+        blocking_statuses = {"MISSING_DOCX", "MISSING_BODY", "MISMATCH"}
     blockers = [f for f in findings if f.status in blocking_statuses]
+    warnings = [
+        f for f in findings
+        if args.allow_separate_attachments and f.status == "MISSING_DOCX"
+    ]
     submission_safe = len(blockers) == 0
 
     payload = {
-        "version": "1.0",
+        "version": "1.1",
         "manuscript": str(args.md),
         "docx": str(args.docx) if args.docx else None,
+        "policy": {
+            "allow_separate_attachments": bool(args.allow_separate_attachments),
+        },
         "summary": {
             "total_in_text_citations": len(citations),
             "unique_labels": len(findings),
@@ -414,6 +433,8 @@ def main() -> int:
             "missing_body": sum(1 for f in findings if f.status == "MISSING_BODY"),
             "mismatch": sum(1 for f in findings if f.status == "MISMATCH"),
             "uncited": sum(1 for f in findings if f.status == "UNCITED"),
+            "blockers": len(blockers),
+            "warnings": len(warnings),
         },
         "submission_safe": submission_safe,
         "findings": [asdict(f) for f in findings],
@@ -425,6 +446,11 @@ def main() -> int:
     if not args.quiet:
         print(render_summary(findings, len(citations)))
         print(f"\n[check_xref] wrote {args.out}")
+        if warnings:
+            print(
+                f"[check_xref] WARN: {len(warnings)} MISSING_DOCX row(s) downgraded "
+                f"under --allow-separate-attachments."
+            )
         if not submission_safe:
             print(f"[check_xref] SUBMISSION BLOCKED: {len(blockers)} cross-reference defect(s).")
 

@@ -342,10 +342,25 @@ Numerical audits (2.5/2.5a/2.5b) cover in-text numbers; they do **not** cover re
 2. **Invoke `/verify-refs`** on the resolved bib. The skill writes `qc/reference_audit.json` with a per-entry verdict (`VERIFIED` / `FABRICATED` / `UNVERIFIED`) and a top-level `submission_safe` boolean.
 
    ```bash
-   # equivalent CLI form (same result as invoking the skill)
-   python3 skills/verify-refs/scripts/verify_refs.py \
-       --bib "$(python3 -c "import yaml,sys; print(yaml.safe_load(open('SSOT.yaml'))['truth']['refs_bib'])")" \
-       --out qc/reference_audit.json --strict
+   # equivalent CLI form (same result as invoking the skill).
+   # verify_refs.py takes a positional input (the .bib path) and writes its audit
+   # to <project-root>/qc/reference_audit.json (path derived from --project-root).
+   BIB="$(python3 -c "import yaml; print(yaml.safe_load(open('SSOT.yaml'))['truth']['refs_bib'])")"
+   python3 skills/verify-refs/scripts/verify_refs.py "$BIB" --project-root . --strict
+   ```
+
+   When both reference QC and cross-reference QC are needed in one pass, prefer
+   the master orchestration entry point in `/manage-refs` — it chains
+   `check_citation_keys.py` → `verify_refs.py --strict` → `render_pandoc.sh`
+   (optional) → `check_xref.py --strict` and writes
+   `qc/pre_submission_gate.json` as the single submission-readiness artifact:
+
+   ```bash
+   bash "${MEDSCI_SKILLS_ROOT:-$HOME/workspace/medsci-skills}/skills/manage-refs/scripts/pre_submission_gate.sh" \
+       --md manuscript/manuscript.md \
+       --bib manuscript/_src/refs.bib \
+       --docx submission/<journal>/manuscript.docx \
+       --allow-separate-attachments  # see Phase 2.5d for when this is appropriate
    ```
 
 3. **Read `qc/reference_audit.json`.** For each entry not marked `VERIFIED`, add a row to the reconciliation block below. `FABRICATED` entries are P0 Major Comments (block submission). `UNVERIFIED` entries are Minor Comments unless the manuscript is at a circulation/submission gate, in which case they escalate to Major.
@@ -399,21 +414,30 @@ DOCX build has occurred yet (early drafts).
    python3 "${MEDSCI_SKILLS_ROOT:-$HOME/workspace/medsci-skills}/skills/manage-refs/scripts/check_xref.py" \
      --md manuscript/manuscript.md \
      --docx manuscript/manuscript_final.docx \
-     --out qc/xref_audit.json
+     --out qc/xref_audit.json \
+     [--allow-separate-attachments]
    ```
 
    The script writes `qc/xref_audit.json` with per-label rows tagged
-   `OK | MISSING_DOCX | MISSING_BODY | MISMATCH | UNCITED | NOT_CITED_NO_BODY`
-   and a top-level `submission_safe` boolean.
+   `OK | MISSING_DOCX | MISSING_BODY | MISMATCH | UNCITED | NOT_CITED_NO_BODY`,
+   a top-level `submission_safe` boolean, and a `policy.allow_separate_attachments`
+   field that records which severity policy applied.
 
-3. **Translate findings to anticipated comments.** Severity mapping:
+3. **Translate findings to anticipated comments.** Severity mapping depends on
+   the journal's figure/table submission policy. Many radiology and medical
+   journals (e.g., European Radiology, Radiology, AJR) accept figures and tables
+   as separate attachment files rather than inline in the manuscript DOCX; for
+   those workflows pass `--allow-separate-attachments` so MISSING_DOCX is not
+   treated as a P0 blocker. `MISSING_BODY` and `MISMATCH` remain P0 regardless,
+   because they indicate SSOT drift between body markdown and rendered DOCX
+   rather than a legitimate attachment style.
 
-   | Status | Self-review classification |
-   |---|---|
-   | `MISSING_DOCX` | **Major (P0)** — cited Table/Figure absent from rendered output |
-   | `MISSING_BODY` | **Major (P0)** — build SSOT drift; rendered caption has no body definition |
-   | `MISMATCH` | **Major (P0)** — caption text disagrees between body and rendered DOCX |
-   | `UNCITED` | Minor — orphan caption that should be cited or removed |
+   | Status | Default policy | With `--allow-separate-attachments` |
+   |---|---|---|
+   | `MISSING_DOCX` | **Major (P0)** — cited Table/Figure absent from rendered output | **Minor** — figure/table is separately attached per journal policy |
+   | `MISSING_BODY` | **Major (P0)** — build SSOT drift; rendered caption has no body definition | **Major (P0)** (no change) |
+   | `MISMATCH` | **Major (P0)** — caption text disagrees between body and rendered DOCX | **Major (P0)** (no change) |
+   | `UNCITED` | Minor — orphan caption that should be cited or removed | Minor (no change) |
 
 4. **Append a reconciliation block to the Phase 3 report:**
 

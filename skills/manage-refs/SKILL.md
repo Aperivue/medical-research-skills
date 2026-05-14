@@ -84,6 +84,8 @@ Validated 2026-05-01 against a 21-reference meta-analysis manuscript
 | Convert `[@key]` → `[N]` for round-trip / debug | `scripts/md_marker_convert.py --to-numbers` | Same map, opposite direction |
 | Wire native Zotero CWYW field codes into a .docx (live Refresh in Word) | `scripts/inject_zotero_cwyw.py` | Co-author Word workflow, post-circulation editability |
 | Manuscript ↔ rendered DOCX cross-reference QC | `scripts/check_xref.py --strict` | Submission gate (P0 blocker on mismatch) |
+| Figures/tables submitted as separate attachments (radiology, most medical journals) | `check_xref.py --strict --allow-separate-attachments` | Downgrades `MISSING_DOCX` to WARN; `MISSING_BODY`/`MISMATCH` remain P0 |
+| **Master pre-submission gate** (recommended before any submission) | `scripts/pre_submission_gate.sh` | Chains `check_citation_keys` → `verify_refs --strict` → `render_pandoc` (optional) → `check_xref --strict`; single artifact `qc/pre_submission_gate.json` |
 | Bibliographic audit against PubMed / CrossRef | **delegate** to `/verify-refs` | Audit-only — keep writer/auditor separation |
 
 ## Workflows
@@ -170,6 +172,41 @@ User shipped a manuscript and a reviewer flagged a Table/Figure mismatch.
    and rebuild, never patch the .docx by hand.
 3. See `references/check_xref_symptoms.md` for the
    `MISSING_BODY` / `MISSING_DOCX` / `MISMATCH` triage table.
+4. For journals that accept figures and tables as **separate attachment files**
+   (the default in European Radiology, Radiology, AJR, JVIR, KJR, and most
+   medical journals), pass `--allow-separate-attachments`. `MISSING_DOCX` rows
+   are then recorded as WARN rather than FAIL; `MISSING_BODY` and `MISMATCH`
+   remain P0 because they indicate SSOT drift, not attachment policy.
+
+### E. Master pre-submission gate (recommended end-to-end chain)
+
+The single entry point that combines workflows A and D plus `/verify-refs`
+into one aborting chain. Use this immediately before submission or before
+circulating a v_N package to senior co-authors.
+
+```bash
+bash "${CLAUDE_SKILL_DIR}/scripts/pre_submission_gate.sh" \
+    --md manuscript/manuscript.md \
+    --bib manuscript/_src/refs.bib \
+    --docx submission/<journal>/manuscript.docx \
+    --allow-separate-attachments    # omit if the journal accepts inline figures/tables
+```
+
+Stage order (first failure aborts):
+1. `check_citation_keys.py manuscript.md refs.bib` — UNDEFINED / UNUSED keys
+2. `verify_refs.py refs.bib --strict` — PubMed / CrossRef per-entry verification
+3. `render_pandoc.sh -j <csl> -i ... -b ... -o ...` — invoked only when `--docx` is omitted
+4. `check_xref.py --md ... --docx ... --strict [--allow-separate-attachments]`
+
+On success the chain writes `qc/pre_submission_gate.json` (plus the
+per-stage artifacts `qc/reference_audit.json` and `qc/xref_audit.json`)
+with `submission_safe: true`. On any failure the JSON records the failing
+stage and exit code, and the script exits non-zero — do not submit until
+the failing stage passes.
+
+Critical: the gate does **not** reimplement any check. It calls the existing
+scripts as subprocesses. If you find yourself wanting to add a check, add it
+to the underlying script (the gate then picks it up automatically).
 
 ## Quality Gates
 
