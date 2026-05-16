@@ -36,7 +36,7 @@ Use INSI-style base; substitute journal name and scorecard fields when confirmed
 - ESR Key Points required in accepted manuscripts — reviewers can suggest strengthening these.
 - Transfer authorization common (to Springer Nature portfolio).
 
-## Confirmed Form Fields (from 2026-04-29 EURE-D-26-00216 invitation)
+## Confirmed Form Fields (from a recent EURE reviewer invitation)
 
 Editorial Manager scorecard differs from INSI H/M/L base. Actual fields:
 
